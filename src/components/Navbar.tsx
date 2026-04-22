@@ -21,10 +21,8 @@ export function Navbar() {
   const navLinks = [
     { name: 'Home', path: '/' },
     { name: 'About', path: '/about' },
-    { name: 'Our Team', path: '/doctors' },
     { name: 'Services', path: '/services' },
-    { name: 'Blog', path: '/blog' },
-    { name: 'FAQ', path: '/faq' },
+    { name: 'Smile Gallery', path: '/gallery' },
     { name: 'Contact Us', path: '/contact' },
   ];
 

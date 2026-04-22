@@ -53,10 +53,9 @@ export function Footer() {
                Quick Links
             </h4>
             <ul className="space-y-4 text-white/50 text-sm font-medium tracking-tight">
-               <li><Link to="/about" className="hover:text-brand-primary transition-colors">About iDent.</Link></li>
-               <li><Link to="/doctors" className="hover:text-brand-primary transition-colors">Our Team</Link></li>
-               <li><Link to="/services" className="hover:text-brand-primary transition-colors">Specialized Services</Link></li>
-               <li><Link to="/blog" className="hover:text-brand-primary transition-colors">Latest News</Link></li>
+               <li><Link to="/about" className="hover:text-brand-primary transition-colors">About Us</Link></li>
+               <li><Link to="/services" className="hover:text-brand-primary transition-colors">Services</Link></li>
+               <li><Link to="/gallery" className="hover:text-brand-primary transition-colors">Smile Gallery</Link></li>
                <li><Link to="/contact" className="hover:text-brand-primary transition-colors">Contact Us</Link></li>
             </ul>
           </div>
