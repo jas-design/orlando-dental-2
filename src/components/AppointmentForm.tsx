@@ -1,12 +1,14 @@
 import { useState, FormEvent } from 'react';
-import { Calendar, User, Phone } from 'lucide-react';
+import { Calendar, User, Phone, CheckCircle2 } from 'lucide-react';
 import { Button } from './Button';
+import { CONTACT_INFO } from '../constants';
 
 interface AppointmentFormProps {
   layout?: 'horizontal' | 'vertical';
 }
 
 export function AppointmentForm({ layout = 'vertical' }: AppointmentFormProps) {
+  const [isSubmitted, setIsSubmitted] = useState(false);
   const [formData, setFormData] = useState({
     name: '',
     phone: '',
@@ -18,10 +20,46 @@ export function AppointmentForm({ layout = 'vertical' }: AppointmentFormProps) {
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
-    // Simulate submission
-    alert('Thank you! We will contact you shortly to confirm your appointment.');
+    
+    // Construct email body
+    const subject = `New Appointment Request from ${formData.name}`;
+    const body = `
+Name: ${formData.name}
+Phone: ${formData.phone}
+Email: ${formData.email}
+Service: ${formData.service}
+Preferred Date: ${formData.date}
+Preferred Time: ${formData.time}
+    `.trim();
+
+    // Open mailto link
+    const mailtoUrl = `mailto:${CONTACT_INFO.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    window.location.href = mailtoUrl;
+
+    // Show success state
+    setIsSubmitted(true);
     setFormData({ name: '', phone: '', email: '', date: '', time: '', service: '' });
+    
+    // Reset success state after a few seconds
+    setTimeout(() => setIsSubmitted(false), 5000);
   };
+
+  if (isSubmitted) {
+    return (
+      <div className="bg-green-50 border border-green-100 p-8 rounded-3xl text-center space-y-4">
+        <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto text-green-600">
+          <CheckCircle2 className="w-8 h-8" />
+        </div>
+        <div className="space-y-2">
+          <h3 className="text-xl font-bold text-green-900">Request Sent!</h3>
+          <p className="text-green-700">
+            Thank you for reaching out. We've opened your email client to send the details to <strong>{CONTACT_INFO.email}</strong>. 
+            We will contact you shortly to confirm.
+          </p>
+        </div>
+      </div>
+    );
+  }
 
   if (layout === 'horizontal') {
     return (

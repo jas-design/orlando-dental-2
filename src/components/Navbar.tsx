@@ -1,11 +1,14 @@
 import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Menu, X, Phone, MapPin, Mail, Facebook, Twitter, Instagram, Search, Linkedin } from 'lucide-react';
+import { Menu, X, Phone, MapPin, Mail, Facebook, Twitter, Instagram, Linkedin } from 'lucide-react';
 import * as Icons from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Logo } from './Logo';
+import { useContent } from '../context/ContentContext';
 
 export function Navbar() {
+  const { content } = useContent();
+  const { contactInfo: CONTACT_INFO } = content;
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const location = useLocation();
@@ -34,21 +37,21 @@ export function Navbar() {
           <div className="flex items-center space-x-6">
             <div className="flex items-center space-x-2">
               <MapPin className="w-3.5 h-3.5 text-brand-primary" />
-              <span>300 Pennsylvania Ave NW</span>
+              <span>{CONTACT_INFO.address}</span>
             </div>
             <div className="flex items-center space-x-2 border-l border-white/10 pl-6">
               <Icons.Clock className="w-3.5 h-3.5 text-brand-primary" />
-              <span>Mon - Sat: 7:00 - 17:00</span>
+              <span>{CONTACT_INFO.hours[0].day}: {CONTACT_INFO.hours[0].time}</span>
             </div>
             <div className="flex items-center space-x-2 border-l border-white/10 pl-6">
               <Phone className="w-3.5 h-3.5 text-brand-primary" />
-              <span>+ 386 40 111 5555</span>
+              <span>{CONTACT_INFO.phone}</span>
             </div>
           </div>
           <div className="flex items-center space-x-6">
             <div className="flex items-center space-x-2">
               <Mail className="w-3.5 h-3.5 text-brand-primary" />
-              <span>info@yourdomain.com</span>
+              <span>{CONTACT_INFO.email}</span>
             </div>
             <div className="flex items-center space-x-4 border-l border-white/10 pl-6 h-3">
               <Facebook className="w-3.5 h-3.5 hover:text-brand-primary transition-colors cursor-pointer" />
@@ -88,9 +91,6 @@ export function Navbar() {
                     {link.name}
                   </Link>
                 ))}
-                <button className="text-brand-dark hover:text-brand-primary transition-colors ml-4">
-                  <Search className="w-4 h-4" />
-                </button>
               </div>
               
               <Link

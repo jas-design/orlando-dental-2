@@ -1,0 +1,70 @@
+{
+  "entities": {
+    "siteSettings": {
+      "title": "Site Settings",
+      "description": "Global configuration for the dental clinic website",
+      "type": "object",
+      "properties": {
+        "clinicName": { "type": "string" },
+        "phone": { "type": "string" },
+        "email": { "type": "string" },
+        "address": { "type": "string" },
+        "googleMapsUrl": { "type": "string" },
+        "hours": { "type": "array" },
+        "logoUrl": { "type": "string" },
+        "social": { "type": "object" }
+      }
+    },
+    "pages": {
+      "title": "Page Content",
+      "description": "Content for specific website pages",
+      "type": "object",
+      "properties": {
+        "slug": { "type": "string" },
+        "title": { "type": "string" },
+        "sections": { "type": "array" }
+      }
+    },
+    "blogPosts": {
+      "title": "Blog Post",
+      "description": "Dental health articles and news",
+      "type": "object",
+      "properties": {
+        "title": { "type": "string" },
+        "content": { "type": "string" },
+        "author": { "type": "string" },
+        "date": { "type": "string" },
+        "image": { "type": "string" },
+        "published": { "type": "boolean" }
+      }
+    },
+    "gallery": {
+      "title": "Gallery Image",
+      "description": "Images for the smile gallery",
+      "type": "object",
+      "properties": {
+        "title": { "type": "string" },
+        "url": { "type": "string" },
+        "category": { "type": "string" }
+      }
+    }
+  },
+  "firestore": {
+    "/settings/global": {
+      "schema": "siteSettings",
+      "description": "Centralized site configuration"
+    },
+    "/pages/{pageId}": {
+      "schema": "pages",
+      "description": "Content for individual pages"
+    },
+    "/blog/{postId}": {
+      "schema": "blogPosts",
+      "description": "Blog content collection"
+    },
+    "/gallery/{imageId}": {
+      "schema": "gallery",
+      "description": "Gallery images collection"
+    }
+  }
+}
