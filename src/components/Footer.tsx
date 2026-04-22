@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import * as Icons from 'lucide-react';
 import { CONTACT_INFO } from '../constants';
-import { IMAGES } from '../assets';
+import { Logo } from './Logo';
 
 export function Footer() {
   return (
@@ -11,28 +11,8 @@ export function Footer() {
           {/* Column 1: Brand & Social */}
           <div className="space-y-10">
             <Link to="/" className="flex items-center group">
-              <div className="h-16 flex items-center justify-center transition-transform hover:scale-[1.02]">
-                 <img 
-                   src={IMAGES.logo} 
-                   alt="Orlando Dental Care" 
-                   className="h-full w-auto object-contain brightness-0 invert"
-                   onError={(e) => {
-                     // Fallback to stylized icon + text if logo.png is missing
-                     const target = e.target as HTMLImageElement;
-                     target.style.display = 'none';
-                     const container = target.parentElement!;
-                     container.innerHTML = `
-                       <div class="flex items-center space-x-2">
-                         <div class="w-10 h-10 bg-[#27a2a8] rounded-lg flex items-center justify-center">
-                           <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-activity w-6 h-6"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
-                         </div>
-                         <span class="font-display font-bold text-2xl leading-none tracking-tight flex items-center text-white">
-                           Orlando<span class="text-[#27a2a8]">Dental.</span>
-                         </span>
-                       </div>
-                     `;
-                   }}
-                 />
+              <div className="h-16 flex items-center justify-center">
+                 <Logo variant="light" />
               </div>
             </Link>
             <p className="text-white/50 text-sm leading-relaxed">
