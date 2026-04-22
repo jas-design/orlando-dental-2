@@ -3,9 +3,11 @@
  * Add new images here to make them easily accessible throughout the app.
  */
 
+const BASE_URL = import.meta.env.BASE_URL;
+
 export const IMAGES = {
   // Brand Assets
-  logo: '/images/logo.png',
+  logo: `${BASE_URL}images/logo.png`,
   
   // Placeholders for future use
   hero_dentist: 'https://images.unsplash.com/photo-1588776814546-1ffcf47267a5?auto=format&fit=crop&q=80&w=1200',
@@ -21,5 +23,8 @@ export const IMAGES = {
  * @param path Public path to the image
  */
 export const getImagePath = (path: string) => {
-  return path;
+  if (path.startsWith('http')) return path;
+  // Ensure the path doesn't start with a slash when joining with BASE_URL
+  const cleanPath = path.startsWith('/') ? path.slice(1) : path;
+  return `${BASE_URL}${cleanPath}`;
 };

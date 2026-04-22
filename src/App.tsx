@@ -15,7 +15,7 @@ import { ScrollToTop } from './components/ScrollToTop';
 
 export default function App() {
   return (
-    <Router>
+    <Router basename="/orlando-dental-2">
       <ScrollToTop />
       <div className="flex flex-col min-h-screen">
         <Navbar />
