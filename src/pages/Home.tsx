@@ -4,19 +4,38 @@ import { motion } from 'motion/react';
 import { Button } from '../components/Button';
 import * as Icons from 'lucide-react';
 import { TEAM, BLOG_POSTS } from '../constants';
+import { doc, getDoc } from 'firebase/firestore';
+import { db } from '../lib/firebase';
 
 export function Home() {
   const [sliderPosition, setSliderPosition] = useState(50);
   const [activeFaq, setActiveFaq] = useState<number | null>(0);
   const [testimonialIndex, setTestimonialIndex] = useState(0);
   const [isMobile, setIsMobile] = useState(false);
+  const [pageData, setPageData] = useState<any>(null);
 
   useEffect(() => {
     const checkMobile = () => setIsMobile(window.innerWidth < 1024);
     checkMobile();
     window.addEventListener('resize', checkMobile);
+    
+    async function fetchPageData() {
+      try {
+        const docSnap = await getDoc(doc(db, 'pages', 'home'));
+        if (docSnap.exists()) {
+          setPageData(docSnap.data());
+        }
+      } catch (error) {
+        console.error("Error loading home page:", error);
+      }
+    }
+    fetchPageData();
+
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
+
+  const heroSection = pageData?.sections?.find((s: any) => s.type === 'hero');
+  const whyChooseUs = pageData?.sections?.find((s: any) => s.id === 'services_intro');
 
   const TESTIMONIALS = [
     { name: 'Sarah Miller', pos: 'Cosmetic Patient', text: 'The level of care here is unmatched. They really took the time to explain every step of my treatment. The results are better than I ever imagined.' },
@@ -45,16 +64,20 @@ export function Home() {
           <div className="max-w-3xl space-y-10">
             <div className="space-y-6">
                <h1 className="text-6xl md:text-8xl font-display font-bold text-brand-dark leading-[1.05] tracking-tight">
-                 Reveal the <br /> 
-                 <span className="text-brand-primary">Radiant Smile</span> <br />
-                 You Deserve
+                 {heroSection?.title?.split('<br />').map((line: string, i: number) => (
+                    <React.Fragment key={i}>
+                       {line} {i === 0 && <br />}
+                    </React.Fragment>
+                 )) || (
+                   <>Reveal the <br /> <span className="text-brand-primary">Radiant Smile</span> <br /> You Deserve</>
+                 )}
                </h1>
                <p className="text-xl text-gray-500 max-w-xl leading-relaxed font-medium">
-                 Experience dental care with a personal touch. Dr. Santos and our team combine artistry and precision to give you the healthy, confident smile you've always wanted.
+                 {heroSection?.description || "Experience dental care with a personal touch. Dr. Santos and our team combine artistry and precision to give you the healthy, confident smile you've always wanted."}
                </p>
             </div>
             <Link to="/contact" className="inline-flex items-center space-x-3 bg-brand-primary text-white px-10 py-5 rounded-md font-bold text-sm uppercase tracking-widest hover:bg-brand-dark transition-all shadow-2xl shadow-brand-primary/30">
-               <span>Make an Appointment</span>
+               <span>{heroSection?.cta || 'Make an Appointment'}</span>
                <Icons.ArrowRight className="w-4 h-4" />
             </Link>
           </div>
@@ -63,7 +86,7 @@ export function Home() {
         {/* Hero Dentist Image */}
         <div className="absolute top-0 right-0 w-full h-full lg:w-1/2 pointer-events-none overflow-hidden xl:block hidden">
            <img 
-             src="https://images.unsplash.com/photo-1588776814546-1ffcf47267a5?auto=format&fit=crop&q=80&w=1200" 
+             src={heroSection?.image || "https://images.unsplash.com/photo-1588776814546-1ffcf47267a5?auto=format&fit=crop&q=80&w=1200"} 
              className="w-full h-full object-cover object-center translate-x-10" 
              alt="Professional Dentist"
            />
@@ -149,10 +172,12 @@ export function Home() {
                 <span>+ WHY CHOOSE US</span>
               </span>
               <h2 className="text-6xl font-display font-bold text-[#1a3a4a] tracking-tight">
-                Diagnosis of <span className="text-brand-primary font-bold">Dental Diseases</span>
+                {whyChooseUs?.title || (
+                   <>Diagnosis of <span className="text-brand-primary font-bold">Dental Diseases</span></>
+                )}
               </h2>
               <p className="text-gray-400 font-medium leading-relaxed">
-                We are committed to sustainability, eco-friendly initiatives.
+                {whyChooseUs?.description || "We are committed to sustainability, eco-friendly initiatives."}
               </p>
            </div>
 

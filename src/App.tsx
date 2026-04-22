@@ -19,6 +19,9 @@ import { AdminSettings } from './pages/AdminSettings';
 import { ScrollToTop } from './components/ScrollToTop';
 import { ContentProvider } from './context/ContentContext';
 
+import { AdminPages } from './pages/AdminPages';
+import { AdminPageEditor } from './pages/AdminPageEditor';
+
 export default function App() {
   return (
     <ContentProvider>
@@ -29,7 +32,8 @@ export default function App() {
             {/* Private Admin Routes */}
             <Route path="/admin" element={<AdminLayout children={<AdminDashboard />} />} />
             <Route path="/admin/settings" element={<AdminLayout children={<AdminSettings />} />} />
-            <Route path="/admin/pages" element={<AdminLayout children={<div className="p-12 text-center text-gray-400 font-bold bg-white rounded-[40px] border border-dashed border-gray-200">Page Management Module Coming Soon</div>} />} />
+            <Route path="/admin/pages" element={<AdminLayout children={<AdminPages />} />} />
+            <Route path="/admin/pages/edit/:pageId" element={<AdminLayout children={<AdminPageEditor />} />} />
             <Route path="/admin/media" element={<AdminLayout children={<div className="p-12 text-center text-gray-400 font-bold bg-white rounded-[40px] border border-dashed border-gray-200">Media Library Module Coming Soon</div>} />} />
             
             {/* Public Routes */}
