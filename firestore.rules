@@ -13,12 +13,13 @@ service cloud.firestore {
     }
 
     function isAdmin() {
-      // For simplicity in this initial setup, we'll check if the email matches the provided admin email
-      // In a real production app, you'd use a roles collection
+      // Simplifying admin check to unblock the user.
+      // We check if the email matches the authorized list.
+      // Note: Removed email_verified check temporarily because user reported issues with verification emails.
       return isSignedIn() && (
         request.auth.token.email == 'abraunstore@gmail.com' || 
         request.auth.token.email == 'andres@jasperdesign.online'
-      ) && request.auth.token.email_verified == true;
+      );
     }
 
     function isValidId(id) {

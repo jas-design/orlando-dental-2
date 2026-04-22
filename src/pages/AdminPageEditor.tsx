@@ -155,9 +155,9 @@ export function AdminPageEditor() {
         updatedAt: new Date().toISOString()
       });
       alert('Page updated successfully!');
-    } catch (error) {
+    } catch (error: any) {
       console.error("Error saving page:", error);
-      alert('Error saving page. Check console for details.');
+      alert(`Error saving page: ${error?.message || 'Unknown error'}`);
     } finally {
       setSaving(false);
     }
@@ -240,7 +240,7 @@ export function AdminPageEditor() {
             <div className="space-y-8">
               {pageData?.sections.map((section: any, index: number) => (
                 <SectionEditor 
-                  key={section.id + index} 
+                  key={section.id || index} 
                   section={section} 
                   index={index}
                   total={pageData.sections.length}
@@ -330,6 +330,7 @@ interface SectionEditorProps {
   onUpdate: (data: any) => void;
   onRemove: () => void;
   onMove: (direction: 'up' | 'down') => void;
+  key?: any;
 }
 
 function SectionEditor({ section, index, total, onUpdate, onRemove, onMove }: SectionEditorProps) {

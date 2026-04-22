@@ -67,7 +67,7 @@ export function DynamicPage() {
   );
 }
 
-function RenderSection({ section }: { section: any }) {
+function RenderSection({ section }: { section: any; key?: any }) {
   const [data, setData] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
   const [settings, setSettings] = useState<any>(null);

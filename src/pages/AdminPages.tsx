@@ -43,8 +43,8 @@ export function AdminPages() {
         }
       });
 
-      // Sort by order or title
-      setPages(finalPages.sort((a, b) => a.title.localeCompare(b.title)));
+      // Sort by title
+      setPages(finalPages.sort((a: any, b: any) => (a.title || '').localeCompare(b.title || '')));
     } catch (error) {
       console.error("Error fetching pages:", error);
       setPages(DEFAULT_PAGES);
@@ -57,24 +57,33 @@ export function AdminPages() {
     e.preventDefault();
     if (!newPage.title || !newPage.slug) return;
     
-    // Normalize slug
-    let slug = newPage.slug.toLowerCase().replace(/\s+/g, '-').replace(/^\//, '');
-    const id = slug || 'new-page-' + Date.now();
+    // Normalize slug: remove special chars, spaces to dashes, lowercase
+    let slug = newPage.slug.toLowerCase()
+      .replace(/[^a-z0-9\s-]/g, '') // remove special chars
+      .trim()
+      .replace(/\s+/g, '-')         // spaces to dashes
+      .replace(/-+/g, '-')          // multiple dashes to single
+      .replace(/^\//, '');          // remove leading slash if entered
+    
+    const docId = slug || 'new-page-' + Date.now();
     slug = '/' + slug;
 
     try {
-      await setDoc(doc(db, 'pages', id), {
+      await setDoc(doc(db, 'pages', docId), {
         title: newPage.title,
         slug: slug,
         sections: [],
-        createdAt: new Date().toISOString()
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString()
       });
       setIsModalOpen(false);
       setNewPage({ title: '', slug: '' });
-      navigate(`/admin/pages/edit/${id}`);
-    } catch (error) {
+      navigate(`/admin/pages/edit/${docId}`);
+    } catch (error: any) {
       console.error("Error creating page:", error);
-      alert("Failed to create page");
+      alert(`Error creating page: ${error?.message || 'Unknown error'}`);
+    } finally {
+      setLoading(false);
     }
   };
 
