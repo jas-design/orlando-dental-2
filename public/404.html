@@ -28,10 +28,11 @@
     <script>
       // If the page is not found (which happens on GH pages deep links),
       // redirect to index.html with the path in the query string.
+      // We slice(0, 2) to preserve the /orlando-dental-2 segment in the URL
       window.location.replace(
         window.location.protocol + '//' + window.location.hostname + (window.location.port ? ':' + window.location.port : '') + 
-        window.location.pathname.split('/').slice(0, 1).join('/') + '/?/' + 
-        window.location.pathname.slice(1).replace(/&/g, '~and~') + 
+        window.location.pathname.split('/').slice(0, 2).join('/') + '/?/' + 
+        window.location.pathname.split('/').slice(2).join('/').replace(/&/g, '~and~') + 
         (window.location.search ? '&' + window.location.search.slice(1).replace(/&/g, '~and~') : '') +
         window.location.hash
       );
