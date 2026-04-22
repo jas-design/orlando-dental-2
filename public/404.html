@@ -1,8 +1,7 @@
-<!doctype html>
-<html lang="en">
+<!DOCTYPE html>
+<html>
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="utf-8">
     <title>Orlando Dental Care</title>
     <script type="text/javascript">
       // Single Page Apps for GitHub Pages
@@ -26,8 +25,16 @@
     </script>
   </head>
   <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
+    <script>
+      // If the page is not found (which happens on GH pages deep links),
+      // redirect to index.html with the path in the query string.
+      window.location.replace(
+        window.location.protocol + '//' + window.location.hostname + (window.location.port ? ':' + window.location.port : '') + 
+        window.location.pathname.split('/').slice(0, 1).join('/') + '/?/' + 
+        window.location.pathname.slice(1).replace(/&/g, '~and~') + 
+        (window.location.search ? '&' + window.location.search.slice(1).replace(/&/g, '~and~') : '') +
+        window.location.hash
+      );
+    </script>
   </body>
 </html>
-
