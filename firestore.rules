@@ -48,5 +48,29 @@ service cloud.firestore {
       allow read: if true;
       allow write: if isAdmin();
     }
+
+    // Team
+    match /team/{memberId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    // Services
+    match /services/{serviceId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    // FAQs
+    match /faqs/{faqId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    // Testimonials
+    match /testimonials/{id} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
   }
 }

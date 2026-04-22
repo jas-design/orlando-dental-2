@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, Link } from 'react-router-dom';
 import { doc, getDoc, setDoc } from 'firebase/firestore';
 import { db } from '../lib/firebase';
 import { motion } from 'motion/react';
-import { Save, ChevronLeft, Loader2, Image as ImageIcon, Plus, Trash2, Eye, Type, Layout, Star, Search } from 'lucide-react';
+import { Save, ChevronLeft, Loader2, Image as ImageIcon, Plus, Trash2, Eye, Type, Layout, Star, Search, Users } from 'lucide-react';
 
 export function AdminPageEditor() {
   const { pageId } = useParams();
@@ -38,7 +38,7 @@ export function AdminPageEditor() {
   }, [pageId]);
 
   const getTemplateForPage = (id: string) => {
-    const common = { slug: `/${id === 'home' ? '' : id}`, title: id.charAt(0).toUpperCase() + id.slice(1) };
+    const common = { slug: `/${id === 'home' ? '' : id}`, title: id.charAt(0).toUpperCase() + id.slice(1), sections: [] };
     
     if (id === 'home') {
       return {
@@ -64,7 +64,86 @@ export function AdminPageEditor() {
         ]
       };
     }
-    return { ...common, sections: [] };
+
+    if (id === 'about') {
+      return {
+        ...common,
+        title: 'About Us',
+        sections: [
+          {
+            id: 'about_hero',
+            type: 'hero',
+            badge: 'OUR STORY',
+            title: 'We Care For Your Dental Health',
+            description: 'At Orlando Dental Care, we take pride in bringing added value to every patient by addressing all of your dental needs.',
+            cta: 'Learn More',
+            image: 'https://images.unsplash.com/photo-1629909613654-28e377c37b09?auto=format&fit=crop&q=80'
+          },
+          {
+             id: 'mission',
+             type: 'text_with_image',
+             title: 'Our Mission',
+             description: 'To provide the highest quality dental care in a comfortable and welcoming environment.',
+             image: 'https://images.unsplash.com/photo-1629907326852-b8356ee70666?auto=format&fit=crop&q=80'
+          }
+        ]
+      };
+    }
+
+    if (id === 'services') {
+      return {
+        ...common,
+        title: 'Services',
+        sections: [
+          {
+            id: 'services_hero',
+            type: 'hero',
+            badge: 'OUR CARE',
+            title: 'Comprehensive Dental Services',
+            description: 'From routine checkups to full smile transformations, we provide comprehensive dental care for all ages.',
+            cta: 'View Services',
+            image: 'https://images.unsplash.com/photo-1576091160550-217359f48f4c?auto=format&fit=crop&q=80'
+          }
+        ]
+      };
+    }
+
+    return common;
+  };
+
+  const addSection = (type: string) => {
+    const newSection = {
+      id: `${type}_${Date.now()}`,
+      type: type,
+      title: 'New Section',
+      description: 'Add your description here...',
+      image: 'https://images.unsplash.com/photo-1629909613654-28e377c37b09?auto=format&fit=crop&q=80'
+    };
+    
+    if (type === 'hero') {
+      (newSection as any).badge = 'NEW BADGE';
+      (newSection as any).cta = 'Button Text';
+    }
+
+    setPageData({
+      ...pageData,
+      sections: [...pageData.sections, newSection]
+    });
+  };
+
+  const removeSection = (index: number) => {
+    if (!window.confirm("Remove this section?")) return;
+    const newSections = pageData.sections.filter((_: any, i: number) => i !== index);
+    setPageData({ ...pageData, sections: newSections });
+  };
+
+  const moveSection = (index: number, direction: 'up' | 'down') => {
+    const newSections = [...pageData.sections];
+    const newIndex = direction === 'up' ? index - 1 : index + 1;
+    if (newIndex < 0 || newIndex >= newSections.length) return;
+    
+    [newSections[index], newSections[newIndex]] = [newSections[newIndex], newSections[index]];
+    setPageData({ ...pageData, sections: newSections });
   };
 
   const handleSave = async () => {
@@ -163,16 +242,58 @@ export function AdminPageEditor() {
                 <SectionEditor 
                   key={section.id + index} 
                   section={section} 
+                  index={index}
+                  total={pageData.sections.length}
                   onUpdate={(data) => updateSection(index, data)} 
+                  onRemove={() => removeSection(index)}
+                  onMove={(dir) => moveSection(index, dir)}
                 />
               ))}
 
-              <button className="w-full py-8 border-2 border-dashed border-gray-100 rounded-[32px] text-gray-300 font-bold flex flex-col items-center justify-center gap-4 hover:border-brand-primary/30 hover:text-brand-primary hover:bg-brand-primary/5 transition-all">
-                 <div className="w-12 h-12 bg-gray-50 rounded-full flex items-center justify-center">
-                    <Plus className="w-6 h-6" />
-                 </div>
-                 <span>Add New Section</span>
-              </button>
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                <button 
+                  onClick={() => addSection('hero')}
+                  className="py-4 border-2 border-dashed border-gray-100 rounded-[24px] text-gray-400 font-bold flex flex-col items-center justify-center gap-2 hover:border-brand-primary/30 hover:text-brand-primary hover:bg-brand-primary/5 transition-all text-xs"
+                >
+                   <Star className="w-5 h-5" />
+                   <span>Hero</span>
+                </button>
+                <button 
+                  onClick={() => addSection('text_with_image')}
+                  className="py-4 border-2 border-dashed border-gray-100 rounded-[24px] text-gray-400 font-bold flex flex-col items-center justify-center gap-2 hover:border-brand-primary/30 hover:text-brand-primary hover:bg-brand-primary/5 transition-all text-xs"
+                >
+                   <Type className="w-5 h-5" />
+                   <span>Content</span>
+                </button>
+                <button 
+                  onClick={() => addSection('services_grid')}
+                  className="py-4 border-2 border-dashed border-gray-100 rounded-[24px] text-gray-400 font-bold flex flex-col items-center justify-center gap-2 hover:border-brand-primary/30 hover:text-brand-primary hover:bg-brand-primary/5 transition-all text-xs"
+                >
+                   <Layout className="w-5 h-5" />
+                   <span>Services Grid</span>
+                </button>
+                <button 
+                  onClick={() => addSection('team_grid')}
+                  className="py-4 border-2 border-dashed border-gray-100 rounded-[24px] text-gray-400 font-bold flex flex-col items-center justify-center gap-2 hover:border-brand-primary/30 hover:text-brand-primary hover:bg-brand-primary/5 transition-all text-xs"
+                >
+                   <Users className="w-5 h-5" />
+                   <span>Team Grid</span>
+                </button>
+                <button 
+                  onClick={() => addSection('blog_grid')}
+                  className="py-4 border-2 border-dashed border-gray-100 rounded-[24px] text-gray-400 font-bold flex flex-col items-center justify-center gap-2 hover:border-brand-primary/30 hover:text-brand-primary hover:bg-brand-primary/5 transition-all text-xs"
+                >
+                   <ImageIcon className="w-5 h-5" />
+                   <span>Blog Feed</span>
+                </button>
+                <button 
+                  onClick={() => addSection('contact_strip')}
+                  className="py-4 border-2 border-dashed border-gray-100 rounded-[24px] text-gray-400 font-bold flex flex-col items-center justify-center gap-2 hover:border-brand-primary/30 hover:text-brand-primary hover:bg-brand-primary/5 transition-all text-xs"
+                >
+                   <Search className="w-5 h-5" />
+                   <span>Contact Info</span>
+                </button>
+              </div>
             </div>
           ) : (
              <div className="bg-white p-10 rounded-[40px] border border-gray-100 shadow-sm space-y-8">
@@ -204,11 +325,14 @@ export function AdminPageEditor() {
 
 interface SectionEditorProps {
   section: any;
+  index: number;
+  total: number;
   onUpdate: (data: any) => void;
-  key?: any;
+  onRemove: () => void;
+  onMove: (direction: 'up' | 'down') => void;
 }
 
-function SectionEditor({ section, onUpdate }: SectionEditorProps) {
+function SectionEditor({ section, index, total, onUpdate, onRemove, onMove }: SectionEditorProps) {
   const [isOpen, setIsOpen] = useState(true);
 
   return (
@@ -218,16 +342,35 @@ function SectionEditor({ section, onUpdate }: SectionEditorProps) {
         onClick={() => setIsOpen(!isOpen)}
       >
         <div className="flex items-center gap-4">
+           <div className="flex flex-col gap-1 mr-2">
+              <button 
+                disabled={index === 0}
+                onClick={(e) => { e.stopPropagation(); onMove('up'); }}
+                className="p-1 text-gray-300 hover:text-brand-primary disabled:opacity-0 transition-all"
+              >
+                 <ChevronLeft className="w-4 h-4 rotate-90" />
+              </button>
+              <button 
+                disabled={index === total - 1}
+                onClick={(e) => { e.stopPropagation(); onMove('down'); }}
+                className="p-1 text-gray-300 hover:text-brand-primary disabled:opacity-0 transition-all"
+              >
+                 <ChevronLeft className="w-4 h-4 -rotate-90" />
+              </button>
+           </div>
            <div className="w-10 h-10 bg-brand-primary/10 rounded-xl flex items-center justify-center text-brand-primary">
               {section.type === 'hero' ? <Star className="w-5 h-5" /> : <Type className="w-5 h-5" />}
            </div>
            <div>
-              <h3 className="font-bold text-brand-dark uppercase tracking-widest text-xs">{section.id} Section</h3>
-              <p className="text-sm text-gray-400 font-medium">Type: {section.type}</p>
+              <h3 className="font-bold text-brand-dark uppercase tracking-widest text-xs">Section {index + 1}: {section.type}</h3>
+              <p className="text-[10px] text-gray-400 font-bold uppercase tracking-widest">ID: {section.id}</p>
            </div>
         </div>
         <div className="flex items-center gap-4">
-           <button className="p-2 text-gray-300 hover:text-red-500 transition-colors">
+           <button 
+            onClick={(e) => { e.stopPropagation(); onRemove(); }}
+            className="p-2 text-gray-300 hover:text-red-500 transition-colors"
+          >
               <Trash2 className="w-5 h-5" />
            </button>
         </div>
@@ -320,6 +463,35 @@ function SectionEditor({ section, onUpdate }: SectionEditorProps) {
                   />
                 </div>
               </div>
+            </div>
+          )}
+          {(section.type === 'services_grid' || section.type === 'team_grid' || section.type === 'blog_grid') && (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+               <div className="space-y-2">
+                <label className="text-xs font-black text-gray-400 uppercase tracking-widest">Section Heading</label>
+                <input 
+                  type="text" 
+                  value={section.title} 
+                  onChange={(e) => onUpdate({ title: e.target.value })}
+                  className="w-full p-4 bg-white border border-gray-100 rounded-2xl outline-none focus:ring-2 focus:ring-brand-primary" 
+                />
+              </div>
+              <div className="md:col-span-2 space-y-2">
+                <label className="text-xs font-black text-gray-400 uppercase tracking-widest">Subheading (Optional)</label>
+                <textarea 
+                  value={section.description} 
+                  onChange={(e) => onUpdate({ description: e.target.value })}
+                  rows={2}
+                  className="w-full p-4 bg-white border border-gray-100 rounded-2xl outline-none focus:ring-2 focus:ring-brand-primary resize-none" 
+                />
+              </div>
+            </div>
+          )}
+
+          {section.type === 'contact_strip' && (
+            <div className="p-6 bg-blue-50/50 rounded-2xl flex items-center gap-4 text-blue-700">
+               <Search className="w-6 h-6" />
+               <p className="text-sm font-medium">This section pulls data automatically from your <Link to="/admin/settings" className="font-bold underline">Contact Settings</Link>.</p>
             </div>
           )}
         </div>

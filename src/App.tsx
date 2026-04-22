@@ -21,6 +21,12 @@ import { ContentProvider } from './context/ContentContext';
 
 import { AdminPages } from './pages/AdminPages';
 import { AdminPageEditor } from './pages/AdminPageEditor';
+import { AdminBlog } from './pages/AdminBlog';
+import { AdminGallery } from './pages/AdminGallery';
+import { AdminServices } from './pages/AdminServices';
+import { AdminTeam } from './pages/AdminTeam';
+
+import { DynamicPage } from './pages/DynamicPage';
 
 export default function App() {
   return (
@@ -34,6 +40,10 @@ export default function App() {
             <Route path="/admin/settings" element={<AdminLayout children={<AdminSettings />} />} />
             <Route path="/admin/pages" element={<AdminLayout children={<AdminPages />} />} />
             <Route path="/admin/pages/edit/:pageId" element={<AdminLayout children={<AdminPageEditor />} />} />
+            <Route path="/admin/blog" element={<AdminLayout children={<AdminBlog />} />} />
+            <Route path="/admin/gallery" element={<AdminLayout children={<AdminGallery />} />} />
+            <Route path="/admin/services" element={<AdminLayout children={<AdminServices />} />} />
+            <Route path="/admin/team" element={<AdminLayout children={<AdminTeam />} />} />
             <Route path="/admin/media" element={<AdminLayout children={<div className="p-12 text-center text-gray-400 font-bold bg-white rounded-[40px] border border-dashed border-gray-200">Media Library Module Coming Soon</div>} />} />
             
             {/* Public Routes */}
@@ -49,6 +59,8 @@ export default function App() {
                     <Route path="/gallery" element={<Gallery />} />
                     <Route path="/contact" element={<Contact />} />
                     <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+                    {/* Dynamic Pages */}
+                    <Route path="*" element={<DynamicPage />} />
                   </Routes>
                 </main>
                 <Footer />

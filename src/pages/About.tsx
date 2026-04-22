@@ -1,8 +1,42 @@
+import React, { useState, useEffect } from 'react';
 import { motion } from 'motion/react';
-import { Target, Award, Users, ShieldCheck, CheckCircle2 } from 'lucide-react';
+import { Target, Award, Users, ShieldCheck, Loader2 } from 'lucide-react';
 import { Button } from '../components/Button';
+import { collection, getDocs, query, orderBy, doc, getDoc } from 'firebase/firestore';
+import { db } from '../lib/firebase';
+import { TEAM as STATIC_TEAM } from '../constants';
 
 export function About() {
+  const [team, setTeam] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [pageData, setPageData] = useState<any>(null);
+
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        // Fetch Page Data for About
+        const pageSnap = await getDoc(doc(db, 'pages', 'about'));
+        if (pageSnap.exists()) {
+          setPageData(pageSnap.data());
+        }
+
+        const q = query(collection(db, 'team'), orderBy('order', 'asc'));
+        const snap = await getDocs(q);
+        const data = snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        setTeam(data);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      } finally {
+        setLoading(false);
+      }
+    }
+    fetchData();
+  }, []);
+
+  const displayTeam = team.length > 0 ? team : STATIC_TEAM;
+  const missionSection = pageData?.sections?.find((s: any) => s.id === 'mission');
+  const heroSection = pageData?.sections?.find((s: any) => s.type === 'hero');
+
   return (
     <div className="pt-24">
       {/* Hero Header */}
@@ -14,7 +48,7 @@ export function About() {
             animate={{ opacity: 1, y: 0 }}
             className="text-brand-primary font-black uppercase tracking-widest text-xs"
           >
-            Our Story
+            {heroSection?.badge || 'Our Story'}
           </motion.span>
           <motion.h1 
             initial={{ opacity: 0, y: 20 }}
@@ -22,7 +56,7 @@ export function About() {
             transition={{ delay: 0.1 }}
             className="text-5xl md:text-7xl font-display font-bold mt-4 mb-6 text-brand-dark"
           >
-            We Care For Your Dental Health
+            {heroSection?.title || 'We Care For Your Dental Health'}
           </motion.h1>
           <motion.p 
             initial={{ opacity: 0, y: 20 }}
@@ -30,7 +64,7 @@ export function About() {
             transition={{ delay: 0.2 }}
             className="text-xl text-gray-700/80 max-w-2xl mx-auto leading-relaxed"
           >
-            At Orlando Dental Care, we take pride in bringing added value to every patient by addressing all of your dental needs and concerns.
+            {heroSection?.description || 'At Orlando Dental Care, we take pride in bringing added value to every patient by addressing all of your dental needs and concerns.'}
           </motion.p>
         </div>
       </section>
@@ -41,9 +75,9 @@ export function About() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
             <div className="space-y-12">
                <div className="space-y-4">
-                 <h2 className="text-4xl font-display font-bold">Our Mission</h2>
+                 <h2 className="text-4xl font-display font-bold">{missionSection?.title || 'Our Mission'}</h2>
                  <p className="text-gray-600 text-lg leading-relaxed">
-                   Our mission is to provide the highest quality dental care in a comfortable and welcoming environment. We believe in educating our patients and providing them with all the necessary information to make informed decisions about their oral health.
+                   {missionSection?.description || 'Our mission is to provide the highest quality dental care in a comfortable and welcoming environment. We believe in educating our patients and providing them with all the necessary information to make informed decisions about their oral health.'}
                  </p>
                </div>
                <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
@@ -135,6 +169,43 @@ export function About() {
         </div>
       </section>
       
+      {/* Our Team Section */}
+      <section className="py-24 bg-brand-dark text-white overflow-hidden">
+        <div className="container mx-auto px-4">
+          <div className="text-center max-w-3xl mx-auto mb-20 space-y-4">
+            <span className="text-brand-primary font-black uppercase tracking-widest text-xs">+ OUR SPECIALISTS</span>
+            <h2 className="text-5xl font-display font-bold leading-none">Meet the Experts Behind <br /> Your Radiant Smile</h2>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
+            {displayTeam.map((member, i) => (
+              <motion.div 
+                key={member.id || i}
+                initial={{ opacity: 0, scale: 0.9 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.1 }}
+                className="group space-y-6 text-center"
+              >
+                <div className="aspect-[4/5] rounded-[48px] overflow-hidden bg-white/5 border border-white/10 group-hover:border-brand-primary/50 transition-all duration-500 relative">
+                   <img src={member.image} alt={member.name} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
+                   <div className="absolute inset-0 bg-gradient-to-t from-brand-dark via-transparent to-transparent opacity-60" />
+                   <div className="absolute bottom-8 left-0 right-0 px-6">
+                      <span className="inline-block px-4 py-1.5 bg-brand-primary text-white font-bold text-[10px] rounded-full uppercase tracking-widest mb-3">
+                         {member.specialty}
+                      </span>
+                      <h4 className="text-2xl font-display font-bold leading-none">{member.name}</h4>
+                   </div>
+                </div>
+                <p className="text-gray-400 text-sm leading-relaxed max-w-xs mx-auto line-clamp-3 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+                  {member.description}
+                </p>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* Call to Action */}
       <section className="py-24 container mx-auto px-4">
         <div className="bg-brand-secondary/30 rounded-[64px] p-12 md:p-24 text-center space-y-8">

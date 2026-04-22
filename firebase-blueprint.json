@@ -47,6 +47,53 @@
         "url": { "type": "string" },
         "category": { "type": "string" }
       }
+    },
+    "team": {
+      "title": "Team Member",
+      "description": "Staff and doctors at the clinic",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "specialty": { "type": "string" },
+        "description": { "type": "string" },
+        "image": { "type": "string" },
+        "order": { "type": "number" }
+      }
+    },
+    "services": {
+      "title": "Dental Service",
+      "description": "Services offered by the clinic",
+      "type": "object",
+      "properties": {
+        "title": { "type": "string" },
+        "description": { "type": "string" },
+        "icon": { "type": "string" },
+        "image": { "type": "string" },
+        "category": { "type": "string" },
+        "order": { "type": "number" }
+      }
+    },
+    "faqs": {
+      "title": "Frequently Asked Question",
+      "description": "Website FAQs",
+      "type": "object",
+      "properties": {
+        "question": { "type": "string" },
+        "answer": { "type": "string" },
+        "order": { "type": "number" }
+      }
+    },
+    "testimonials": {
+      "title": "Testimonial",
+      "description": "Patient reviews and testimonials",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "role": { "type": "string" },
+        "content": { "type": "string" },
+        "rating": { "type": "number" },
+        "image": { "type": "string" }
+      }
     }
   },
   "firestore": {
@@ -65,6 +112,22 @@
     "/gallery/{imageId}": {
       "schema": "gallery",
       "description": "Gallery images collection"
+    },
+    "/team/{memberId}": {
+      "schema": "team",
+      "description": "Team members collection"
+    },
+    "/services/{serviceId}": {
+      "schema": "services",
+      "description": "Services collection"
+    },
+    "/faqs/{faqId}": {
+      "schema": "faqs",
+      "description": "FAQs collection"
+    },
+    "/testimonials/{id}": {
+      "schema": "testimonials",
+      "description": "Testimonials collection"
     }
   }
 }

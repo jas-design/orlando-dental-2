@@ -4,7 +4,7 @@ import { motion } from 'motion/react';
 import { Button } from '../components/Button';
 import * as Icons from 'lucide-react';
 import { TEAM, BLOG_POSTS } from '../constants';
-import { doc, getDoc } from 'firebase/firestore';
+import { doc, getDoc, collection, getDocs, query, orderBy, limit } from 'firebase/firestore';
 import { db } from '../lib/firebase';
 
 export function Home() {
@@ -13,29 +13,53 @@ export function Home() {
   const [testimonialIndex, setTestimonialIndex] = useState(0);
   const [isMobile, setIsMobile] = useState(false);
   const [pageData, setPageData] = useState<any>(null);
+  const [services, setServices] = useState<any[]>([]);
+  const [blogPosts, setBlogPosts] = useState<any[]>([]);
 
   useEffect(() => {
     const checkMobile = () => setIsMobile(window.innerWidth < 1024);
     checkMobile();
     window.addEventListener('resize', checkMobile);
     
-    async function fetchPageData() {
+    async function fetchData() {
       try {
-        const docSnap = await getDoc(doc(db, 'pages', 'home'));
-        if (docSnap.exists()) {
-          setPageData(docSnap.data());
-        }
+        // Fetch Home Page Content
+        const pageSnap = await getDoc(doc(db, 'pages', 'home'));
+        if (pageSnap.exists()) setPageData(pageSnap.data());
+
+        // Fetch Services
+        const servicesSnap = await getDocs(query(collection(db, 'services'), orderBy('order', 'asc'), limit(8)));
+        const servicesData = servicesSnap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        setServices(servicesData);
+
+        // Fetch Recent Blogs
+        const blogSnap = await getDocs(query(collection(db, 'blog'), orderBy('date', 'desc'), limit(3)));
+        const blogData = blogSnap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        setBlogPosts(blogData);
       } catch (error) {
-        console.error("Error loading home page:", error);
+        console.error("Error loading data:", error);
       }
     }
-    fetchPageData();
+    fetchData();
 
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
   const heroSection = pageData?.sections?.find((s: any) => s.type === 'hero');
   const whyChooseUs = pageData?.sections?.find((s: any) => s.id === 'services_intro');
+
+  const DEFAULT_SERVICES = [
+    { title: 'General Dental Care', icon: 'Stethoscope' },
+    { title: 'Dental Orthodontics', icon: 'Activity' },
+    { title: 'Dental Implants', icon: 'Syringe' },
+    { title: 'Advanced Dentistry', icon: 'ClipboardCheck' },
+    { title: 'Teeth Whitening', icon: 'Sparkles' },
+    { title: 'Crowns & Bridges', icon: 'Crown' },
+    { title: 'Dental Veneers', icon: 'Smile' },
+    { title: 'Emergency Procedures', icon: 'ShieldAlert' },
+  ];
+
+  const displayServices = services.length > 0 ? services : DEFAULT_SERVICES;
 
   const TESTIMONIALS = [
     { name: 'Sarah Miller', pos: 'Cosmetic Patient', text: 'The level of care here is unmatched. They really took the time to explain every step of my treatment. The results are better than I ever imagined.' },
@@ -138,23 +162,17 @@ export function Home() {
            </div>
 
            <div className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-10">
-              {[
-                { name: 'General Dental Care', icon: Icons.Stethoscope },
-                { name: 'Dental Orthodontics', icon: Icons.Activity },
-                { name: 'Dental Implants', icon: Icons.Syringe },
-                { name: 'Advanced Dentistry', icon: Icons.ClipboardCheck },
-                { name: 'Teeth Whitening', icon: Icons.Sparkles },
-                { name: 'Crowns & Bridges', icon: Icons.Crown },
-                { name: 'Dental Veneers', icon: Icons.Smile },
-                { name: 'Emergency Procedures', icon: Icons.ShieldAlert },
-              ].map((service, i) => (
-                <div key={i} className="group p-10 bg-white border border-gray-100 rounded-[40px] hover:shadow-3xl transition-all duration-500 text-center space-y-6 flex flex-col items-center">
-                   <div className="w-20 h-20 bg-white text-brand-primary rounded-2xl flex items-center justify-center shadow-lg transition-transform duration-500 group-hover:scale-110 group-hover:rotate-6">
-                      <service.icon className="w-10 h-10" />
-                   </div>
-                   <h3 className="font-bold text-brand-dark uppercase tracking-[0.2em] text-[9px]">{service.name}</h3>
-                </div>
-              ))}
+              {displayServices.map((service: any, i: number) => {
+                const IconComponent = (Icons as any)[service.icon] || Icons.Stethoscope;
+                return (
+                  <div key={i} className="group p-10 bg-white border border-gray-100 rounded-[40px] hover:shadow-3xl transition-all duration-500 text-center space-y-6 flex flex-col items-center">
+                    <div className="w-20 h-20 bg-white text-brand-primary rounded-2xl flex items-center justify-center shadow-lg transition-transform duration-500 group-hover:scale-110 group-hover:rotate-6">
+                       <IconComponent className="w-10 h-10" />
+                    </div>
+                    <h3 className="font-bold text-brand-dark uppercase tracking-[0.2em] text-[10px]">{service.title || service.name}</h3>
+                  </div>
+                );
+              })}
            </div>
         </div>
       </section>
@@ -500,6 +518,62 @@ export function Home() {
                 />
               ))}
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Latest News (Blog) */}
+      <section className="py-40 bg-gray-50/50">
+        <div className="container mx-auto px-4">
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-24">
+            <div className="max-w-2xl space-y-6">
+               <span className="text-brand-primary font-black uppercase text-xs tracking-[0.4em] block">+ LATEST NEWS</span>
+               <h2 className="text-5xl md:text-7xl font-display font-bold text-brand-dark tracking-tighter leading-none">Oral Health <br /> <span className="text-brand-primary">Tips & Insights</span></h2>
+            </div>
+            <Link to="/blog" className="px-10 py-5 bg-white text-brand-dark rounded-2xl font-bold uppercase tracking-widest text-[11px] border border-gray-100 hover:bg-brand-primary hover:text-white hover:border-brand-primary transition-all shadow-xl shadow-gray-200/50">
+               View All Articles
+            </Link>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
+            {blogPosts.length > 0 ? (
+              blogPosts.map((post: any, i: number) => (
+                <motion.div 
+                  key={post.id}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: i * 0.1 }}
+                  className="group bg-white rounded-[40px] overflow-hidden border border-gray-50 shadow-sm hover:shadow-3xl transition-all duration-500"
+                >
+                  <div className="aspect-[16/10] overflow-hidden">
+                    <img src={post.image} alt={post.title} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
+                  </div>
+                  <div className="p-10 space-y-6">
+                    <div className="flex items-center gap-4 text-[10px] font-black uppercase tracking-widest text-brand-primary">
+                      <span>{post.category}</span>
+                      <span className="w-1 h-1 bg-gray-200 rounded-full" />
+                      <span className="text-gray-400">{post.date}</span>
+                    </div>
+                    <h3 className="text-2xl font-display font-bold text-brand-dark group-hover:text-brand-primary transition-colors line-clamp-2">
+                       {post.title}
+                    </h3>
+                    <Link to={`/blog/${post.id}`} className="inline-flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-brand-dark group-hover:text-brand-primary transition-colors">
+                      <span>Read More</span>
+                      <Icons.ArrowRight className="w-3.5 h-3.5" />
+                    </Link>
+                  </div>
+                </motion.div>
+              ))
+            ) : (
+              // Fallback cards if no posts in DB
+              [1, 2, 3].map((_, i) => (
+                <div key={i} className="bg-white/50 rounded-[40px] border border-dashed border-gray-200 p-12 text-center flex flex-col items-center justify-center space-y-4">
+                  <Icons.FileText className="w-12 h-12 text-gray-200" />
+                  <p className="text-gray-400 font-bold uppercase tracking-widest text-xs">Awaiting Articles</p>
+                </div>
+              ))
+            )}
           </div>
         </div>
       </section>

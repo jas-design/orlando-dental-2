@@ -13,7 +13,10 @@ import {
   X, 
   User,
   ExternalLink,
-  Loader2
+  Loader2,
+  Newspaper,
+  Stethoscope,
+  Users
 } from 'lucide-react';
 import { cn } from '../lib/utils';
 
@@ -56,8 +59,11 @@ export function AdminLayout({ children }: { children: ReactNode }) {
   const navItems = [
     { name: 'Overview', path: '/admin', icon: LayoutDashboard },
     { name: 'Pages', path: '/admin/pages', icon: FileText },
-    { name: 'Media Library', path: '/admin/media', icon: ImageIcon },
-    { name: 'Contact Settings', path: '/admin/settings', icon: Settings },
+    { name: 'Services', path: '/admin/services', icon: Stethoscope },
+    { name: 'Team', path: '/admin/team', icon: Users },
+    { name: 'Blog', path: '/admin/blog', icon: Newspaper },
+    { name: 'Smile Gallery', path: '/admin/gallery', icon: ImageIcon },
+    { name: 'Contact Info', path: '/admin/settings', icon: Settings },
   ];
 
   return (

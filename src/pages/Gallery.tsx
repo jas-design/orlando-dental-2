@@ -1,45 +1,47 @@
-import { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { X, Search } from 'lucide-react';
+import { X, Search, Loader2 } from 'lucide-react';
+import { collection, getDocs, query, orderBy } from 'firebase/firestore';
+import { db } from '../lib/firebase';
 
 export function Gallery() {
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
-  const [filter, setFilter] = useState<'all' | 'results' | 'office'>('all');
+  const [filter, setFilter] = useState<'all' | string>('all');
+  const [galleryItems, setGalleryItems] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  const images = [
+  useEffect(() => {
+    async function fetchGallery() {
+      try {
+        const q = query(collection(db, 'gallery'), orderBy('createdAt', 'desc'));
+        const snap = await getDocs(q);
+        const data = snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        setGalleryItems(data);
+      } catch (error) {
+        console.error("Error fetching gallery:", error);
+      } finally {
+        setLoading(false);
+      }
+    }
+    fetchGallery();
+  }, []);
+
+  const staticImages = [
     {
       url: 'https://images.unsplash.com/photo-1598256989800-fe5f95da9787?auto=format&fit=crop&q=80&w=800',
-      category: 'results',
+      category: 'Cosmetic',
       title: 'Invisalign Treatment result'
     },
     {
       url: 'https://images.unsplash.com/photo-1606811971618-4486d14f3f99?auto=format&fit=crop&q=80&w=800',
-      category: 'results',
+      category: 'Cosmetic',
       title: 'Smile Transformation'
-    },
-    {
-      url: 'https://images.unsplash.com/photo-1629909613654-28e377c37b09?auto=format&fit=crop&q=80&w=800',
-      category: 'office',
-      title: 'Modern Consultation Room'
-    },
-    {
-      url: 'https://images.unsplash.com/photo-1588776814546-1ffcf47267a5?auto=format&fit=crop&q=80&w=800',
-      category: 'office',
-      title: 'Treatment Bay'
-    },
-    {
-      url: 'https://images.unsplash.com/photo-1594824476967-48c8b964273f?auto=format&fit=crop&q=80&w=800',
-      category: 'office',
-      title: 'Welcoming Reception'
-    },
-    {
-      url: 'https://images.unsplash.com/photo-1516062423079-7ca13cdc7f52?auto=format&fit=crop&q=80&w=800',
-      category: 'results',
-      title: 'Dental Implant Result'
     }
   ];
 
+  const images = galleryItems.length > 0 ? galleryItems : staticImages;
   const filteredImages = filter === 'all' ? images : images.filter(img => img.category === filter);
+  const categories = ['all', ...Array.from(new Set(images.map((img: any) => img.category)))];
 
   return (
     <div className="pt-24 min-h-screen bg-white">
@@ -55,22 +57,18 @@ export function Gallery() {
 
       {/* Filter Tabs */}
       <section className="container mx-auto px-4 mb-12">
-        <div className="flex justify-center gap-6">
-          {[
-            { id: 'all', label: 'All Photos' },
-            { id: 'results', label: 'Patient Results' },
-            { id: 'office', label: 'Our Office' }
-          ].map((tab) => (
+        <div className="flex flex-wrap justify-center gap-4">
+          {categories.map((cat) => (
             <button
-              key={tab.id}
-              onClick={() => setFilter(tab.id as any)}
-              className={`px-6 py-2 rounded-full font-bold transition-all ${
-                filter === tab.id 
-                  ? 'bg-brand-primary text-brand-dark shadow-md' 
-                  : 'text-gray-500 hover:text-gray-900'
+              key={cat}
+              onClick={() => setFilter(cat as any)}
+              className={`px-8 py-3 rounded-full font-bold transition-all uppercase text-[10px] tracking-widest ${
+                filter === cat 
+                  ? 'bg-brand-primary text-brand-dark shadow-xl shadow-brand-primary/20' 
+                  : 'bg-gray-50 text-gray-400 hover:text-gray-900'
               }`}
             >
-              {tab.label}
+              {cat === 'all' ? 'All Photos' : cat}
             </button>
           ))}
         </div>
@@ -78,36 +76,42 @@ export function Gallery() {
 
       {/* Grid */}
       <section className="container mx-auto px-4 pb-24">
-        <div className="columns-1 md:columns-2 lg:columns-3 gap-6 space-y-6">
-          <AnimatePresence mode="popLayout">
-            {filteredImages.map((img, i) => (
-              <motion.div
-                key={img.url}
-                layout
-                initial={{ opacity: 0, scale: 0.9 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.9 }}
-                transition={{ duration: 0.3 }}
-                className="relative group cursor-pointer overflow-hidden rounded-3xl shadow-sm hover:shadow-xl transition-all"
-                onClick={() => setSelectedImage(img.url)}
-              >
-                <img 
-                  src={img.url} 
-                  alt={img.title} 
-                  className="w-full h-auto object-cover" 
-                />
-                <div className="absolute inset-0 bg-brand-dark/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                  <div className="w-12 h-12 bg-white rounded-full flex items-center justify-center text-brand-primary shadow-lg">
-                    <Search className="w-6 h-6" />
+        {loading ? (
+          <div className="flex justify-center py-20">
+            <Loader2 className="w-10 h-10 animate-spin text-brand-primary" />
+          </div>
+        ) : (
+          <div className="columns-1 md:columns-2 lg:columns-3 gap-6 space-y-6">
+            <AnimatePresence mode="popLayout">
+              {filteredImages.map((img, i) => (
+                <motion.div
+                  key={img.url || i}
+                  layout
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.9 }}
+                  transition={{ duration: 0.3 }}
+                  className="relative group cursor-pointer overflow-hidden rounded-3xl shadow-sm hover:shadow-xl transition-all"
+                  onClick={() => setSelectedImage(img.url)}
+                >
+                  <img 
+                    src={img.url} 
+                    alt={img.title} 
+                    className="w-full h-auto object-cover" 
+                  />
+                  <div className="absolute inset-0 bg-brand-dark/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                    <div className="w-12 h-12 bg-white rounded-full flex items-center justify-center text-brand-primary shadow-lg">
+                       <Search className="w-6 h-6" />
+                    </div>
                   </div>
-                </div>
-                <div className="absolute bottom-4 left-4 right-4 bg-white/90 backdrop-blur-md p-3 rounded-2xl translate-y-12 group-hover:translate-y-0 transition-transform">
-                  <p className="text-sm font-bold text-gray-900">{img.title}</p>
-                </div>
-              </motion.div>
-            ))}
-          </AnimatePresence>
-        </div>
+                  <div className="absolute bottom-4 left-4 right-4 bg-white/90 backdrop-blur-md p-3 rounded-2xl translate-y-12 group-hover:translate-y-0 transition-transform">
+                    <p className="text-sm font-bold text-gray-900 line-clamp-1">{img.title}</p>
+                  </div>
+                </motion.div>
+              ))}
+            </AnimatePresence>
+          </div>
+        )}
       </section>
 
       {/* Lightbox */}
@@ -131,8 +135,7 @@ export function Gallery() {
               animate={{ scale: 1 }}
               exit={{ scale: 0.9 }}
               src={selectedImage} 
-              className="max-w-full max-h-full object-contain rounded-xl"
-              onClick={(e) => e.stopPropagation()}
+              className="max-w-full max-h-full object-contain rounded-xl shadow-2xl" 
             />
           </motion.div>
         )}
