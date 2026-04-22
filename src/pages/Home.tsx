@@ -233,11 +233,23 @@ export function Home() {
                 className="relative h-[600px] rounded-[30px] overflow-hidden shadow-3xl select-none group cursor-ew-resize order-2 lg:order-1"
                 onMouseMove={handleMouseMove}
               >
+                {/* Before/After Labels */}
+                <div className="absolute top-6 left-6 z-20 pointer-events-none">
+                  <span className="bg-black/60 backdrop-blur-md text-white text-[10px] font-black uppercase tracking-[0.2em] px-4 py-2 rounded-full border border-white/10 shadow-xl">
+                    Before
+                  </span>
+                </div>
+                <div className="absolute top-6 right-6 z-20 pointer-events-none">
+                  <span className="bg-brand-primary/90 backdrop-blur-md text-white text-[10px] font-black uppercase tracking-[0.2em] px-4 py-2 rounded-full shadow-xl">
+                    After
+                  </span>
+                </div>
+
                 <div className="absolute inset-0">
-                  <img src="https://images.unsplash.com/photo-1593059080506-3458322287bd?auto=format&fit=crop&q=80&w=1200" className="w-full h-full object-cover" alt="Before" />
+                  <img src="https://images.unsplash.com/photo-1629909613654-28e377c37b09?auto=format&fit=crop&q=80&w=1200" className="w-full h-full object-cover" alt="After" />
                 </div>
                 <div className="absolute inset-0" style={{ clipPath: `inset(0 ${100 - sliderPosition}% 0 0)` }}>
-                  <img src="https://images.unsplash.com/photo-1629909613654-28e377c37b09?auto=format&fit=crop&q=80&w=1200" className="w-full h-full object-cover" alt="After" />
+                  <img src="https://images.unsplash.com/photo-1593059080506-3458322287bd?auto=format&fit=crop&q=80&w=1200" className="w-full h-full object-cover" alt="Before" />
                 </div>
                 {/* Thin White Divider Line */}
                 <div 
