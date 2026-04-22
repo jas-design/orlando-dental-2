@@ -15,7 +15,8 @@ service cloud.firestore {
     function isAdmin() {
       // For simplicity in this initial setup, we'll check if the email matches the provided admin email
       // In a real production app, you'd use a roles collection
-      return isSignedIn() && (request.auth.token.email == 'abraunstore@gmail.com' && request.auth.token.email_verified == true);
+      let adminEmails = ['abraunstore@gmail.com', 'andres@jasperdesign.online'];
+      return isSignedIn() && (request.auth.token.email in adminEmails && request.auth.token.email_verified == true);
     }
 
     function isValidId(id) {

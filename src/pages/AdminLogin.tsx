@@ -26,10 +26,14 @@ export function AdminLogin() {
       await signInWithEmailAndPassword(auth, email, password);
       navigate('/admin');
     } catch (err: any) {
+      console.error("Auth Error:", err);
+      const isAllowedAdmin = email === 'abraunstore@gmail.com' || email === 'andres@jasperdesign.online';
       // In newer Firebase, user-not-found might be obscured as invalid-credential
-      if ((err.code === 'auth/user-not-found' || err.code === 'auth/invalid-credential') && email === 'abraunstore@gmail.com') {
+      if ((err.code === 'auth/user-not-found' || err.code === 'auth/invalid-credential') && isAllowedAdmin) {
          setNeedsSetup(true);
-         setError('Login failed. If this is your first time, click "Initialize Admin" to create your secure account.');
+         setError('Login failed. If this is your first time, click "Initialize Admin" below.');
+      } else if (err.code === 'auth/unauthorized-domain') {
+         setError('Domain Error: You must add "jas-design.github.io" to your Authorized Domains in the Firebase Console.');
       } else {
          setError(err.message || 'Login failed');
       }
@@ -44,9 +48,9 @@ export function AdminLogin() {
     try {
       // Create user with a random temporary password
       const tempPass = Math.random().toString(36).slice(-10) + 'A1!';
-      await createUserWithEmailAndPassword(auth, 'abraunstore@gmail.com', tempPass);
+      await createUserWithEmailAndPassword(auth, email, tempPass);
       // Immediately trigger reset
-      await sendPasswordResetEmail(auth, 'abraunstore@gmail.com');
+      await sendPasswordResetEmail(auth, email);
       setResetSent(true);
       setNeedsSetup(false);
     } catch (err: any) {
@@ -67,7 +71,10 @@ export function AdminLogin() {
       await sendPasswordResetEmail(auth, email);
       setResetSent(true);
     } catch (err: any) {
-      if (err.code === 'auth/user-not-found' && email === 'abraunstore@gmail.com') {
+      const isAllowedAdmin = email === 'abraunstore@gmail.com' || email === 'andres@jasperdesign.online';
+      if (err.code === 'auth/unauthorized-domain') {
+         setError('Domain Error: Add this domain to your Authorized Domains in the Firebase Console.');
+      } else if (err.code === 'auth/user-not-found' && isAllowedAdmin) {
          setNeedsSetup(true);
          setError('Account not found. You need to initialize it first.');
       } else {
