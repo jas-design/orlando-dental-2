@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useContent } from '../context/ContentContext';
 import { motion } from 'motion/react';
 import { Save, Phone, Mail, MapPin, Clock, Loader2, CheckCircle } from 'lucide-react';

@@ -2,6 +2,7 @@ import { ReactNode, useEffect, useState } from 'react';
 import { NavLink, useNavigate, useLocation } from 'react-router-dom';
 import { auth } from '../lib/firebase';
 import { onAuthStateChanged, signOut } from 'firebase/auth';
+import { motion, AnimatePresence } from 'motion/react';
 import { 
   LayoutDashboard, 
   FileText, 
@@ -210,6 +211,3 @@ export function AdminLayout({ children }: { children: ReactNode }) {
     </div>
   );
 }
-
-// Dummy AnimatePresence simple implementation for now to avoid motion complexities if needed
-const AnimatePresence = ({ children }: { children: any }) => <>{children}</>;

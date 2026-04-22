@@ -1,3 +1,4 @@
+import { cn } from '../lib/utils';
 import { motion } from 'motion/react';
 import { 
   FileEdit, 
@@ -114,5 +115,3 @@ export function AdminDashboard() {
     </div>
   );
 }
-
-import { cn } from '../lib/utils';
