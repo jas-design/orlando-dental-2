@@ -5,6 +5,7 @@ import { Button } from '../components/Button';
 import { collection, getDocs, query, orderBy, doc, getDoc } from 'firebase/firestore';
 import { db } from '../lib/firebase';
 import { TEAM as STATIC_TEAM } from '../constants';
+import { renderTitle } from '../lib/utils';
 
 export function About() {
   const [team, setTeam] = useState<any[]>([]);
@@ -34,8 +35,9 @@ export function About() {
   }, []);
 
   const displayTeam = team.length > 0 ? team : STATIC_TEAM;
-  const missionSection = pageData?.sections?.find((s: any) => s.id === 'mission');
+  const missionSection = pageData?.sections?.find((s: any) => s.id === 'mission' || s.type === 'text_with_image');
   const heroSection = pageData?.sections?.find((s: any) => s.type === 'hero');
+  const teamSection = pageData?.sections?.find((s: any) => s.type === 'team_grid');
 
   return (
     <div className="pt-24">
@@ -56,7 +58,7 @@ export function About() {
             transition={{ delay: 0.1 }}
             className="text-5xl md:text-7xl font-display font-bold mt-4 mb-6 text-brand-dark"
           >
-            {heroSection?.title || 'We Care For Your Dental Health'}
+            {renderTitle(heroSection?.title) || 'We Care For Your Dental Health'}
           </motion.h1>
           <motion.p 
             initial={{ opacity: 0, y: 20 }}
@@ -75,7 +77,9 @@ export function About() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
             <div className="space-y-12">
                <div className="space-y-4">
-                 <h2 className="text-4xl font-display font-bold">{missionSection?.title || 'Our Mission'}</h2>
+                 <h2 className="text-4xl font-display font-bold">
+                   {renderTitle(missionSection?.title) || 'Our Mission'}
+                 </h2>
                  <p className="text-gray-600 text-lg leading-relaxed">
                    {missionSection?.description || 'Our mission is to provide the highest quality dental care in a comfortable and welcoming environment. We believe in educating our patients and providing them with all the necessary information to make informed decisions about their oral health.'}
                  </p>
@@ -102,7 +106,7 @@ export function About() {
             <div className="relative">
               <div className="rounded-[48px] overflow-hidden shadow-2xl">
                 <img 
-                  src="https://images.unsplash.com/photo-1629909613654-28e377c37b09?auto=format&fit=crop&q=80&w=800" 
+                  src={missionSection?.image || "https://images.unsplash.com/photo-1629909613654-28e377c37b09?auto=format&fit=crop&q=80&w=800"} 
                   alt="Our Office" 
                   className="w-full aspect-[4/3] object-cover"
                 />
@@ -173,8 +177,8 @@ export function About() {
       <section className="py-24 bg-brand-dark text-white overflow-hidden">
         <div className="container mx-auto px-4">
           <div className="text-center max-w-3xl mx-auto mb-20 space-y-4">
-            <span className="text-brand-primary font-black uppercase tracking-widest text-xs">+ OUR SPECIALISTS</span>
-            <h2 className="text-5xl font-display font-bold leading-none">Meet the Experts Behind <br /> Your Radiant Smile</h2>
+            <span className="text-brand-primary font-black uppercase tracking-widest text-xs">{teamSection?.badge || '+ OUR SPECIALISTS'}</span>
+            <h2 className="text-5xl font-display font-bold leading-none">{renderTitle(teamSection?.title) || <>Meet the Experts Behind <br /> Your Radiant Smile</>}</h2>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-12">

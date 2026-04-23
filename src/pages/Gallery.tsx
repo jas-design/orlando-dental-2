@@ -1,18 +1,24 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { X, Search, Loader2 } from 'lucide-react';
-import { collection, getDocs, query, orderBy } from 'firebase/firestore';
+import { collection, getDocs, query, orderBy, doc, getDoc } from 'firebase/firestore';
 import { db } from '../lib/firebase';
+import { renderTitle } from '../lib/utils';
 
 export function Gallery() {
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [filter, setFilter] = useState<'all' | string>('all');
   const [galleryItems, setGalleryItems] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [pageData, setPageData] = useState<any>(null);
 
   useEffect(() => {
-    async function fetchGallery() {
+    async function fetchData() {
       try {
+        // Fetch Page Data
+        const pageSnap = await getDoc(doc(db, 'pages', 'gallery'));
+        if (pageSnap.exists()) setPageData(pageSnap.data());
+
         const q = query(collection(db, 'gallery'), orderBy('createdAt', 'desc'));
         const snap = await getDocs(q);
         const data = snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
@@ -23,7 +29,7 @@ export function Gallery() {
         setLoading(false);
       }
     }
-    fetchGallery();
+    fetchData();
   }, []);
 
   const staticImages = [
@@ -42,15 +48,19 @@ export function Gallery() {
   const images = galleryItems.length > 0 ? galleryItems : staticImages;
   const filteredImages = filter === 'all' ? images : images.filter(img => img.category === filter);
   const categories = ['all', ...Array.from(new Set(images.map((img: any) => img.category)))];
+  
+  const heroSection = pageData?.sections?.find((s: any) => s.type === 'hero');
 
   return (
     <div className="pt-24 min-h-screen bg-white">
       {/* Header */}
       <section className="bg-[#D4ECEE] py-24 mb-12">
         <div className="container mx-auto px-4 text-center">
-           <h1 className="text-5xl md:text-7xl font-display font-bold text-brand-dark mb-6">Smile Gallery</h1>
+           <h1 className="text-5xl md:text-7xl font-display font-bold text-brand-dark mb-6">
+             {renderTitle(heroSection?.title) || 'Smile Gallery'}
+           </h1>
            <p className="text-gray-700 font-medium text-xl max-w-2xl mx-auto leading-relaxed">
-             Take a look at our modern facility and some of the amazing transformations we've achieved for our patients.
+             {heroSection?.description || 'Take a look at our modern facility and some of the amazing transformations we\'ve achieved for our patients.'}
            </p>
         </div>
       </section>

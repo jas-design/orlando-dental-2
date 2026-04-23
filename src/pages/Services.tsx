@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'motion/react';
-import { ArrowRight, CheckCircle2, Loader2 } from 'lucide-react';
+import { CheckCircle2, Loader2 } from 'lucide-react';
 import * as Icons from 'lucide-react';
 import { Button } from '../components/Button';
 import { SERVICES as STATIC_SERVICES } from '../constants';
 import { collection, getDocs, query, orderBy, doc, getDoc } from 'firebase/firestore';
 import { db } from '../lib/firebase';
+import { renderTitle } from '../lib/utils';
 
 export function Services() {
   const [services, setServices] = useState<any[]>([]);
@@ -34,6 +35,7 @@ export function Services() {
 
   const displayServices = services.length > 0 ? services : STATIC_SERVICES;
   const heroSection = pageData?.sections?.find((s: any) => s.type === 'hero');
+  const servicesIntro = pageData?.sections?.find((s: any) => s.type === 'services_grid');
 
   return (
     <div className="pt-24">
@@ -41,7 +43,7 @@ export function Services() {
       <section className="bg-[#D4ECEE] py-24 border-b border-brand-primary/20">
         <div className="container mx-auto px-4 text-center">
           <h1 className="text-5xl md:text-7xl font-display font-bold text-brand-dark mb-6">
-            {heroSection?.title || 'Our Services'}
+            {renderTitle(heroSection?.title) || 'Our Services'}
           </h1>
           <p className="text-gray-700 font-medium text-xl max-w-2xl mx-auto leading-relaxed">
             {heroSection?.description || 'From routine checkups to full smile transformations, we provide comprehensive dental care for patients of all ages.'}

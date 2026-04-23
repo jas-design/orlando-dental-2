@@ -1,9 +1,30 @@
+import React, { useState, useEffect } from 'react';
 import { motion } from 'motion/react';
 import { Phone, Mail, MapPin, Clock, ExternalLink } from 'lucide-react';
 import { AppointmentForm } from '../components/AppointmentForm';
 import { CONTACT_INFO } from '../constants';
+import { doc, getDoc } from 'firebase/firestore';
+import { db } from '../lib/firebase';
+import { renderTitle } from '../lib/utils';
 
 export function Contact() {
+  const [pageData, setPageData] = useState<any>(null);
+
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const pageSnap = await getDoc(doc(db, 'pages', 'contact'));
+        if (pageSnap.exists()) setPageData(pageSnap.data());
+      } catch (error) {
+        console.error("Error fetching contact page data:", error);
+      }
+    }
+    fetchData();
+  }, []);
+
+  const heroSection = pageData?.sections?.find((s: any) => s.type === 'hero');
+  const contactStrip = pageData?.sections?.find((s: any) => s.type === 'contact_strip');
+
   return (
     <div className="pt-24 min-h-screen">
       {/* Hero Header */}
@@ -14,7 +35,7 @@ export function Contact() {
             animate={{ opacity: 1, y: 0 }}
             className="text-5xl md:text-7xl font-display font-bold text-brand-dark mb-6"
           >
-            Get In Touch
+            {renderTitle(heroSection?.title) || 'Get In Touch'}
           </motion.h1>
           <motion.p 
             initial={{ opacity: 0, y: 20 }}
@@ -22,7 +43,7 @@ export function Contact() {
             transition={{ delay: 0.1 }}
             className="text-gray-700 font-medium text-xl max-w-2xl mx-auto leading-relaxed"
           >
-            Have questions or ready to schedule? Our team is here to help you achieve the smile of your dreams.
+            {heroSection?.description || 'Have questions or ready to schedule? Our team is here to help you achieve the smile of your dreams.'}
           </motion.p>
         </div>
       </section>
@@ -38,9 +59,11 @@ export function Contact() {
                className="space-y-12"
             >
               <div className="space-y-8">
-                <h2 className="text-4xl font-display font-bold">Contact Information</h2>
+                <h2 className="text-4xl font-display font-bold">
+                  {renderTitle(contactStrip?.title) || 'Contact Information'}
+                </h2>
                 <p className="text-gray-500 text-lg">
-                  Visit us in Orlando or reach out via phone or email for any inquiries about our services or insurance coverage.
+                  {contactStrip?.description || 'Visit us in Orlando or reach out via phone or email for any inquiries about our services or insurance coverage.'}
                 </p>
                 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8 pt-4">

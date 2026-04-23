@@ -127,7 +127,7 @@ export function AdminPageEditor() {
       };
     }
 
-    if (id === 'about') {
+    if (normalizedId === 'about') {
       return {
         ...common,
         title: 'About Us',
@@ -136,8 +136,8 @@ export function AdminPageEditor() {
             id: 'about_hero',
             type: 'hero',
             badge: 'OUR STORY',
-            title: 'We Care For Your Dental Health',
-            description: 'At Orlando Dental Care, we take pride in bringing added value to every patient by addressing all of your dental needs.',
+            title: 'We Care For Your {Dental Health}',
+            description: 'At Orlando Dental Care, we take pride in bringing added value to every patient by addressing all of your dental needs and concerns.',
             cta: 'Learn More',
             image: 'https://images.unsplash.com/photo-1629909613654-28e377c37b09?auto=format&fit=crop&q=80'
           },
@@ -145,14 +145,20 @@ export function AdminPageEditor() {
              id: 'mission',
              type: 'text_with_image',
              title: 'Our Mission',
-             description: 'To provide the highest quality dental care in a comfortable and welcoming environment.',
+             description: 'Our mission is to provide the highest quality dental care in a comfortable and welcoming environment. We believe in educating our patients and providing them with all the necessary information to make informed decisions about their oral health.',
              image: 'https://images.unsplash.com/photo-1629907326852-b8356ee70666?auto=format&fit=crop&q=80'
+          },
+          {
+             id: 'team_grid',
+             type: 'team_grid',
+             title: 'Meet the Experts Behind <br /> Your {Radiant Smile}',
+             description: 'Dedicated to providing the best dental experience for our community with a focus on comfort and high-end results.'
           }
         ]
       };
     }
 
-    if (id === 'services') {
+    if (normalizedId === 'services') {
       return {
         ...common,
         title: 'Services',
@@ -161,10 +167,58 @@ export function AdminPageEditor() {
             id: 'services_hero',
             type: 'hero',
             badge: 'OUR CARE',
-            title: 'Comprehensive Dental Services',
-            description: 'From routine checkups to full smile transformations, we provide comprehensive dental care for all ages.',
+            title: 'Comprehensive {Dental Services}',
+            description: 'From routine checkups to full smile transformations, we provide comprehensive dental care for patients of all ages.',
             cta: 'View Services',
             image: 'https://images.unsplash.com/photo-1576091160550-217359f48f4c?auto=format&fit=crop&q=80'
+          },
+          {
+            id: 'services_grid',
+            type: 'services_grid',
+            title: 'Complete {Dental Care}',
+            description: 'Dedicated to providing the best dental experience for our community with a focus on comfort and high-end results.'
+          }
+        ]
+      };
+    }
+
+    if (normalizedId === 'gallery') {
+      return {
+        ...common,
+        title: 'Smile Gallery',
+        sections: [
+          {
+            id: 'gallery_hero',
+            type: 'hero',
+            badge: 'SMILE TRANSFORMATION',
+            title: 'Our {Smile Gallery}',
+            description: 'Take a look at our modern facility and some of the amazing transformations we\'ve achieved for our patients.',
+            cta: 'View Gallery',
+            image: 'https://images.unsplash.com/photo-1598256989800-fe5f95da9787?auto=format&fit=crop&q=80'
+          }
+        ]
+      };
+    }
+
+    if (normalizedId === 'contact') {
+      return {
+        ...common,
+        title: 'Contact Us',
+        sections: [
+          {
+            id: 'contact_hero',
+            type: 'hero',
+            badge: 'CONTACT US',
+            title: 'Get {In Touch}',
+            description: 'Have questions or ready to schedule? Our team is here to help you achieve the smile of your dreams.',
+            cta: 'Schedule Now',
+            image: 'https://images.unsplash.com/photo-1629909613654-28e377c37b09?auto=format&fit=crop&q=80'
+          },
+          {
+            id: 'contact_strip',
+            type: 'contact_strip',
+            title: 'Contact Information',
+            description: 'Visit us in Orlando or reach out via phone or email for any inquiries about our services or insurance coverage.'
           }
         ]
       };

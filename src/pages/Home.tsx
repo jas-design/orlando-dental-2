@@ -6,6 +6,7 @@ import * as Icons from 'lucide-react';
 import { TEAM, BLOG_POSTS } from '../constants';
 import { doc, getDoc, collection, getDocs, query, orderBy, limit } from 'firebase/firestore';
 import { db } from '../lib/firebase';
+import { renderTitle } from '../lib/utils';
 
 export function Home() {
   const [sliderPosition, setSliderPosition] = useState(50);
@@ -48,7 +49,7 @@ export function Home() {
   const heroSection = pageData?.sections?.find((s: any) => s.type === 'hero');
   const infoStrip = pageData?.sections?.find((s: any) => s.type === 'info_strip');
   const servicesIntro = pageData?.sections?.find((s: any) => s.type === 'services_grid');
-  const whyChooseUs = pageData?.sections?.find((s: any) => s.id === 'services_intro' || s.type === 'text_with_image');
+  const whyChooseUs = pageData?.sections?.find((s: any) => s.id === 'mission' || s.id === 'services_intro' || s.type === 'text_with_image');
   const beforeAfterSection = pageData?.sections?.find((s: any) => s.type === 'before_after');
   const faqSection = pageData?.sections?.find((s: any) => s.type === 'faq');
   const doctorBanner = pageData?.sections?.find((s: any) => s.type === 'doctor_banner');
@@ -83,29 +84,6 @@ export function Home() {
     const x = e.clientX - rect.left;
     const position = Math.max(0, Math.min(100, (x / rect.width) * 100));
     setSliderPosition(position);
-  };
-
-  const renderTitle = (title: string) => {
-    if (!title) return null;
-    
-    // First split by <br /> for lines
-    return title.split('<br />').map((line, lineIndex) => {
-      // Then for each line, look for {color text}
-      const parts = line.split(/(\{.*?\})/);
-      
-      return (
-        <React.Fragment key={lineIndex}>
-          {parts.map((part, partIndex) => {
-            if (part.startsWith('{') && part.endsWith('}')) {
-              const text = part.slice(1, -1);
-              return <span key={partIndex} className="text-brand-primary">{text}</span>;
-            }
-            return part;
-          })}
-          {lineIndex < title.split('<br />').length - 1 && <br />}
-        </React.Fragment>
-      );
-    });
   };
 
   return (
