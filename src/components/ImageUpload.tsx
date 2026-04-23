@@ -29,25 +29,34 @@ export function ImageUpload({ value, onChange, label, folder = 'images' }: Image
     setUploading(true);
 
     try {
+      console.log("Starting upload for file:", file.name, "type:", file.type);
       const fileName = `${Date.now()}-${file.name.replace(/[^a-zA-Z0-9.]/g, '_')}`;
       const storageRef = ref(storage, `${folder}/${fileName}`);
       
-      const result = await uploadBytes(storageRef, file);
+      // Adding metadata can help some browsers process the upload more reliably
+      const metadata = {
+        contentType: file.type || 'image/jpeg'
+      };
+
+      const result = await uploadBytes(storageRef, file, metadata);
+      console.log("Upload successful, getting download URL...");
       const downloadURL = await getDownloadURL(result.ref);
       
       onChange(downloadURL);
       showNotification("Image uploaded successfully!");
     } catch (error: any) {
-      console.error("Upload error details:", error);
+      console.error("FULL Upload error:", error);
       
       let message = "Upload failed. Please try again.";
       if (error.code === 'storage/unauthorized') {
         message = "Permission denied. Please check your storage rules.";
       } else if (error.code === 'storage/retry-limit-exceeded') {
         message = "Upload timed out. Is your internet stable?";
+      } else if (error.message?.includes('CORS')) {
+        message = "Connection blocked (CORS). Please check authorized domains.";
       }
       
-      showNotification(message, "error");
+      showNotification(`${message} (Error: ${error.code || 'unknown'})`, "error");
     } finally {
       setUploading(false);
       if (fileInputRef.current) fileInputRef.current.value = '';
