@@ -47,16 +47,18 @@ export function ImageUpload({ value, onChange, label, folder = 'images' }: Image
     } catch (error: any) {
       console.error("FULL Upload error:", error);
       
-      let message = "Upload failed. Please try again.";
+      let message = "Upload failed.";
       if (error.code === 'storage/unauthorized') {
-        message = "Permission denied. Please check your storage rules.";
+        message = "Permission denied. Check your Firebase Storage Rules: set rule to 'allow read, write: if request.auth != null;'.";
       } else if (error.code === 'storage/retry-limit-exceeded') {
-        message = "Upload timed out. Is your internet stable?";
+        message = "Upload timed out. This often means Firebase Storage isn't fully set up or CORS is blocking the request.";
       } else if (error.message?.includes('CORS')) {
-        message = "Connection blocked (CORS). Please check authorized domains.";
+        message = "CORS Blocked. You must configure CORS on your Firebase bucket for this domain.";
+      } else {
+        message = `Upload failed (${error.code || 'unknown'}). Try pasting a direct image URL instead.`;
       }
       
-      showNotification(`${message} (Error: ${error.code || 'unknown'})`, "error");
+      showNotification(message, "error");
     } finally {
       setUploading(false);
       if (fileInputRef.current) fileInputRef.current.value = '';
