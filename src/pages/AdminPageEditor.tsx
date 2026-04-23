@@ -28,13 +28,23 @@ export function AdminPageEditor() {
         
         if (docSnap.exists()) {
           const dbData = docSnap.data();
-          // If the page exists but has no sections, merge it with template sections
-          // This prevents "overriding" with blank content if the user opens a semi-initialized page
+          // Aggressive merge: ensure we have a title and sections if it's a known page
+          const finalData = { 
+            ...template, 
+            ...dbData 
+          };
+
+          // If it's a known page (like home) and sections are missing/empty, take from template
           if (!dbData.sections || dbData.sections.length === 0) {
-            setPageData({ ...template, ...dbData, sections: template.sections });
-          } else {
-            setPageData({ ...template, ...dbData });
+            finalData.sections = template.sections;
           }
+
+          // Ensure title is never empty
+          if (!dbData.title || dbData.title.trim() === "") {
+            finalData.title = template.title;
+          }
+
+          setPageData(finalData);
         } else {
           // Initialize with default template based on pageId
           setPageData(template);
@@ -49,9 +59,15 @@ export function AdminPageEditor() {
   }, [pageId]);
 
   const getTemplateForPage = (id: string) => {
-    const common = { slug: `/${id === 'home' ? '' : id}`, title: id.charAt(0).toUpperCase() + id.slice(1), sections: [] };
+    const normalizedId = id.toLowerCase().trim();
+    const common = { 
+      slug: normalizedId === 'home' ? '/' : `/${normalizedId}`, 
+      title: normalizedId.charAt(0).toUpperCase() + normalizedId.slice(1), 
+      sections: [] 
+    };
     
-    if (id === 'home') {
+    // We check both ID and slug for "Home" identification
+    if (normalizedId === 'home' || normalizedId === 'index') {
       return {
         ...common,
         title: 'Home Page',
