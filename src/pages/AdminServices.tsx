@@ -5,6 +5,8 @@ import { motion, AnimatePresence } from 'motion/react';
 import { Stethoscope, Plus, Trash2, Loader2, Search, X, Check, Edit2, Layout, Image as ImageIcon } from 'lucide-react';
 import * as Icons from 'lucide-react';
 
+import { ImageUpload } from '../components/ImageUpload';
+
 export function AdminServices() {
   const [services, setServices] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
@@ -158,14 +160,11 @@ export function AdminServices() {
                         />
                      </div>
                      <div className="md:col-span-2 space-y-2">
-                        <label className="text-xs font-black text-gray-400 uppercase tracking-widest pl-1">Main Image URL</label>
-                        <input 
-                           required
-                           type="url"
-                           value={currentService.image}
-                           onChange={(e) => setCurrentService({...currentService, image: e.target.value})}
-                           className="w-full p-4 bg-gray-50 border border-gray-100 rounded-2xl outline-none focus:bg-white focus:ring-2 focus:ring-brand-primary transition-all"
-                           placeholder="https://images.unsplash.com/..."
+                        <ImageUpload 
+                          label="Main Service Image"
+                          value={currentService.image}
+                          onChange={(url) => setCurrentService({...currentService, image: url})}
+                          folder="services"
                         />
                      </div>
                      <div className="md:col-span-2 space-y-2">

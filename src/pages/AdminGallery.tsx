@@ -4,6 +4,8 @@ import { db } from '../lib/firebase';
 import { motion, AnimatePresence } from 'motion/react';
 import { Image as ImageIcon, Plus, Trash2, Loader2, Search, X, Check, Filter } from 'lucide-react';
 
+import { ImageUpload } from '../components/ImageUpload';
+
 const CATEGORIES = ['Cosmetic', 'Implants', 'Orthodontics', 'General'];
 
 export function AdminGallery() {
@@ -129,18 +131,12 @@ export function AdminGallery() {
                   </div>
 
                   <div className="space-y-2">
-                     <label className="text-xs font-black text-gray-400 uppercase tracking-widest pl-1">Image URL</label>
-                     <div className="relative">
-                        <ImageIcon className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-300" />
-                        <input 
-                           required
-                           type="url"
-                           value={newImage.url}
-                           onChange={(e) => setNewImage({...newImage, url: e.target.value})}
-                           className="w-full pl-12 pr-4 py-4 bg-gray-50 border border-gray-100 rounded-2xl outline-none focus:bg-white focus:ring-2 focus:ring-brand-primary transition-all"
-                           placeholder="https://images.unsplash.com/..."
-                        />
-                     </div>
+                     <ImageUpload 
+                       label="Image Asset"
+                       value={newImage.url}
+                       onChange={(url) => setNewImage({...newImage, url: url})}
+                       folder="gallery"
+                     />
                   </div>
 
                   <div className="space-y-2">

@@ -4,6 +4,8 @@ import { db } from '../lib/firebase';
 import { motion, AnimatePresence } from 'motion/react';
 import { FileText, Plus, Trash2, Loader2, Search, X, Check, Edit2, Calendar, User, Tag } from 'lucide-react';
 
+import { ImageUpload } from '../components/ImageUpload';
+
 export function AdminBlog() {
   const [posts, setPosts] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
@@ -176,17 +178,14 @@ export function AdminBlog() {
                            className="w-full p-4 bg-gray-50 border border-gray-100 rounded-2xl outline-none focus:bg-white focus:ring-2 focus:ring-brand-primary transition-all"
                         />
                      </div>
-                     <div className="md:col-span-2 space-y-2">
-                        <label className="text-xs font-black text-gray-400 uppercase tracking-widest pl-1">Featured Image URL</label>
-                        <input 
-                           required
-                           type="url"
+                      <div className="md:col-span-2 space-y-2">
+                         <ImageUpload 
+                           label="Featured Image"
                            value={currentPost.image}
-                           onChange={(e) => setCurrentPost({...currentPost, image: e.target.value})}
-                           className="w-full p-4 bg-gray-50 border border-gray-100 rounded-2xl outline-none focus:bg-white focus:ring-2 focus:ring-brand-primary transition-all"
-                           placeholder="https://images.unsplash.com/..."
-                        />
-                     </div>
+                           onChange={(url) => setCurrentPost({...currentPost, image: url})}
+                           folder="blog"
+                         />
+                      </div>
                      <div className="md:col-span-2 space-y-2">
                         <label className="text-xs font-black text-gray-400 uppercase tracking-widest pl-1">Preview Description</label>
                         <textarea 

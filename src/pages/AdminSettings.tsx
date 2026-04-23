@@ -3,6 +3,8 @@ import { useContent } from '../context/ContentContext';
 import { motion } from 'motion/react';
 import { Save, Phone, Mail, MapPin, Clock, Loader2, CheckCircle } from 'lucide-react';
 
+import { ImageUpload } from '../components/ImageUpload';
+
 export function AdminSettings() {
   const { content, updateContent } = useContent();
   const [formData, setFormData] = useState(content.contactInfo);
@@ -76,6 +78,16 @@ export function AdminSettings() {
                  value={formData.address}
                  onChange={(e) => setFormData({ ...formData, address: e.target.value })}
                  className="w-full px-4 py-3 bg-gray-50 border-gray-100 rounded-xl focus:ring-2 focus:ring-brand-primary outline-none font-medium transition-all"
+               />
+            </div>
+
+            {/* Site Logo */}
+            <div className="bg-white p-8 rounded-[32px] border border-gray-100 shadow-sm space-y-4 md:col-span-2">
+               <ImageUpload 
+                 label="Clinic Logo"
+                 value={formData.logoUrl || ''}
+                 onChange={(url) => setFormData({ ...formData, logoUrl: url })}
+                 folder="settings"
                />
             </div>
 

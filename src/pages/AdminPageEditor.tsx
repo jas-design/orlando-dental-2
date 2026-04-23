@@ -5,6 +5,8 @@ import { db } from '../lib/firebase';
 import { motion } from 'motion/react';
 import { Save, ChevronLeft, Loader2, Image as ImageIcon, Plus, Trash2, Eye, Type, Layout, Star, Search, Users } from 'lucide-react';
 
+import { ImageUpload } from '../components/ImageUpload';
+
 export function AdminPageEditor() {
   const { pageId } = useParams();
   const navigate = useNavigate();
@@ -418,16 +420,12 @@ function SectionEditor({ section, index, total, onUpdate, onRemove, onMove }: Se
                 />
               </div>
               <div className="space-y-2">
-                <label className="text-xs font-black text-gray-400 uppercase tracking-widest">Background Image URL</label>
-                <div className="relative">
-                   <ImageIcon className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-300" />
-                   <input 
-                    type="text" 
-                    value={section.image} 
-                    onChange={(e) => onUpdate({ image: e.target.value })}
-                    className="w-full pl-12 pr-4 py-4 bg-white border border-gray-100 rounded-2xl outline-none focus:ring-2 focus:ring-brand-primary" 
-                  />
-                </div>
+                <ImageUpload 
+                  label="Background Image"
+                  value={section.image}
+                  onChange={(url) => onUpdate({ image: url })}
+                  folder="pages/hero"
+                />
               </div>
             </div>
           )}
@@ -453,16 +451,12 @@ function SectionEditor({ section, index, total, onUpdate, onRemove, onMove }: Se
                 />
               </div>
               <div className="space-y-2 md:col-span-2">
-                <label className="text-xs font-black text-gray-400 uppercase tracking-widest">Image URL</label>
-                <div className="relative">
-                   <ImageIcon className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-300" />
-                   <input 
-                    type="text" 
-                    value={section.image} 
-                    onChange={(e) => onUpdate({ image: e.target.value })}
-                    className="w-full pl-12 pr-4 py-4 bg-white border border-gray-100 rounded-2xl outline-none focus:ring-2 focus:ring-brand-primary" 
-                  />
-                </div>
+                <ImageUpload 
+                  label="Main Image"
+                  value={section.image}
+                  onChange={(url) => onUpdate({ image: url })}
+                  folder="pages/content"
+                />
               </div>
             </div>
           )}
