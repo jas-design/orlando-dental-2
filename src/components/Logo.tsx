@@ -1,6 +1,6 @@
 import React from 'react';
 import { IMAGES } from '../assets';
-import { Smile as SmileIcon } from 'lucide-react';
+import { useContent } from '../context/ContentContext';
 
 interface LogoProps {
   className?: string;
@@ -36,11 +36,13 @@ const ToothIcon = ({ className }: { className?: string }) => (
 
 export function Logo({ className = "", variant = 'dark' }: LogoProps) {
   const [imageError, setImageError] = React.useState(false);
+  const { content } = useContent();
+  const dynamicLogo = content.contactInfo.logoUrl;
 
   if (!imageError) {
     return (
       <img 
-        src={IMAGES.logo} 
+        src={dynamicLogo || IMAGES.logo} 
         alt="Orlando Dental Care" 
         className={`${variant === 'light' ? 'brightness-0 invert' : ''} h-full w-auto object-contain transition-transform hover:scale-[1.02] ${className}`}
         onError={() => setImageError(true)}

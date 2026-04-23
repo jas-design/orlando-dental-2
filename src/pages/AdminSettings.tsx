@@ -33,117 +33,137 @@ export function AdminSettings() {
   return (
     <div className="max-w-4xl space-y-12">
       <div>
-         <p className="text-brand-primary font-black uppercase tracking-[0.3em] mb-2 text-xs">Configuration</p>
-         <h1 className="text-4xl font-display font-bold text-brand-dark">Contact Information</h1>
-         <p className="text-gray-500 mt-2">Changes here will automatically update the header, footer, and contact page.</p>
+         <p className="text-brand-primary font-black uppercase tracking-[0.3em] mb-2 text-xs">Settings</p>
+         <h1 className="text-4xl font-display font-bold text-brand-dark">General & Contact</h1>
+         <p className="text-gray-500 mt-2">Manage your clinic's basic information and contact details.</p>
       </div>
 
-      <form onSubmit={handleSave} className="space-y-8">
-         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            {/* Phone */}
-            <div className="bg-white p-8 rounded-[32px] border border-gray-100 shadow-sm space-y-4">
-               <div className="flex items-center gap-3 text-brand-primary">
-                  <Phone className="w-5 h-5" />
-                  <span className="text-sm font-bold uppercase tracking-widest">Phone Number</span>
-               </div>
-               <input 
-                 type="text"
-                 value={formData.phone}
-                 onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                 className="w-full px-4 py-3 bg-gray-50 border-gray-100 rounded-xl focus:ring-2 focus:ring-brand-primary outline-none font-medium transition-all"
-               />
-            </div>
-
-            {/* WhatsApp */}
-            <div className="bg-white p-8 rounded-[32px] border border-gray-100 shadow-sm space-y-4">
-               <div className="flex items-center gap-3 text-[#25D366]">
-                  <MessageCircle className="w-5 h-5" />
-                  <span className="text-sm font-bold uppercase tracking-widest">WhatsApp Number</span>
-               </div>
-               <input 
-                 type="text"
-                 placeholder="e.g. 4077379444"
-                 value={formData.whatsapp || ''}
-                 onChange={(e) => setFormData({ ...formData, whatsapp: e.target.value.replace(/\D/g, '') })}
-                 className="w-full px-4 py-3 bg-gray-50 border-gray-100 rounded-xl focus:ring-2 focus:ring-[#25D366] outline-none font-medium transition-all"
-               />
-               <p className="text-[10px] text-gray-400">Only numbers, no spaces or dashes (e.g. 14075550123)</p>
-            </div>
-
-            {/* Email */}
-            <div className="bg-white p-8 rounded-[32px] border border-gray-100 shadow-sm space-y-4">
-               <div className="flex items-center gap-3 text-brand-primary">
-                  <Mail className="w-5 h-5" />
-                  <span className="text-sm font-bold uppercase tracking-widest">Email Address</span>
-               </div>
-               <input 
-                 type="email"
-                 value={formData.email}
-                 onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                 className="w-full px-4 py-3 bg-gray-50 border-gray-100 rounded-xl focus:ring-2 focus:ring-brand-primary outline-none font-medium transition-all"
-               />
-            </div>
-
-            {/* Address */}
-            <div className="bg-white p-8 rounded-[32px] border border-gray-100 shadow-sm space-y-4 md:col-span-2">
-               <div className="flex items-center gap-3 text-brand-primary">
-                  <MapPin className="w-5 h-5" />
-                  <span className="text-sm font-bold uppercase tracking-widest">Clinic Address</span>
-               </div>
-               <input 
-                 type="text"
-                 value={formData.address}
-                 onChange={(e) => setFormData({ ...formData, address: e.target.value })}
-                 className="w-full px-4 py-3 bg-gray-50 border-gray-100 rounded-xl focus:ring-2 focus:ring-brand-primary outline-none font-medium transition-all"
-               />
-            </div>
-
-            {/* Site Logo */}
-            <div className="bg-white p-8 rounded-[32px] border border-gray-100 shadow-sm space-y-4 md:col-span-2">
-               <ImageUpload 
-                 label="Clinic Logo"
-                 value={formData.logoUrl || ''}
-                 onChange={(url) => setFormData({ ...formData, logoUrl: url })}
-                 folder="images"
-               />
-            </div>
-
-            {/* Hours */}
-            <div className="bg-white p-8 rounded-[32px] border border-gray-100 shadow-sm space-y-6 md:col-span-2">
-               <div className="flex items-center gap-3 text-brand-primary">
-                  <Clock className="w-5 h-5" />
-                  <span className="text-sm font-bold uppercase tracking-widest">Business Hours</span>
-               </div>
-               <div className="space-y-4">
-                 {formData.hours.map((h, i) => (
-                   <div key={i} className="flex gap-4 items-center">
-                      <input 
-                        type="text"
-                        value={h.day}
-                        onChange={(e) => {
-                          const newHours = [...formData.hours];
-                          newHours[i].day = e.target.value;
-                          setFormData({ ...formData, hours: newHours });
-                        }}
-                        className="flex-1 px-4 py-2 bg-gray-50 border-gray-100 rounded-lg outline-none text-sm font-bold"
-                      />
-                      <input 
-                        type="text"
-                        value={h.time}
-                        onChange={(e) => {
-                          const newHours = [...formData.hours];
-                          newHours[i].time = e.target.value;
-                          setFormData({ ...formData, hours: newHours });
-                        }}
-                        className="flex-1 px-4 py-2 bg-gray-50 border-gray-100 rounded-lg outline-none text-sm"
-                      />
-                   </div>
-                 ))}
+      <form onSubmit={handleSave} className="space-y-12">
+         {/* General Information Section */}
+         <section className="space-y-6">
+            <h2 className="text-xl font-display font-bold text-brand-dark flex items-center gap-2">
+               <span className="w-8 h-1 bg-brand-primary rounded-full"></span>
+               General Information
+            </h2>
+            <div className="grid grid-cols-1 gap-8">
+               {/* Site Logo */}
+               <div className="bg-white p-8 rounded-[32px] border border-gray-100 shadow-sm space-y-4">
+                  <div className="flex items-center gap-3 text-brand-primary mb-2">
+                     <span className="text-sm font-bold uppercase tracking-widest text-gray-400">Main Clinic Logo</span>
+                  </div>
+                  <ImageUpload 
+                    label="Upload Clinic Logo"
+                    value={formData.logoUrl || ''}
+                    onChange={(url) => setFormData({ ...formData, logoUrl: url })}
+                    folder="images"
+                  />
+                  <p className="text-xs text-gray-400 mt-2 italic">If no image is uploaded, the site will fall back to the default logo designs.</p>
                </div>
             </div>
-         </div>
+         </section>
 
-         <div className="flex items-center gap-4">
+         {/* Contact Information Section */}
+         <section className="space-y-6">
+            <h2 className="text-xl font-display font-bold text-brand-dark flex items-center gap-2">
+               <span className="w-8 h-1 bg-brand-primary rounded-full"></span>
+               Contact Details
+            </h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+               {/* Phone */}
+               <div className="bg-white p-8 rounded-[32px] border border-gray-100 shadow-sm space-y-4">
+                  <div className="flex items-center gap-3 text-brand-primary">
+                     <Phone className="w-5 h-5" />
+                     <span className="text-sm font-bold uppercase tracking-widest">Phone Number</span>
+                  </div>
+                  <input 
+                    type="text"
+                    value={formData.phone}
+                    onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                    className="w-full px-4 py-3 bg-gray-50 border-gray-100 rounded-xl focus:ring-2 focus:ring-brand-primary outline-none font-medium transition-all"
+                  />
+               </div>
+
+               {/* WhatsApp */}
+               <div className="bg-white p-8 rounded-[32px] border border-gray-100 shadow-sm space-y-4">
+                  <div className="flex items-center gap-3 text-[#25D366]">
+                     <MessageCircle className="w-5 h-5" />
+                     <span className="text-sm font-bold uppercase tracking-widest">WhatsApp Number</span>
+                  </div>
+                  <input 
+                    type="text"
+                    placeholder="e.g. 4077379444"
+                    value={formData.whatsapp || ''}
+                    onChange={(e) => setFormData({ ...formData, whatsapp: e.target.value.replace(/\D/g, '') })}
+                    className="w-full px-4 py-3 bg-gray-50 border-gray-100 rounded-xl focus:ring-2 focus:ring-[#25D366] outline-none font-medium transition-all"
+                  />
+                  <p className="text-[10px] text-gray-400">Only numbers, no spaces or dashes</p>
+               </div>
+
+               {/* Email */}
+               <div className="bg-white p-8 rounded-[32px] border border-gray-100 shadow-sm space-y-4">
+                  <div className="flex items-center gap-3 text-brand-primary">
+                     <Mail className="w-5 h-5" />
+                     <span className="text-sm font-bold uppercase tracking-widest">Email Address</span>
+                  </div>
+                  <input 
+                    type="email"
+                    value={formData.email}
+                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                    className="w-full px-4 py-3 bg-gray-50 border-gray-100 rounded-xl focus:ring-2 focus:ring-brand-primary outline-none font-medium transition-all"
+                  />
+               </div>
+
+               {/* Address */}
+               <div className="bg-white p-8 rounded-[32px] border border-gray-100 shadow-sm space-y-4 md:col-span-1">
+                  <div className="flex items-center gap-3 text-brand-primary">
+                     <MapPin className="w-5 h-5" />
+                     <span className="text-sm font-bold uppercase tracking-widest">Clinic Address</span>
+                  </div>
+                  <input 
+                    type="text"
+                    value={formData.address}
+                    onChange={(e) => setFormData({ ...formData, address: e.target.value })}
+                    className="w-full px-4 py-3 bg-gray-50 border-gray-100 rounded-xl focus:ring-2 focus:ring-brand-primary outline-none font-medium transition-all"
+                  />
+               </div>
+
+               {/* Hours */}
+               <div className="bg-white p-8 rounded-[32px] border border-gray-100 shadow-sm space-y-6 md:col-span-2">
+                  <div className="flex items-center gap-3 text-brand-primary">
+                     <Clock className="w-5 h-5" />
+                     <span className="text-sm font-bold uppercase tracking-widest">Business Hours</span>
+                  </div>
+                  <div className="space-y-4">
+                    {formData.hours.map((h, i) => (
+                      <div key={i} className="flex gap-4 items-center">
+                         <input 
+                           type="text"
+                           value={h.day}
+                           onChange={(e) => {
+                             const newHours = [...formData.hours];
+                             newHours[i].day = e.target.value;
+                             setFormData({ ...formData, hours: newHours });
+                           }}
+                           className="flex-1 px-4 py-2 bg-gray-50 border-gray-100 rounded-lg outline-none text-sm font-bold"
+                         />
+                         <input 
+                           type="text"
+                           value={h.time}
+                           onChange={(e) => {
+                             const newHours = [...formData.hours];
+                             newHours[i].time = e.target.value;
+                             setFormData({ ...formData, hours: newHours });
+                           }}
+                           className="flex-1 px-4 py-2 bg-gray-50 border-gray-100 rounded-lg outline-none text-sm"
+                         />
+                      </div>
+                    ))}
+                  </div>
+               </div>
+            </div>
+         </section>
+
+         <div className="flex items-center gap-4 fixed bottom-8 right-8 z-50">
             <button 
               type="submit"
               disabled={saving}
