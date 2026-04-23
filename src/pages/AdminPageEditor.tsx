@@ -24,12 +24,19 @@ export function AdminPageEditor() {
       try {
         const docRef = doc(db, 'pages', pageId);
         const docSnap = await getDoc(docRef);
+        const template = getTemplateForPage(pageId);
         
         if (docSnap.exists()) {
-          setPageData(docSnap.data());
+          const dbData = docSnap.data();
+          // If the page exists but has no sections, merge it with template sections
+          // This prevents "overriding" with blank content if the user opens a semi-initialized page
+          if (!dbData.sections || dbData.sections.length === 0) {
+            setPageData({ ...template, ...dbData, sections: template.sections });
+          } else {
+            setPageData({ ...template, ...dbData });
+          }
         } else {
           // Initialize with default template based on pageId
-          const template = getTemplateForPage(pageId);
           setPageData(template);
         }
       } catch (error) {

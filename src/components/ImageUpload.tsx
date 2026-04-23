@@ -1,7 +1,7 @@
 import React, { useRef, useState } from 'react';
-import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
 import { storage } from '../lib/firebase';
-import { Upload, X, Loader2, Image as ImageIcon } from 'lucide-react';
+import { Upload, X, Loader2, Image as ImageIcon, Link as LinkIcon } from 'lucide-react';
 import { useNotification } from '../context/NotificationContext';
 
 interface ImageUploadProps {
@@ -34,18 +34,33 @@ export function ImageUpload({ value, onChange, label, folder = 'images' }: Image
       const fileName = `${Date.now()}-${file.name.replace(/[^a-zA-Z0-9.]/g, '_')}`;
       const storageRef = ref(storage, `${folder}/${fileName}`);
       
-      // Use uploadBytes for maximum reliability
-      const uploadResult = await uploadBytes(storageRef, file);
-      const downloadURL = await getDownloadURL(uploadResult.ref);
-      
-      onChange(downloadURL);
-      setUploading(false);
-      setProgress(0);
-      showNotification("Image uploaded successfully!");
+      const uploadTask = uploadBytesResumable(storageRef, file);
+
+      uploadTask.on('state_changed', 
+        (snapshot) => {
+          const p = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+          setProgress(p);
+        }, 
+        (error) => {
+          console.error("Upload error:", error);
+          showNotification("Upload failed. Please check your storage permissions.", "error");
+          setUploading(false);
+          if (fileInputRef.current) fileInputRef.current.value = '';
+        }, 
+        async () => {
+          const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
+          onChange(downloadURL);
+          setUploading(false);
+          setProgress(0);
+          showNotification("Image uploaded successfully!");
+          if (fileInputRef.current) fileInputRef.current.value = '';
+        }
+      );
     } catch (error) {
-      console.error("Upload error:", error);
-      showNotification("Upload failed. Please check your storage permissions or connection.", "error");
+      console.error("Upload execution error:", error);
+      showNotification("Upload execution failed.", "error");
       setUploading(false);
+      if (fileInputRef.current) fileInputRef.current.value = '';
     }
   };
 
@@ -54,22 +69,25 @@ export function ImageUpload({ value, onChange, label, folder = 'images' }: Image
       {label && <label className="text-xs font-black text-gray-400 uppercase tracking-widest block">{label}</label>}
       
       <div className="relative group">
-        <div className="flex gap-4">
-          <input 
-            type="text" 
-            value={value} 
-            onChange={(e) => onChange(e.target.value)}
-            placeholder="Image URL or upload..."
-            className="flex-1 p-4 bg-white border border-gray-100 rounded-2xl outline-none focus:ring-2 focus:ring-brand-primary" 
-          />
+        <div className="flex flex-col md:flex-row gap-4">
+          <div className="flex-1 relative">
+            <LinkIcon className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-300" />
+            <input 
+              type="text" 
+              value={value} 
+              onChange={(e) => onChange(e.target.value)}
+              placeholder="Paste custom image URL here..."
+              className="w-full p-4 pl-12 bg-white border border-gray-100 rounded-2xl outline-none focus:ring-2 focus:ring-brand-primary placeholder:text-gray-300 text-sm" 
+            />
+          </div>
           <button
             type="button"
             onClick={() => fileInputRef.current?.click()}
             disabled={uploading}
-            className="px-6 bg-brand-primary text-white rounded-2xl font-bold transition-all hover:bg-brand-dark disabled:opacity-50 flex items-center justify-center gap-2"
+            className="px-8 bg-brand-primary text-white rounded-2xl font-bold transition-all hover:bg-brand-dark disabled:opacity-50 flex items-center justify-center gap-3 shadow-lg shadow-brand-primary/10 whitespace-nowrap min-h-[56px]"
           >
             {uploading ? <Loader2 className="w-5 h-5 animate-spin" /> : <Upload className="w-5 h-5" />}
-            <span className="hidden md:inline">Upload</span>
+            <span>{uploading ? `${Math.round(progress)}%` : 'Upload File'}</span>
           </button>
         </div>
 
