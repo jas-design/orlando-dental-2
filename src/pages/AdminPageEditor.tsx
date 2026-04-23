@@ -426,7 +426,7 @@ function SectionEditor({ section, index, total, onUpdate, onRemove, onMove }: Se
                   label="Background Image"
                   value={section.image}
                   onChange={(url) => onUpdate({ image: url })}
-                  folder="pages/hero"
+                  folder="images"
                 />
               </div>
             </div>
@@ -457,7 +457,7 @@ function SectionEditor({ section, index, total, onUpdate, onRemove, onMove }: Se
                   label="Main Image"
                   value={section.image}
                   onChange={(url) => onUpdate({ image: url })}
-                  folder="pages/content"
+                  folder="images"
                 />
               </div>
             </div>

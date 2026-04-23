@@ -156,7 +156,7 @@ export function AdminTeam() {
                           label="Profile Image"
                           value={currentMember.image}
                           onChange={(url) => setCurrentMember({...currentMember, image: url})}
-                          folder="team"
+                          folder="images"
                         />
                       </div>
                      <div className="md:col-span-2 space-y-2">

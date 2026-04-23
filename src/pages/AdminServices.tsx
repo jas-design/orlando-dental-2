@@ -168,7 +168,7 @@ export function AdminServices() {
                           label="Main Service Image"
                           value={currentService.image}
                           onChange={(url) => setCurrentService({...currentService, image: url})}
-                          folder="services"
+                          folder="images"
                         />
                      </div>
                      <div className="md:col-span-2 space-y-2">

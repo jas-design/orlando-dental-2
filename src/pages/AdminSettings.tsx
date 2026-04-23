@@ -88,7 +88,7 @@ export function AdminSettings() {
                  label="Clinic Logo"
                  value={formData.logoUrl || ''}
                  onChange={(url) => setFormData({ ...formData, logoUrl: url })}
-                 folder="settings"
+                 folder="images"
                />
             </div>
 

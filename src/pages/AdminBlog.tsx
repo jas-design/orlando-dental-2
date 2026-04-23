@@ -186,7 +186,7 @@ export function AdminBlog() {
                            label="Featured Image"
                            value={currentPost.image}
                            onChange={(url) => setCurrentPost({...currentPost, image: url})}
-                           folder="blog"
+                           folder="images"
                          />
                       </div>
                      <div className="md:col-span-2 space-y-2">

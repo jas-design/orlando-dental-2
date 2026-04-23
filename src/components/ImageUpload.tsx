@@ -1,7 +1,8 @@
 import React, { useRef, useState } from 'react';
-import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
+import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { storage } from '../lib/firebase';
 import { Upload, X, Loader2, Image as ImageIcon } from 'lucide-react';
+import { useNotification } from '../context/NotificationContext';
 
 interface ImageUploadProps {
   value: string;
@@ -14,14 +15,15 @@ export function ImageUpload({ value, onChange, label, folder = 'images' }: Image
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [uploading, setUploading] = useState(false);
   const [progress, setProgress] = useState(0);
+  const { showNotification } = useNotification();
 
   const handleFileSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
 
-    // Check file size (max 5MB)
-    if (file.size > 5 * 1024 * 1024) {
-      alert("File is too large. Max 5MB.");
+    // Check file size (max 10MB)
+    if (file.size > 10 * 1024 * 1024) {
+      showNotification("File is too large. Max 10MB.", "error");
       return;
     }
 
@@ -31,27 +33,18 @@ export function ImageUpload({ value, onChange, label, folder = 'images' }: Image
     try {
       const fileName = `${Date.now()}-${file.name.replace(/[^a-zA-Z0-9.]/g, '_')}`;
       const storageRef = ref(storage, `${folder}/${fileName}`);
-      const uploadTask = uploadBytesResumable(storageRef, file);
-
-      uploadTask.on('state_changed', 
-        (snapshot) => {
-          const p = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-          setProgress(p);
-        }, 
-        (error) => {
-          console.error("Upload error:", error);
-          alert("Upload failed. Check your connection.");
-          setUploading(false);
-        }, 
-        async () => {
-          const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
-          onChange(downloadURL);
-          setUploading(false);
-          setProgress(0);
-        }
-      );
+      
+      // Use uploadBytes for maximum reliability
+      const uploadResult = await uploadBytes(storageRef, file);
+      const downloadURL = await getDownloadURL(uploadResult.ref);
+      
+      onChange(downloadURL);
+      setUploading(false);
+      setProgress(0);
+      showNotification("Image uploaded successfully!");
     } catch (error) {
-      console.error("Setup error:", error);
+      console.error("Upload error:", error);
+      showNotification("Upload failed. Please check your storage permissions or connection.", "error");
       setUploading(false);
     }
   };
