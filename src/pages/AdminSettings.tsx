@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useContent } from '../context/ContentContext';
 import { motion } from 'motion/react';
-import { Save, Phone, Mail, MapPin, Clock, Loader2, CheckCircle } from 'lucide-react';
+import { Save, Phone, Mail, MapPin, Clock, Loader2, CheckCircle, MessageCircle } from 'lucide-react';
 import { useNotification } from '../context/NotificationContext';
 
 import { ImageUpload } from '../components/ImageUpload';
@@ -52,6 +52,22 @@ export function AdminSettings() {
                  onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
                  className="w-full px-4 py-3 bg-gray-50 border-gray-100 rounded-xl focus:ring-2 focus:ring-brand-primary outline-none font-medium transition-all"
                />
+            </div>
+
+            {/* WhatsApp */}
+            <div className="bg-white p-8 rounded-[32px] border border-gray-100 shadow-sm space-y-4">
+               <div className="flex items-center gap-3 text-[#25D366]">
+                  <MessageCircle className="w-5 h-5" />
+                  <span className="text-sm font-bold uppercase tracking-widest">WhatsApp Number</span>
+               </div>
+               <input 
+                 type="text"
+                 placeholder="e.g. 4077379444"
+                 value={formData.whatsapp || ''}
+                 onChange={(e) => setFormData({ ...formData, whatsapp: e.target.value.replace(/\D/g, '') })}
+                 className="w-full px-4 py-3 bg-gray-50 border-gray-100 rounded-xl focus:ring-2 focus:ring-[#25D366] outline-none font-medium transition-all"
+               />
+               <p className="text-[10px] text-gray-400">Only numbers, no spaces or dashes (e.g. 14075550123)</p>
             </div>
 
             {/* Email */}
