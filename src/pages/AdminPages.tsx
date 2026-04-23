@@ -2,16 +2,17 @@ import React, { useState, useEffect } from 'react';
 import { collection, query, getDocs, addDoc, doc, setDoc, deleteDoc } from 'firebase/firestore';
 import { db } from '../lib/firebase';
 import { motion, AnimatePresence } from 'motion/react';
-import { FileText, Plus, ChevronRight, Search, Loader2, X, AlertCircle, Trash2 } from 'lucide-react';
+import { FileText, Plus, ChevronRight, Search, Loader2, X, AlertCircle, Trash2, GripVertical } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useNotification } from '../context/NotificationContext';
+import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd';
 
 const DEFAULT_PAGES = [
-  { id: 'home', title: 'Home Page', slug: '/' },
-  { id: 'about', title: 'About Us', slug: '/about' },
-  { id: 'services', title: 'Services', slug: '/services' },
-  { id: 'gallery', title: 'Smile Gallery', slug: '/gallery' },
-  { id: 'contact', title: 'Contact', slug: '/contact' }
+  { id: 'home', title: 'Home Page', slug: '/', order: 0 },
+  { id: 'about', title: 'About Us', slug: '/about', order: 1 },
+  { id: 'services', title: 'Services', slug: '/services', order: 2 },
+  { id: 'gallery', title: 'Smile Gallery', slug: '/gallery', order: 3 },
+  { id: 'contact', title: 'Contact', slug: '/contact', order: 4 }
 ];
 
 export function AdminPages() {
@@ -45,8 +46,15 @@ export function AdminPages() {
         }
       });
 
-      // Sort by title
-      setPages(finalPages.sort((a: any, b: any) => (a.title || '').localeCompare(b.title || '')));
+      // Sort by order field, then by title as fallback
+      const sorted = finalPages.sort((a: any, b: any) => {
+        const orderA = a.order !== undefined ? a.order : 999;
+        const orderB = b.order !== undefined ? b.order : 999;
+        if (orderA !== orderB) return orderA - orderB;
+        return (a.title || '').localeCompare(b.title || '');
+      });
+
+      setPages(sorted);
     } catch (error) {
       console.error("Error fetching pages:", error);
       setPages(DEFAULT_PAGES);
@@ -70,11 +78,15 @@ export function AdminPages() {
     const docId = slug || 'new-page-' + Date.now();
     slug = '/' + slug;
 
+    // Get max order
+    const maxOrder = pages.length > 0 ? Math.max(...pages.map(p => p.order || 0)) : -1;
+
     try {
       await setDoc(doc(db, 'pages', docId), {
         title: newPage.title,
         slug: slug,
         sections: [],
+        order: maxOrder + 1,
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString()
       });
@@ -103,6 +115,34 @@ export function AdminPages() {
       fetchPages();
     } catch (error) {
       console.error("Error deleting:", error);
+    }
+  };
+
+  const handleDragEnd = async (result: any) => {
+    if (!result.destination) return;
+
+    const items = Array.from(pages);
+    const [reorderedItem] = items.splice(result.source.index, 1) as any[];
+    items.splice(result.destination.index, 0, reorderedItem);
+
+    // Update local state immediately
+    const updatedItems = items.map((item: any, index: number) => ({
+      ...item,
+      order: index
+    }));
+    setPages(updatedItems);
+
+    // Save to Firestore
+    try {
+      showNotification('Updating page order...', 'info');
+      const batchPromises = updatedItems.map(item => 
+        setDoc(doc(db, 'pages', item.id), { order: item.order }, { merge: true })
+      );
+      await Promise.all(batchPromises);
+      showNotification('Page order updated!');
+    } catch (error) {
+      console.error("Error updating order:", error);
+      showNotification('Failed to save page order.', 'error');
     }
   };
 
@@ -144,47 +184,74 @@ export function AdminPages() {
           <Loader2 className="w-8 h-8 animate-spin text-brand-primary" />
         </div>
       ) : (
-        <div className="grid grid-cols-1 gap-4">
-          {filteredPages.map((page, index) => {
-            const isDefault = DEFAULT_PAGES.some(p => p.id === page.id);
-            return (
-              <motion.div
-                key={page.id}
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: index * 0.05 }}
-                onClick={() => navigate(`/admin/pages/edit/${page.id}`)}
-                className="group bg-white p-6 rounded-[32px] border border-gray-50 shadow-sm hover:shadow-xl hover:border-brand-primary/20 transition-all cursor-pointer flex items-center justify-between"
+        <DragDropContext onDragEnd={handleDragEnd}>
+          <Droppable droppableId="pages-list">
+            {(provided) => (
+              <div 
+                {...provided.droppableProps}
+                ref={provided.innerRef}
+                className="grid grid-cols-1 gap-4"
               >
-                <div className="flex items-center gap-6">
-                  <div className="w-14 h-14 bg-brand-primary/5 rounded-2xl flex items-center justify-center text-brand-primary group-hover:bg-brand-primary group-hover:text-white transition-all shadow-sm">
-                    <FileText className="w-6 h-6" />
-                  </div>
-                  <div>
-                    <div className="flex items-center gap-3">
-                       <h3 className="text-lg font-bold text-brand-dark">{page.title}</h3>
-                       {isDefault && (
-                         <span className="text-[10px] font-black uppercase tracking-widest px-2 py-0.5 bg-gray-100 text-gray-400 rounded-full">System</span>
-                       )}
-                    </div>
-                    <p className="text-sm text-gray-400 font-medium">{page.slug}</p>
-                  </div>
-                </div>
-                <div className="flex items-center gap-4">
-                  {!isDefault && (
-                    <button 
-                      onClick={(e) => handleDelete(e, page.id)}
-                      className="p-3 text-gray-300 hover:text-red-500 hover:bg-red-50 rounded-xl transition-all"
-                    >
-                       <Trash2 className="w-5 h-5" />
-                    </button>
-                  )}
-                  <ChevronRight className="w-6 h-6 text-gray-200 group-hover:text-brand-primary transition-all" />
-                </div>
-              </motion.div>
-            );
-          })}
-        </div>
+                {filteredPages.map((page, index) => {
+                  const isDefault = DEFAULT_PAGES.some(p => p.id === page.id);
+                  const DraggableAny = Draggable as any;
+                  return (
+                    <DraggableAny key={page.id} draggableId={page.id} index={index}>
+                      {(provided: any, snapshot: any) => (
+                        <div
+                          ref={provided.innerRef}
+                          {...provided.draggableProps}
+                          className={snapshot.isDragging ? "z-50" : ""}
+                        >
+                          <motion.div
+                            initial={{ opacity: 0, y: 10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: snapshot.isDragging ? 0 : index * 0.05 }}
+                            onClick={() => navigate(`/admin/pages/edit/${page.id}`)}
+                            className={`group bg-white p-6 rounded-[32px] border border-gray-50 shadow-sm hover:shadow-xl hover:border-brand-primary/20 transition-all cursor-pointer flex items-center justify-between ${snapshot.isDragging ? 'shadow-2xl border-brand-primary ring-2 ring-brand-primary/20 bg-brand-primary/5' : ''}`}
+                          >
+                            <div className="flex items-center gap-6">
+                              <div 
+                                {...provided.dragHandleProps}
+                                className="p-2 -ml-2 text-gray-300 hover:text-brand-primary transition-colors cursor-grab active:cursor-grabbing"
+                              >
+                                <GripVertical className="w-5 h-5" />
+                              </div>
+                              <div className="w-14 h-14 bg-brand-primary/5 rounded-2xl flex items-center justify-center text-brand-primary group-hover:bg-brand-primary group-hover:text-white transition-all shadow-sm">
+                                <FileText className="w-6 h-6" />
+                              </div>
+                              <div>
+                                <div className="flex items-center gap-3">
+                                  <h3 className="text-lg font-bold text-brand-dark">{page.title}</h3>
+                                  {isDefault && (
+                                    <span className="text-[10px] font-black uppercase tracking-widest px-2 py-0.5 bg-gray-100 text-gray-400 rounded-full">System</span>
+                                  )}
+                                </div>
+                                <p className="text-sm text-gray-400 font-medium">{page.slug}</p>
+                              </div>
+                            </div>
+                            <div className="flex items-center gap-4">
+                              {!isDefault && (
+                                <button 
+                                  onClick={(e) => handleDelete(e, page.id)}
+                                  className="p-3 text-gray-300 hover:text-red-500 hover:bg-red-50 rounded-xl transition-all"
+                                >
+                                  <Trash2 className="w-5 h-5" />
+                                </button>
+                              )}
+                              <ChevronRight className="w-6 h-6 text-gray-200 group-hover:text-brand-primary transition-all" />
+                            </div>
+                          </motion.div>
+                        </div>
+                      )}
+                    </DraggableAny>
+                  );
+                })}
+                {provided.placeholder}
+              </div>
+            )}
+          </Droppable>
+        </DragDropContext>
       )}
 
       {/* New Page Modal */}
