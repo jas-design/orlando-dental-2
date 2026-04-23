@@ -3,6 +3,7 @@ import { collection, query, getDocs, addDoc, deleteDoc, doc, updateDoc, orderBy 
 import { db } from '../lib/firebase';
 import { motion, AnimatePresence } from 'motion/react';
 import { Users, Plus, Trash2, Loader2, X, Check, Edit2, ShieldCheck, Heart } from 'lucide-react';
+import { useNotification } from '../context/NotificationContext';
 
 import { ImageUpload } from '../components/ImageUpload';
 
@@ -12,6 +13,7 @@ export function AdminTeam() {
   const [saving, setSaving] = useState(false);
   const [isEditMode, setIsEditMode] = useState(false);
   const [currentMember, setCurrentMember] = useState<any>(null);
+  const { showNotification } = useNotification();
 
   const emptyMember = {
     name: '',
@@ -54,8 +56,10 @@ export function AdminTeam() {
       }
       setIsEditMode(false);
       fetchMembers();
+      showNotification('Team member saved successfully!');
     } catch (error) {
       console.error("Error saving member:", error);
+      showNotification('Error saving team member.', 'error');
     } finally {
       setSaving(false);
     }

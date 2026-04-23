@@ -3,6 +3,7 @@ import { collection, query, getDocs, addDoc, deleteDoc, doc, updateDoc } from 'f
 import { db } from '../lib/firebase';
 import { motion, AnimatePresence } from 'motion/react';
 import { Image as ImageIcon, Plus, Trash2, Loader2, Search, X, Check, Filter } from 'lucide-react';
+import { useNotification } from '../context/NotificationContext';
 
 import { ImageUpload } from '../components/ImageUpload';
 
@@ -14,6 +15,7 @@ export function AdminGallery() {
   const [saving, setSaving] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [isAddMode, setIsAddMode] = useState(false);
+  const { showNotification } = useNotification();
   
   const [newImage, setNewImage] = useState({
     title: '',
@@ -50,9 +52,10 @@ export function AdminGallery() {
       setIsAddMode(false);
       setNewImage({ title: '', url: '', category: 'Cosmetic' });
       fetchImages();
+      showNotification('Image added to gallery!');
     } catch (error) {
       console.error("Error adding image:", error);
-      alert("Error adding image. Check console.");
+      showNotification("Error adding image.", "error");
     } finally {
       setSaving(false);
     }

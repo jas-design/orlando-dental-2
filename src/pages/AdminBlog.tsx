@@ -3,6 +3,7 @@ import { collection, query, getDocs, addDoc, deleteDoc, doc, updateDoc, orderBy 
 import { db } from '../lib/firebase';
 import { motion, AnimatePresence } from 'motion/react';
 import { FileText, Plus, Trash2, Loader2, Search, X, Check, Edit2, Calendar, User, Tag } from 'lucide-react';
+import { useNotification } from '../context/NotificationContext';
 
 import { ImageUpload } from '../components/ImageUpload';
 
@@ -13,6 +14,7 @@ export function AdminBlog() {
   const [searchTerm, setSearchTerm] = useState('');
   const [isEditMode, setIsEditMode] = useState(false);
   const [currentPost, setCurrentPost] = useState<any>(null);
+  const { showNotification } = useNotification();
 
   const emptyPost = {
     title: '',
@@ -58,9 +60,10 @@ export function AdminBlog() {
       }
       setIsEditMode(false);
       fetchPosts();
+      showNotification('Post published successfully!');
     } catch (error) {
       console.error("Error saving post:", error);
-      alert("Error saving post.");
+      showNotification("Error saving post.", "error");
     } finally {
       setSaving(false);
     }

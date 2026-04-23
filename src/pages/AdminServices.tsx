@@ -4,6 +4,7 @@ import { db } from '../lib/firebase';
 import { motion, AnimatePresence } from 'motion/react';
 import { Stethoscope, Plus, Trash2, Loader2, Search, X, Check, Edit2, Layout, Image as ImageIcon } from 'lucide-react';
 import * as Icons from 'lucide-react';
+import { useNotification } from '../context/NotificationContext';
 
 import { ImageUpload } from '../components/ImageUpload';
 
@@ -14,6 +15,7 @@ export function AdminServices() {
   const [searchTerm, setSearchTerm] = useState('');
   const [isEditMode, setIsEditMode] = useState(false);
   const [currentService, setCurrentService] = useState<any>(null);
+  const { showNotification } = useNotification();
 
   const emptyService = {
     title: '',
@@ -57,8 +59,10 @@ export function AdminServices() {
       }
       setIsEditMode(false);
       fetchServices();
+      showNotification('Service updated successfully!');
     } catch (error) {
       console.error("Error saving service:", error);
+      showNotification('Error saving service.', 'error');
     } finally {
       setSaving(false);
     }

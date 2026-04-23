@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useContent } from '../context/ContentContext';
 import { motion } from 'motion/react';
 import { Save, Phone, Mail, MapPin, Clock, Loader2, CheckCircle } from 'lucide-react';
+import { useNotification } from '../context/NotificationContext';
 
 import { ImageUpload } from '../components/ImageUpload';
 
@@ -9,7 +10,7 @@ export function AdminSettings() {
   const { content, updateContent } = useContent();
   const [formData, setFormData] = useState(content.contactInfo);
   const [saving, setSaving] = useState(false);
-  const [success, setSuccess] = useState(false);
+  const { showNotification } = useNotification();
 
   useEffect(() => {
     setFormData(content.contactInfo);
@@ -20,10 +21,10 @@ export function AdminSettings() {
     setSaving(true);
     try {
       await updateContent({ contactInfo: formData });
-      setSuccess(true);
-      setTimeout(() => setSuccess(false), 3000);
+      showNotification('Settings updated successfully!');
     } catch (err) {
       console.error(err);
+      showNotification('Error saving settings.', 'error');
     } finally {
       setSaving(false);
     }
@@ -135,17 +136,6 @@ export function AdminSettings() {
                {saving ? <Loader2 className="w-5 h-5 animate-spin" /> : <Save className="w-5 h-5" />}
                {saving ? 'Saving...' : 'Save Changes'}
             </button>
-
-            {success && (
-              <motion.div 
-                initial={{ opacity: 0, x: -10 }}
-                animate={{ opacity: 1, x: 0 }}
-                className="flex items-center gap-2 text-emerald-500 font-bold"
-              >
-                 <CheckCircle className="w-5 h-5" />
-                 All changes published!
-              </motion.div>
-            )}
          </div>
       </form>
     </div>

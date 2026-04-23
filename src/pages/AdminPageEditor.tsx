@@ -4,6 +4,7 @@ import { doc, getDoc, setDoc } from 'firebase/firestore';
 import { db } from '../lib/firebase';
 import { motion } from 'motion/react';
 import { Save, ChevronLeft, Loader2, Image as ImageIcon, Plus, Trash2, Eye, Type, Layout, Star, Search, Users } from 'lucide-react';
+import { useNotification } from '../context/NotificationContext';
 
 import { ImageUpload } from '../components/ImageUpload';
 
@@ -14,6 +15,7 @@ export function AdminPageEditor() {
   const [saving, setSaving] = useState(false);
   const [pageData, setPageData] = useState<any>(null);
   const [activeTab, setActiveTab] = useState('content');
+  const { showNotification } = useNotification();
 
   useEffect(() => {
     async function fetchPageData() {
@@ -156,10 +158,10 @@ export function AdminPageEditor() {
         ...pageData,
         updatedAt: new Date().toISOString()
       });
-      alert('Page updated successfully!');
+      showNotification('Page updated successfully!');
     } catch (error: any) {
       console.error("Error saving page:", error);
-      alert(`Error saving page: ${error?.message || 'Unknown error'}`);
+      showNotification(`Error saving page: ${error?.message || 'Unknown error'}`, 'error');
     } finally {
       setSaving(false);
     }

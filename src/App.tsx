@@ -18,6 +18,7 @@ import { AdminDashboard } from './pages/AdminDashboard';
 import { AdminSettings } from './pages/AdminSettings';
 import { ScrollToTop } from './components/ScrollToTop';
 import { ContentProvider } from './context/ContentContext';
+import { NotificationProvider } from './context/NotificationContext';
 
 import { AdminPages } from './pages/AdminPages';
 import { AdminPageEditor } from './pages/AdminPageEditor';
@@ -30,8 +31,9 @@ import { DynamicPage } from './pages/DynamicPage';
 
 export default function App() {
   return (
-    <ContentProvider>
-      <Router basename="/orlando-dental-2">
+    <NotificationProvider>
+      <ContentProvider>
+        <Router basename="/orlando-dental-2">
         <ScrollToTop />
         <div className="flex flex-col min-h-screen">
           <Routes>
@@ -80,5 +82,6 @@ export default function App() {
       </div>
     </Router>
     </ContentProvider>
+    </NotificationProvider>
   );
 }

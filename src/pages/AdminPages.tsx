@@ -4,6 +4,7 @@ import { db } from '../lib/firebase';
 import { motion, AnimatePresence } from 'motion/react';
 import { FileText, Plus, ChevronRight, Search, Loader2, X, AlertCircle, Trash2 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { useNotification } from '../context/NotificationContext';
 
 const DEFAULT_PAGES = [
   { id: 'home', title: 'Home Page', slug: '/' },
@@ -20,6 +21,7 @@ export function AdminPages() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [newPage, setNewPage] = useState({ title: '', slug: '' });
   const navigate = useNavigate();
+  const { showNotification } = useNotification();
 
   useEffect(() => {
     fetchPages();
@@ -78,10 +80,11 @@ export function AdminPages() {
       });
       setIsModalOpen(false);
       setNewPage({ title: '', slug: '' });
+      showNotification('Page created successfully!');
       navigate(`/admin/pages/edit/${docId}`);
     } catch (error: any) {
       console.error("Error creating page:", error);
-      alert(`Error creating page: ${error?.message || 'Unknown error'}`);
+      showNotification(`Error creating page: ${error?.message || 'Unknown error'}`, 'error');
     } finally {
       setLoading(false);
     }
@@ -90,7 +93,7 @@ export function AdminPages() {
   const handleDelete = async (e: React.MouseEvent, id: string) => {
     e.stopPropagation();
     if (DEFAULT_PAGES.find(p => p.id === id)) {
-      alert("Default system pages cannot be deleted.");
+      showNotification("Default system pages cannot be deleted.", "error");
       return;
     }
     if (!window.confirm("Are you sure you want to delete this page?")) return;
