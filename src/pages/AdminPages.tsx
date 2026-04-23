@@ -35,16 +35,16 @@ export function AdminPages() {
       const querySnapshot = await getDocs(q);
       const fetchedPages = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
       
-      // Ensure all default pages are represented
-      const defaultMap = new Map(DEFAULT_PAGES.map(p => [p.id, p]));
-      
-      // Combine - favor DB version if it exists
-      const finalPages = [...fetchedPages];
-      DEFAULT_PAGES.forEach(def => {
-        if (!finalPages.find(p => p.id === def.id)) {
-          finalPages.push(def);
-        }
+      // Merge logic: ensure all default pages are present, favoring DB values for order and content
+      const mergedDefaultPages = DEFAULT_PAGES.map(def => {
+        const dbPage = fetchedPages.find(p => p.id === def.id);
+        return dbPage ? { ...def, ...dbPage } : def;
       });
+
+      // Filter out those already handled from fetchedPages to get custom pages
+      const customPages = fetchedPages.filter(p => !DEFAULT_PAGES.find(def => def.id === p.id));
+      
+      const finalPages = [...mergedDefaultPages, ...customPages];
 
       // Sort by order field, then by title as fallback
       const sorted = finalPages.sort((a: any, b: any) => {
@@ -120,6 +120,10 @@ export function AdminPages() {
 
   const handleDragEnd = async (result: any) => {
     if (!result.destination) return;
+    if (searchTerm) {
+      showNotification('Reordering is disabled while searching', 'info');
+      return;
+    }
 
     const items = Array.from(pages);
     const [reorderedItem] = items.splice(result.source.index, 1) as any[];
@@ -211,12 +215,14 @@ export function AdminPages() {
                             className={`group bg-white p-6 rounded-[32px] border border-gray-50 shadow-sm hover:shadow-xl hover:border-brand-primary/20 transition-all cursor-pointer flex items-center justify-between ${snapshot.isDragging ? 'shadow-2xl border-brand-primary ring-2 ring-brand-primary/20 bg-brand-primary/5' : ''}`}
                           >
                             <div className="flex items-center gap-6">
-                              <div 
-                                {...provided.dragHandleProps}
-                                className="p-2 -ml-2 text-gray-300 hover:text-brand-primary transition-colors cursor-grab active:cursor-grabbing"
-                              >
-                                <GripVertical className="w-5 h-5" />
-                              </div>
+                              {!searchTerm && (
+                                <div 
+                                  {...provided.dragHandleProps}
+                                  className="p-2 -ml-2 text-gray-300 hover:text-brand-primary transition-colors cursor-grab active:cursor-grabbing"
+                                >
+                                  <GripVertical className="w-5 h-5" />
+                                </div>
+                              )}
                               <div className="w-14 h-14 bg-brand-primary/5 rounded-2xl flex items-center justify-center text-brand-primary group-hover:bg-brand-primary group-hover:text-white transition-all shadow-sm">
                                 <FileText className="w-6 h-6" />
                               </div>

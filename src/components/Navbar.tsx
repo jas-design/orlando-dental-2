@@ -37,12 +37,13 @@ export function Navbar() {
     const unsubscribeNav = onSnapshot(q, (querySnapshot) => {
       const fetchedPages = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as any));
       
-      const finalPages: any[] = [...fetchedPages];
-      DEFAULT_PAGES.forEach(def => {
-        if (!finalPages.find(p => p.id === def.id)) {
-          finalPages.push(def);
-        }
+      const mergedDefaultPages = DEFAULT_PAGES.map(def => {
+        const dbPage = fetchedPages.find(p => p.id === def.id);
+        return dbPage ? { ...def, ...dbPage } : def;
       });
+
+      const customPages = fetchedPages.filter(p => !DEFAULT_PAGES.find(def => def.id === p.id));
+      const finalPages = [...mergedDefaultPages, ...customPages];
 
       const sorted = finalPages.sort((a: any, b: any) => {
         const orderA = a.order !== undefined ? a.order : 999;
