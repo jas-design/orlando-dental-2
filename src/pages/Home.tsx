@@ -85,6 +85,29 @@ export function Home() {
     setSliderPosition(position);
   };
 
+  const renderTitle = (title: string) => {
+    if (!title) return null;
+    
+    // First split by <br /> for lines
+    return title.split('<br />').map((line, lineIndex) => {
+      // Then for each line, look for {color text}
+      const parts = line.split(/(\{.*?\})/);
+      
+      return (
+        <React.Fragment key={lineIndex}>
+          {parts.map((part, partIndex) => {
+            if (part.startsWith('{') && part.endsWith('}')) {
+              const text = part.slice(1, -1);
+              return <span key={partIndex} className="text-brand-primary">{text}</span>;
+            }
+            return part;
+          })}
+          {lineIndex < title.split('<br />').length - 1 && <br />}
+        </React.Fragment>
+      );
+    });
+  };
+
   return (
     <div className="overflow-x-hidden font-sans">
       {/* 1. Hero Section */}
@@ -93,12 +116,8 @@ export function Home() {
           <div className="max-w-3xl space-y-10">
             <div className="space-y-6">
                <h1 className="text-6xl md:text-8xl font-display font-bold text-brand-dark leading-[1.05] tracking-tight">
-                 {heroSection?.title?.split('<br />').map((line: string, i: number) => (
-                    <React.Fragment key={i}>
-                       {line} {i === 0 && <br />}
-                    </React.Fragment>
-                 )) || (
-                   <>Reveal the <br /> <span className="text-brand-primary">Radiant Smile</span> <br /> You Deserve</>
+                 {heroSection?.title ? renderTitle(heroSection.title) : (
+                    <>Reveal the <br /> <span className="text-brand-primary">Radiant Smile</span> <br /> You Deserve</>
                  )}
                </h1>
                <p className="text-xl text-gray-500 max-w-xl leading-relaxed font-medium">
@@ -162,7 +181,9 @@ export function Home() {
               <span className="text-brand-primary font-black uppercase text-xs tracking-[0.4em] flex items-center justify-center space-x-2">
                  <span>+ OUR SERVICES</span>
               </span>
-              <h2 className="text-5xl font-display font-bold text-brand-dark tracking-tighter">{servicesIntro?.title || 'Complete Dental Care'}</h2>
+              <h2 className="text-5xl font-display font-bold text-brand-dark tracking-tighter">
+                {servicesIntro?.title ? renderTitle(servicesIntro.title) : 'Complete Dental Care'}
+              </h2>
               <p className="text-gray-500 font-medium leading-relaxed">{servicesIntro?.description || 'Dedicated to providing the best dental experience for our community with a focus on comfort and high-end results.'}</p>
            </div>
 
@@ -195,7 +216,7 @@ export function Home() {
                 <span>+ WHY CHOOSE US</span>
               </span>
               <h2 className="text-6xl font-display font-bold text-[#1a3a4a] tracking-tight">
-                {whyChooseUs?.title || (
+                {whyChooseUs?.title ? renderTitle(whyChooseUs.title) : (
                    <>Diagnosis of <span className="text-brand-primary font-bold">Dental Diseases</span></>
                 )}
               </h2>
@@ -317,7 +338,7 @@ export function Home() {
                  <div className="space-y-4">
                     <span className="text-brand-primary font-black uppercase text-xs tracking-[0.4em] block mb-4">+ BEFORE AND AFTER</span>
                     <h2 className="text-5xl md:text-7xl font-display font-medium text-white tracking-tight">
-                       {beforeAfterSection?.title || 'Get a Hollywood Smile Today!'}
+                       {beforeAfterSection?.title ? renderTitle(beforeAfterSection.title) : 'Get a Hollywood Smile Today!'}
                     </h2>
                  </div>
                  <div className="space-y-6">
@@ -342,7 +363,7 @@ export function Home() {
                  <span>+ FREQUENTLY ASKED QUESTIONS</span>
               </span>
               <h2 className="text-5xl md:text-7xl font-display font-medium text-[#1e293b] tracking-tight leading-tight">
-                 {faqSection?.title || (
+                 {faqSection?.title ? renderTitle(faqSection.title) : (
                     <>If You Have Questions? <br /> We've Got Answers!</>
                  )}
               </h2>
@@ -428,7 +449,7 @@ export function Home() {
                  <div className="space-y-6">
                     <span className="text-brand-primary font-black uppercase text-xs tracking-[0.4em] block mb-4">+ MEDICAL DIRECTOR</span>
                     <h2 className="text-6xl md:text-8xl font-display font-bold text-brand-dark leading-[0.9] tracking-tighter">
-                       {doctorBanner?.title || 'Lead by Dr. A. Viviana Santos'}
+                       {doctorBanner?.title ? renderTitle(doctorBanner.title) : 'Lead by Dr. A. Viviana Santos'}
                     </h2>
                  </div>
                  <p className="text-gray-400 text-2xl font-medium leading-relaxed italic border-l-4 border-brand-primary pl-10">

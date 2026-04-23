@@ -515,6 +515,9 @@ function SectionEditor({ section, index, total, onUpdate, onRemove, onMove }: Se
                   onChange={(e) => onUpdate({ title: e.target.value })}
                   className="w-full p-4 bg-white border border-gray-100 rounded-2xl outline-none focus:ring-2 focus:ring-brand-primary" 
                 />
+                <p className="text-[10px] text-gray-400 pl-1 italic">
+                  Tip: Use <b>{"{text}"}</b> to color text (ex: {"{Our Smile}"}) and <b>{"<br />"}</b> for new lines.
+                </p>
               </div>
               <div className="md:col-span-2 space-y-2">
                 <label className="text-xs font-black text-gray-400 uppercase tracking-widest">Sub-description</label>
@@ -555,6 +558,9 @@ function SectionEditor({ section, index, total, onUpdate, onRemove, onMove }: Se
                   onChange={(e) => onUpdate({ title: e.target.value })}
                   className="w-full p-4 bg-white border border-gray-100 rounded-2xl outline-none focus:ring-2 focus:ring-brand-primary" 
                 />
+                <p className="text-[10px] text-gray-400 pl-1 italic">
+                  Tip: Use <b>{"{text}"}</b> to color text and <b>{"<br />"}</b> for new lines.
+                </p>
               </div>
               <div className="md:col-span-2 space-y-2">
                 <label className="text-xs font-black text-gray-400 uppercase tracking-widest">Content Text</label>
@@ -608,6 +614,9 @@ function SectionEditor({ section, index, total, onUpdate, onRemove, onMove }: Se
                   onChange={(e) => onUpdate({ title: e.target.value })}
                   className="w-full p-4 bg-white border border-gray-100 rounded-2xl outline-none focus:ring-2 focus:ring-brand-primary" 
                 />
+                <p className="text-[10px] text-gray-400 pl-1 italic">
+                  Tip: Use <b>{"{text}"}</b> to color text and <b>{"<br />"}</b> for new lines.
+                </p>
               </div>
               <div className="md:col-span-2 space-y-2">
                 <label className="text-xs font-black text-gray-400 uppercase tracking-widest">Description</label>
@@ -647,6 +656,9 @@ function SectionEditor({ section, index, total, onUpdate, onRemove, onMove }: Se
                   onChange={(e) => onUpdate({ title: e.target.value })}
                   className="w-full p-4 bg-white border border-gray-100 rounded-2xl outline-none focus:ring-2 focus:ring-brand-primary" 
                 />
+                <p className="text-[10px] text-gray-400 pl-1 italic">
+                  Tip: Use <b>{"{text}"}</b> to color text and <b>{"<br />"}</b> for new lines.
+                </p>
               </div>
               <div className="space-y-2">
                 <label className="text-xs font-black text-gray-400 uppercase tracking-widest">Doctor Quote</label>
@@ -696,6 +708,9 @@ function SectionEditor({ section, index, total, onUpdate, onRemove, onMove }: Se
                   onChange={(e) => onUpdate({ title: e.target.value })}
                   className="w-full p-4 bg-white border border-gray-100 rounded-2xl outline-none focus:ring-2 focus:ring-brand-primary" 
                 />
+                <p className="text-[10px] text-gray-400 pl-1 italic">
+                   Tip: Use <b>{"{text}"}</b> to color text and <b>{"<br />"}</b> for new lines.
+                </p>
               </div>
               <div className="md:col-span-2 space-y-2">
                 <label className="text-xs font-black text-gray-400 uppercase tracking-widest">Subheading</label>
@@ -719,6 +734,9 @@ function SectionEditor({ section, index, total, onUpdate, onRemove, onMove }: Se
                   onChange={(e) => onUpdate({ title: e.target.value })}
                   className="w-full p-4 bg-white border border-gray-100 rounded-2xl outline-none focus:ring-2 focus:ring-brand-primary" 
                 />
+                <p className="text-[10px] text-gray-400 pl-1 italic">
+                  Tip: Use <b>{"{text}"}</b> to color text and <b>{"<br />"}</b> for new lines.
+                </p>
               </div>
               <div className="md:col-span-2 space-y-2">
                 <label className="text-xs font-black text-gray-400 uppercase tracking-widest">Subheading (Optional)</label>
