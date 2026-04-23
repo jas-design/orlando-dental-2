@@ -1,7 +1,7 @@
 import React, { useRef, useState } from 'react';
-import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
+import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { storage } from '../lib/firebase';
-import { Upload, X, Loader2, Image as ImageIcon, Link as LinkIcon } from 'lucide-react';
+import { Upload, X, Loader2, Link as LinkIcon } from 'lucide-react';
 import { useNotification } from '../context/NotificationContext';
 
 interface ImageUploadProps {
@@ -14,51 +14,41 @@ interface ImageUploadProps {
 export function ImageUpload({ value, onChange, label, folder = 'images' }: ImageUploadProps) {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [uploading, setUploading] = useState(false);
-  const [progress, setProgress] = useState(0);
   const { showNotification } = useNotification();
 
   const handleFileSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
 
-    // Check file size (max 10MB)
-    if (file.size > 10 * 1024 * 1024) {
-      showNotification("File is too large. Max 10MB.", "error");
+    // Check file size (max 5MB to be safe)
+    if (file.size > 5 * 1024 * 1024) {
+      showNotification("File is too large. Max 5MB.", "error");
       return;
     }
 
     setUploading(true);
-    setProgress(0);
 
     try {
       const fileName = `${Date.now()}-${file.name.replace(/[^a-zA-Z0-9.]/g, '_')}`;
       const storageRef = ref(storage, `${folder}/${fileName}`);
       
-      const uploadTask = uploadBytesResumable(storageRef, file);
-
-      uploadTask.on('state_changed', 
-        (snapshot) => {
-          const p = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-          setProgress(p);
-        }, 
-        (error) => {
-          console.error("Upload error:", error);
-          showNotification("Upload failed. Please check your storage permissions.", "error");
-          setUploading(false);
-          if (fileInputRef.current) fileInputRef.current.value = '';
-        }, 
-        async () => {
-          const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
-          onChange(downloadURL);
-          setUploading(false);
-          setProgress(0);
-          showNotification("Image uploaded successfully!");
-          if (fileInputRef.current) fileInputRef.current.value = '';
-        }
-      );
-    } catch (error) {
-      console.error("Upload execution error:", error);
-      showNotification("Upload execution failed.", "error");
+      const result = await uploadBytes(storageRef, file);
+      const downloadURL = await getDownloadURL(result.ref);
+      
+      onChange(downloadURL);
+      showNotification("Image uploaded successfully!");
+    } catch (error: any) {
+      console.error("Upload error details:", error);
+      
+      let message = "Upload failed. Please try again.";
+      if (error.code === 'storage/unauthorized') {
+        message = "Permission denied. Please check your storage rules.";
+      } else if (error.code === 'storage/retry-limit-exceeded') {
+        message = "Upload timed out. Is your internet stable?";
+      }
+      
+      showNotification(message, "error");
+    } finally {
       setUploading(false);
       if (fileInputRef.current) fileInputRef.current.value = '';
     }
@@ -87,16 +77,13 @@ export function ImageUpload({ value, onChange, label, folder = 'images' }: Image
             className="px-8 bg-brand-primary text-white rounded-2xl font-bold transition-all hover:bg-brand-dark disabled:opacity-50 flex items-center justify-center gap-3 shadow-lg shadow-brand-primary/10 whitespace-nowrap min-h-[56px]"
           >
             {uploading ? <Loader2 className="w-5 h-5 animate-spin" /> : <Upload className="w-5 h-5" />}
-            <span>{uploading ? `${Math.round(progress)}%` : 'Upload File'}</span>
+            <span>{uploading ? 'Uploading...' : 'Upload File'}</span>
           </button>
         </div>
 
         {uploading && (
            <div className="absolute -bottom-2 left-0 right-0 h-1 bg-gray-100 rounded-full overflow-hidden">
-              <div 
-                className="h-full bg-brand-primary transition-all duration-300" 
-                style={{ width: `${progress}%` }}
-              />
+              <div className="h-full bg-brand-primary animate-pulse w-full" />
            </div>
         )}
 
