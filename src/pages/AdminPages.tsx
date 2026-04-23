@@ -18,6 +18,7 @@ const DEFAULT_PAGES = [
 export function AdminPages() {
   const [pages, setPages] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [enabled, setEnabled] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [newPage, setNewPage] = useState({ title: '', slug: '' });
@@ -26,6 +27,13 @@ export function AdminPages() {
 
   useEffect(() => {
     fetchPages();
+    
+    // Workaround for @hello-pangea/dnd in React 18/19 StrictMode
+    const animation = requestAnimationFrame(() => setEnabled(true));
+    return () => {
+      cancelAnimationFrame(animation);
+      setEnabled(false);
+    };
   }, []);
 
   async function fetchPages() {
@@ -45,9 +53,16 @@ export function AdminPages() {
       const customPages = fetchedPages.filter(p => !DEFAULT_PAGES.find(def => def.id === p.id));
       
       const finalPages = [...mergedDefaultPages, ...customPages];
+      
+      // Ensure every page has required fields to prevent crashes
+      const sanitizedPages = finalPages.map((p: any) => ({
+        ...p,
+        title: p.title || 'Untitled Page',
+        slug: p.slug || '#'
+      }));
 
       // Sort by order field, then by title as fallback
-      const sorted = finalPages.sort((a: any, b: any) => {
+      const sorted = sanitizedPages.sort((a: any, b: any) => {
         const orderA = a.order !== undefined ? a.order : 999;
         const orderB = b.order !== undefined ? b.order : 999;
         if (orderA !== orderB) return orderA - orderB;
@@ -184,6 +199,10 @@ export function AdminPages() {
       </div>
 
       {loading ? (
+        <div className="flex items-center justify-center py-20">
+          <Loader2 className="w-8 h-8 animate-spin text-brand-primary" />
+        </div>
+      ) : !enabled ? (
         <div className="flex items-center justify-center py-20">
           <Loader2 className="w-8 h-8 animate-spin text-brand-primary" />
         </div>
