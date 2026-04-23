@@ -53,6 +53,9 @@ export function Home() {
   const beforeAfterSection = pageData?.sections?.find((s: any) => s.type === 'before_after');
   const faqSection = pageData?.sections?.find((s: any) => s.type === 'faq');
   const doctorBanner = pageData?.sections?.find((s: any) => s.type === 'doctor_banner');
+  const testimonialsIntro = pageData?.sections?.find((s: any) => s.id === 'testimonials');
+  const blogIntro = pageData?.sections?.find((s: any) => s.id === 'blog');
+  const footerCta = pageData?.sections?.find((s: any) => s.id === 'footer_cta');
 
   const DEFAULT_SERVICES = [
     { title: 'General Dental Care', icon: 'Stethoscope' },
@@ -458,9 +461,14 @@ export function Home() {
         <div className="container mx-auto px-4">
           <div className="text-center max-w-2xl mx-auto space-y-8 mb-24">
             <span className="text-brand-primary font-black uppercase text-xs tracking-[0.4em] flex items-center justify-center space-x-2">
-               <span>+ TESTIMONIALS</span>
+               <span>+ {testimonialsIntro?.badge || 'TESTIMONIALS'}</span>
             </span>
-            <h2 className="text-5xl md:text-7xl font-display font-bold text-brand-dark tracking-tighter leading-none">What Our Patients Say</h2>
+            <h2 className="text-5xl md:text-7xl font-display font-bold text-brand-dark tracking-tighter leading-none">
+              {renderTitle(testimonialsIntro?.title) || 'What Our Patients Say'}
+            </h2>
+            {testimonialsIntro?.description && (
+              <p className="text-gray-500 font-medium leading-relaxed">{testimonialsIntro.description}</p>
+            )}
           </div>
 
           <div className="relative">
@@ -530,8 +538,13 @@ export function Home() {
         <div className="container mx-auto px-4">
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-24">
             <div className="max-w-2xl space-y-6">
-               <span className="text-brand-primary font-black uppercase text-xs tracking-[0.4em] block">+ LATEST NEWS</span>
-               <h2 className="text-5xl md:text-7xl font-display font-bold text-brand-dark tracking-tighter leading-none">Oral Health <br /> <span className="text-brand-primary">Tips & Insights</span></h2>
+               <span className="text-brand-primary font-black uppercase text-xs tracking-[0.4em] block">+ {blogIntro?.badge || 'LATEST NEWS'}</span>
+               <h2 className="text-5xl md:text-7xl font-display font-bold text-brand-dark tracking-tighter leading-none">
+                 {renderTitle(blogIntro?.title) || <>Oral Health <br /> <span className="text-brand-primary">Tips & Insights</span></>}
+               </h2>
+               {blogIntro?.description && (
+                 <p className="text-gray-500 font-medium leading-relaxed">{blogIntro.description}</p>
+               )}
             </div>
             <Link to="/blog" className="px-10 py-5 bg-white text-brand-dark rounded-2xl font-bold uppercase tracking-widest text-[11px] border border-gray-100 hover:bg-brand-primary hover:text-white hover:border-brand-primary transition-all shadow-xl shadow-gray-200/50">
                View All Articles
@@ -586,13 +599,15 @@ export function Home() {
         <div className="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')]" />
         <div className="container mx-auto px-4 text-center space-y-16 relative z-10">
           <h2 className="text-6xl md:text-[120px] font-display font-bold text-white leading-[0.85] tracking-tighter">
-            READY TO <br /> <span className="text-brand-dark">TRANSFORM</span> <br /> YOUR SMILE?
+            {footerCta?.title ? renderTitle(footerCta.title) : (
+               <>READY TO <br /> <span className="text-brand-dark">TRANSFORM</span> <br /> YOUR SMILE?</>
+            )}
           </h2>
           <div className="flex flex-col md:flex-row items-center justify-center gap-10">
              <Link to="/contact" className="bg-brand-dark text-white px-16 py-8 rounded-[30px] font-black text-xl hover:bg-white hover:text-brand-primary transition-all shadow-3xl group">
                 <span className="flex items-center space-x-4">
-                  <span>BOOK NOW</span>
-                  <Icons.ArrowUpRight className="w-6 h-6 transition-transform group-hover:rotate-45" />
+                   <span>{footerCta?.cta || 'BOOK NOW'}</span>
+                   <Icons.ArrowUpRight className="w-6 h-6 transition-transform group-hover:rotate-45" />
                 </span>
              </Link>
              <a href="tel:+386401115555" className="bg-white text-brand-primary px-16 py-8 rounded-[30px] font-black text-xl hover:bg-brand-dark hover:text-white transition-all shadow-3xl">

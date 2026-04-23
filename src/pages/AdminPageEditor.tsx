@@ -75,53 +75,80 @@ export function AdminPageEditor() {
           {
             id: 'hero',
             type: 'hero',
-            badge: 'EXCELLENCE IN DENTISTRY',
-            title: 'Modern Care, Classic Smile',
+            title: 'Reveal the {Radiant Smile} You Deserve',
             description: 'Experience dental care that combines advanced technology with a gentle, personalized touch in a comfortable environment.',
-            cta: 'Book Appointment',
-            image: 'https://images.unsplash.com/photo-1629909613654-28e377c37b09?auto=format&fit=crop&q=80'
+            cta: 'BOOK APPOINTMENT',
+            image: 'https://images.unsplash.com/photo-1576091160550-217359f48f4c?auto=format&fit=crop&q=80'
           },
           {
             id: 'info_strip',
             type: 'info_strip',
             phone: '+ 386 40 111 5555',
-            hours: 'Mon - Sat: 7:00 - 17:00'
+            hours: 'Mon - Sat: 7:00 - 17:00',
+            cta: 'BOOK AN APPOINTMENT'
           },
           {
             id: 'services_grid',
             type: 'services_grid',
-            title: 'Complete Dental Care',
+            badge: 'OUR SERVICES',
+            title: 'Complete {Dental Care}',
             description: 'Dedicated to providing the best dental experience for our community with a focus on comfort and high-end results.'
           },
           {
-            id: 'services_intro',
+            id: 'mission',
             type: 'text_with_image',
-            title: 'Diagnosis of Dental Diseases',
+            badge: 'WHY CHOOSE US',
+            title: 'Diagnosis of {Dental Diseases}',
             description: 'We are committed to providing the highest quality dental care using state-of-the-art equipment.',
-            image: 'https://images.unsplash.com/photo-1576091160550-217359f48f4c?auto=format&fit=crop&q=80'
+            image: 'https://images.unsplash.com/photo-1629909613654-28e377c37b09?auto=format&fit=crop&q=80'
           },
           {
-             id: 'before_after',
-             type: 'before_after',
-             title: 'Get a Hollywood Smile Today!',
-             description: 'Experience life-changing results with our advanced cosmetic dentistry procedures.',
-             image_before: 'https://images.unsplash.com/photo-1593059080506-3458322287bd?auto=format&fit=crop&q=80&w=1200',
-             image_after: 'https://images.unsplash.com/photo-1629909613654-28e377c37b09?auto=format&fit=crop&q=80&w=1200'
+            id: 'before_after',
+            type: 'before_after',
+            badge: 'BEFORE AND AFTER',
+            title: 'Get a {Hollywood Smile} Today!',
+            description: 'Experience life-changing results with our advanced cosmetic dentistry procedures.',
+            image_before: 'https://images.unsplash.com/photo-1593059080506-3458322287bd?auto=format&fit=crop&q=80&w=1200',
+            image_after: 'https://images.unsplash.com/photo-1629909613654-28e377c37b09?auto=format&fit=crop&q=80&w=1200'
           },
           {
-             id: 'faq',
-             type: 'faq',
-             title: 'If You Have Questions? We\'ve Got Answers!',
-             description: 'Find answers to your most common dental health questions.'
+            id: 'faq',
+            type: 'faq',
+            badge: 'FREQUENTLY ASKED QUESTIONS',
+            title: 'If You Have Questions? <br /> We\'ve Got {Answers}!',
+            description: 'Find answers to your most common dental health questions.'
           },
           {
-             id: 'doctor_banner',
-             type: 'doctor_banner',
-             title: 'Lead by Dr. A. Viviana Santos',
-             quote: 'Every smile tells a story. Our mission is to make sure yours is one of health, confidence, and joy.',
-             experience: '25+',
-             patients: '18k+',
-             image: 'https://images.unsplash.com/photo-1559839734-2b71ea197ec2?auto=format&fit=crop&q=80&w=1000'
+            id: 'doctor_banner',
+            type: 'doctor_banner',
+            badge: 'MEDICAL DIRECTOR',
+            title: 'Lead by Dr. A. {Viviana Santos}',
+            quote: 'Every smile tells a story. Our mission is to make sure yours is one of health, confidence, and joy.',
+            experience: '25+',
+            patients: '18k+',
+            image: 'https://images.unsplash.com/photo-1559839734-2b71ea197ec2?auto=format&fit=crop&q=80&w=1000'
+          },
+          {
+            id: 'testimonials',
+            type: 'team_grid',
+            badge: 'TESTIMONIALS',
+            title: 'What Our {Patients Say}',
+            description: 'Read about the experiences of our patients and how we\'ve helped them achieve their perfect smiles.'
+          },
+          {
+            id: 'blog',
+            type: 'blog_grid',
+            badge: 'LATEST NEWS',
+            title: 'Oral Health {Tips & Insights}',
+            description: 'Stay updated with the latest dental health tips, news, and expert advice from our team.'
+          },
+          {
+            id: 'footer_cta',
+            type: 'hero',
+            title: 'READY TO {TRANSFORM} YOUR SMILE?',
+            description: 'Join thousands of happy patients in Orlando. Book your consultation today.',
+            cta: 'BOOK NOW',
+            image: 'https://images.unsplash.com/photo-1598256989800-fe5f95da9787?auto=format&fit=crop&q=80'
           }
         ]
       };
