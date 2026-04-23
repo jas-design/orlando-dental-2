@@ -46,7 +46,12 @@ export function Home() {
   }, []);
 
   const heroSection = pageData?.sections?.find((s: any) => s.type === 'hero');
-  const whyChooseUs = pageData?.sections?.find((s: any) => s.id === 'services_intro');
+  const infoStrip = pageData?.sections?.find((s: any) => s.type === 'info_strip');
+  const servicesIntro = pageData?.sections?.find((s: any) => s.type === 'services_grid');
+  const whyChooseUs = pageData?.sections?.find((s: any) => s.id === 'services_intro' || s.type === 'text_with_image');
+  const beforeAfterSection = pageData?.sections?.find((s: any) => s.type === 'before_after');
+  const faqSection = pageData?.sections?.find((s: any) => s.type === 'faq');
+  const doctorBanner = pageData?.sections?.find((s: any) => s.type === 'doctor_banner');
 
   const DEFAULT_SERVICES = [
     { title: 'General Dental Care', icon: 'Stethoscope' },
@@ -129,7 +134,7 @@ export function Home() {
                  </div>
                  <div>
                     <h3 className="font-bold uppercase tracking-tight text-[11px] opacity-50 mb-1">Give us a call</h3>
-                    <p className="text-2xl font-display font-bold tracking-tight">+ 386 40 111 5555</p>
+                    <p className="text-2xl font-display font-bold tracking-tight">{infoStrip?.phone || '+ 386 40 111 5555'}</p>
                  </div>
               </div>
               <div className="flex items-center space-x-6 border-white/5 md:border-x px-0 md:px-12 h-full">
@@ -138,7 +143,7 @@ export function Home() {
                  </div>
                  <div>
                     <h3 className="font-bold uppercase tracking-tight text-[11px] opacity-50 mb-1">Working Hours</h3>
-                    <p className="text-2xl font-display font-bold tracking-tight">Mon - Sat: 7:00 - 17:00</p>
+                    <p className="text-2xl font-display font-bold tracking-tight">{infoStrip?.hours || 'Mon - Sat: 7:00 - 17:00'}</p>
                  </div>
               </div>
               <div className="flex items-center">
@@ -157,8 +162,8 @@ export function Home() {
               <span className="text-brand-primary font-black uppercase text-xs tracking-[0.4em] flex items-center justify-center space-x-2">
                  <span>+ OUR SERVICES</span>
               </span>
-              <h2 className="text-5xl font-display font-bold text-brand-dark tracking-tighter">Complete Dental Care</h2>
-              <p className="text-gray-500 font-medium leading-relaxed">Dedicated to providing the best dental experience for our community with a focus on comfort and high-end results.</p>
+              <h2 className="text-5xl font-display font-bold text-brand-dark tracking-tighter">{servicesIntro?.title || 'Complete Dental Care'}</h2>
+              <p className="text-gray-500 font-medium leading-relaxed">{servicesIntro?.description || 'Dedicated to providing the best dental experience for our community with a focus on comfort and high-end results.'}</p>
            </div>
 
            <div className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-10">
@@ -289,10 +294,10 @@ export function Home() {
                 </div>
 
                 <div className="absolute inset-0">
-                  <img src="https://images.unsplash.com/photo-1629909613654-28e377c37b09?auto=format&fit=crop&q=80&w=1200" className="w-full h-full object-cover" alt="After" />
+                  <img src={beforeAfterSection?.image_after || "https://images.unsplash.com/photo-1629909613654-28e377c37b09?auto=format&fit=crop&q=80&w=1200"} className="w-full h-full object-cover" alt="After" />
                 </div>
                 <div className="absolute inset-0" style={{ clipPath: `inset(0 ${100 - sliderPosition}% 0 0)` }}>
-                  <img src="https://images.unsplash.com/photo-1593059080506-3458322287bd?auto=format&fit=crop&q=80&w=1200" className="w-full h-full object-cover" alt="Before" />
+                  <img src={beforeAfterSection?.image_before || "https://images.unsplash.com/photo-1593059080506-3458322287bd?auto=format&fit=crop&q=80&w=1200"} className="w-full h-full object-cover" alt="Before" />
                 </div>
                 {/* Thin White Divider Line */}
                 <div 
@@ -312,15 +317,12 @@ export function Home() {
                  <div className="space-y-4">
                     <span className="text-brand-primary font-black uppercase text-xs tracking-[0.4em] block mb-4">+ BEFORE AND AFTER</span>
                     <h2 className="text-5xl md:text-7xl font-display font-medium text-white tracking-tight">
-                       Get a Hollywood <br /> Smile Today!
+                       {beforeAfterSection?.title || 'Get a Hollywood Smile Today!'}
                     </h2>
                  </div>
                  <div className="space-y-6">
                     <p className="text-gray-400 text-lg leading-relaxed font-light">
-                       Sed elementum tortor sit amet lacus feugiat aliquam eu euismod dui, sit finibus neque quam nisl, euismod vitae sem in, tempor auctor nulla facilis in aliquam laoreet semper quam per inceptos.
-                    </p>
-                    <p className="text-gray-400 text-lg leading-relaxed font-light">
-                       Amet lacus feugiat aliquam eu euismod dui, sit amet finibus neque quam euismod vitae sem tempor.
+                       {beforeAfterSection?.description || 'Experience life-changing results with our advanced cosmetic dentistry procedures.'}
                     </p>
                  </div>
                  <div className="pt-6">
@@ -340,7 +342,9 @@ export function Home() {
                  <span>+ FREQUENTLY ASKED QUESTIONS</span>
               </span>
               <h2 className="text-5xl md:text-7xl font-display font-medium text-[#1e293b] tracking-tight leading-tight">
-                 If You Have Questions? <br /> We've Got Answers!
+                 {faqSection?.title || (
+                    <>If You Have Questions? <br /> We've Got Answers!</>
+                 )}
               </h2>
            </div>
 
@@ -424,26 +428,26 @@ export function Home() {
                  <div className="space-y-6">
                     <span className="text-brand-primary font-black uppercase text-xs tracking-[0.4em] block mb-4">+ MEDICAL DIRECTOR</span>
                     <h2 className="text-6xl md:text-8xl font-display font-bold text-brand-dark leading-[0.9] tracking-tighter">
-                       Lead by <br /> Dr. A. Viviana Santos
+                       {doctorBanner?.title || 'Lead by Dr. A. Viviana Santos'}
                     </h2>
                  </div>
                  <p className="text-gray-400 text-2xl font-medium leading-relaxed italic border-l-4 border-brand-primary pl-10">
-                    "Every smile tells a story. Our mission is to make sure yours is one of health, confidence, and joy."
+                    "{doctorBanner?.quote || 'Every smile tells a story. Our mission is to make sure yours is one of health, confidence, and joy.'}"
                  </p>
                  <div className="flex items-center space-x-12">
                     <div className="space-y-2">
-                       <p className="text-5xl font-display font-bold text-brand-primary">25+</p>
+                       <p className="text-5xl font-display font-bold text-brand-primary">{doctorBanner?.experience || '25+'}</p>
                        <p className="text-[11px] font-black uppercase tracking-widest text-brand-dark/40">Years of Practice</p>
                     </div>
                     <div className="w-px h-16 bg-gray-100" />
                     <div className="space-y-2">
-                       <p className="text-5xl font-display font-bold text-brand-dark">18k+</p>
+                       <p className="text-5xl font-display font-bold text-brand-dark">{doctorBanner?.patients || '18k+'}</p>
                        <p className="text-[11px] font-black uppercase tracking-widest text-brand-dark/40">Happy Patients</p>
                     </div>
                  </div>
               </div>
               <div className="lg:w-2/5 h-[700px] w-full relative">
-                 <img src="https://images.unsplash.com/photo-1559839734-2b71ea197ec2?auto=format&fit=crop&q=80&w=1000" className="w-full h-full object-cover" alt="Dr. A. Viviana Santos" />
+                 <img src={doctorBanner?.image || "https://images.unsplash.com/photo-1559839734-2b71ea197ec2?auto=format&fit=crop&q=80&w=1000"} className="w-full h-full object-cover" alt="Dr. A. Viviana Santos" />
                  <div className="absolute inset-0 bg-brand-primary/10 mix-blend-multiply" />
               </div>
            </div>

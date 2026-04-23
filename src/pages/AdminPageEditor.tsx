@@ -3,7 +3,7 @@ import { useParams, useNavigate, Link } from 'react-router-dom';
 import { doc, getDoc, setDoc } from 'firebase/firestore';
 import { db } from '../lib/firebase';
 import { motion } from 'motion/react';
-import { Save, ChevronLeft, Loader2, Image as ImageIcon, Plus, Trash2, Eye, Type, Layout, Star, Search, Users } from 'lucide-react';
+import { Save, ChevronLeft, Loader2, Image as ImageIcon, Plus, Trash2, Eye, Type, Layout, Star, Search, Users, AlertCircle } from 'lucide-react';
 import { useNotification } from '../context/NotificationContext';
 
 import { ImageUpload } from '../components/ImageUpload';
@@ -59,11 +59,46 @@ export function AdminPageEditor() {
             image: 'https://images.unsplash.com/photo-1629909613654-28e377c37b09?auto=format&fit=crop&q=80'
           },
           {
+            id: 'info_strip',
+            type: 'info_strip',
+            phone: '+ 386 40 111 5555',
+            hours: 'Mon - Sat: 7:00 - 17:00'
+          },
+          {
+            id: 'services_grid',
+            type: 'services_grid',
+            title: 'Complete Dental Care',
+            description: 'Dedicated to providing the best dental experience for our community with a focus on comfort and high-end results.'
+          },
+          {
             id: 'services_intro',
             type: 'text_with_image',
-            title: 'Why Choose Us?',
-            description: 'Our team is dedicated to providing the highest quality dental care using state-of-the-art equipment.',
+            title: 'Diagnosis of Dental Diseases',
+            description: 'We are committed to providing the highest quality dental care using state-of-the-art equipment.',
             image: 'https://images.unsplash.com/photo-1576091160550-217359f48f4c?auto=format&fit=crop&q=80'
+          },
+          {
+             id: 'before_after',
+             type: 'before_after',
+             title: 'Get a Hollywood Smile Today!',
+             description: 'Experience life-changing results with our advanced cosmetic dentistry procedures.',
+             image_before: 'https://images.unsplash.com/photo-1593059080506-3458322287bd?auto=format&fit=crop&q=80&w=1200',
+             image_after: 'https://images.unsplash.com/photo-1629909613654-28e377c37b09?auto=format&fit=crop&q=80&w=1200'
+          },
+          {
+             id: 'faq',
+             type: 'faq',
+             title: 'If You Have Questions? We\'ve Got Answers!',
+             description: 'Find answers to your most common dental health questions.'
+          },
+          {
+             id: 'doctor_banner',
+             type: 'doctor_banner',
+             title: 'Lead by Dr. A. Viviana Santos',
+             quote: 'Every smile tells a story. Our mission is to make sure yours is one of health, confidence, and joy.',
+             experience: '25+',
+             patients: '18k+',
+             image: 'https://images.unsplash.com/photo-1559839734-2b71ea197ec2?auto=format&fit=crop&q=80&w=1000'
           }
         ]
       };
@@ -116,33 +151,42 @@ export function AdminPageEditor() {
   };
 
   const addSection = (type: string) => {
-    const newSection = {
-      id: `${type}_${Date.now()}`,
+    let newSection: any = { 
+      id: `${type}_${Date.now()}`, 
       type: type,
       title: 'New Section',
-      description: 'Add your description here...',
-      image: 'https://images.unsplash.com/photo-1629909613654-28e377c37b09?auto=format&fit=crop&q=80'
+      description: 'Add your description here...'
     };
     
+    // Custom defaults for different types
     if (type === 'hero') {
-      (newSection as any).badge = 'NEW BADGE';
-      (newSection as any).cta = 'Button Text';
+      newSection = { ...newSection, title: 'New Hero Section', badge: 'SPECIAL OFFER', cta: 'Book Now', image: 'https://images.unsplash.com/photo-1629909613654-28e377c37b09?auto=format&fit=crop&q=80' };
+    } else if (type === 'text_with_image') {
+      newSection = { ...newSection, image: 'https://images.unsplash.com/photo-1629907326852-b8356ee70666?auto=format&fit=crop&q=80' };
+    } else if (type === 'info_strip') {
+      newSection = { ...newSection, title: '', description: '', phone: '+ 386 40 111 5555', hours: 'Mon - Sat: 7:00 - 17:00' };
+    } else if (type === 'before_after') {
+      newSection = { ...newSection, title: 'Smile Transformation', image_before: 'https://images.unsplash.com/photo-1593059080506-3458322287bd?auto=format&fit=crop&q=80&w=1200', image_after: 'https://images.unsplash.com/photo-1629909613654-28e377c37b09?auto=format&fit=crop&q=80&w=1200' };
+    } else if (type === 'doctor_banner') {
+      newSection = { ...newSection, title: 'Lead by Dr. Santos', quote: 'Your happiness is our priority.', experience: '20+', patients: '10k+', image: 'https://images.unsplash.com/photo-1559839734-2b71ea197ec2?auto=format&fit=crop&q=80&w=1000' };
+    } else if (type === 'faq') {
+      newSection = { ...newSection, title: 'Frequently Asked Questions' };
     }
-
+    
     setPageData({
       ...pageData,
-      sections: [...pageData.sections, newSection]
+      sections: [...(pageData?.sections || []), newSection]
     });
   };
 
   const removeSection = (index: number) => {
     if (!window.confirm("Remove this section?")) return;
-    const newSections = pageData.sections.filter((_: any, i: number) => i !== index);
+    const newSections = (pageData?.sections || []).filter((_: any, i: number) => i !== index);
     setPageData({ ...pageData, sections: newSections });
   };
 
   const moveSection = (index: number, direction: 'up' | 'down') => {
-    const newSections = [...pageData.sections];
+    const newSections = [...(pageData?.sections || [])];
     const newIndex = direction === 'up' ? index - 1 : index + 1;
     if (newIndex < 0 || newIndex >= newSections.length) return;
     
@@ -168,7 +212,7 @@ export function AdminPageEditor() {
   };
 
   const updateSection = (index: number, data: any) => {
-    const newSections = [...pageData.sections];
+    const newSections = [...(pageData?.sections || [])];
     newSections[index] = { ...newSections[index], ...data };
     setPageData({ ...pageData, sections: newSections });
   };
@@ -177,6 +221,24 @@ export function AdminPageEditor() {
     return (
       <div className="min-h-[60vh] flex items-center justify-center">
         <Loader2 className="w-10 h-10 animate-spin text-brand-primary" />
+      </div>
+    );
+  }
+
+  if (!pageData && !loading) {
+    return (
+      <div className="max-w-6xl mx-auto">
+        <div className="text-center py-20 bg-white rounded-[40px] border border-dashed border-gray-200">
+          <AlertCircle className="w-16 h-16 text-gray-200 mx-auto mb-4" />
+          <h2 className="text-xl font-bold text-gray-600 mb-2">Page Not Found</h2>
+          <p className="text-gray-400 font-medium mb-8">We couldn't load the data for this page. It might have been moved or deleted.</p>
+          <button 
+            onClick={() => navigate('/admin/pages')}
+            className="px-8 py-4 bg-brand-primary text-white rounded-2xl font-bold uppercase tracking-widest hover:bg-brand-dark transition-all"
+          >
+            Back to Pages
+          </button>
+        </div>
       </div>
     );
   }
@@ -242,12 +304,12 @@ export function AdminPageEditor() {
         <div className="lg:col-span-3 space-y-6">
           {activeTab === 'content' ? (
             <div className="space-y-8">
-              {pageData?.sections.map((section: any, index: number) => (
+              {pageData?.sections?.map((section: any, index: number) => (
                 <SectionEditor 
                   key={section.id || index} 
                   section={section} 
                   index={index}
-                  total={pageData.sections.length}
+                  total={pageData.sections?.length || 0}
                   onUpdate={(data) => updateSection(index, data)} 
                   onRemove={() => removeSection(index)}
                   onMove={(dir) => moveSection(index, dir)}
@@ -263,11 +325,39 @@ export function AdminPageEditor() {
                    <span>Hero</span>
                 </button>
                 <button 
+                  onClick={() => addSection('info_strip')}
+                  className="py-4 border-2 border-dashed border-gray-100 rounded-[24px] text-gray-400 font-bold flex flex-col items-center justify-center gap-2 hover:border-brand-primary/30 hover:text-brand-primary hover:bg-brand-primary/5 transition-all text-xs"
+                >
+                   <Layout className="w-5 h-5" />
+                   <span>Info Strip</span>
+                </button>
+                <button 
                   onClick={() => addSection('text_with_image')}
                   className="py-4 border-2 border-dashed border-gray-100 rounded-[24px] text-gray-400 font-bold flex flex-col items-center justify-center gap-2 hover:border-brand-primary/30 hover:text-brand-primary hover:bg-brand-primary/5 transition-all text-xs"
                 >
                    <Type className="w-5 h-5" />
                    <span>Content</span>
+                </button>
+                <button 
+                  onClick={() => addSection('before_after')}
+                  className="py-4 border-2 border-dashed border-gray-100 rounded-[24px] text-gray-400 font-bold flex flex-col items-center justify-center gap-2 hover:border-brand-primary/30 hover:text-brand-primary hover:bg-brand-primary/5 transition-all text-xs"
+                >
+                   <Search className="w-5 h-5" />
+                   <span>Before/After</span>
+                </button>
+                <button 
+                  onClick={() => addSection('doctor_banner')}
+                  className="py-4 border-2 border-dashed border-gray-100 rounded-[24px] text-gray-400 font-bold flex flex-col items-center justify-center gap-2 hover:border-brand-primary/30 hover:text-brand-primary hover:bg-brand-primary/5 transition-all text-xs"
+                >
+                   <Users className="w-5 h-5" />
+                   <span>Doc Banner</span>
+                </button>
+                <button 
+                  onClick={() => addSection('faq')}
+                  className="py-4 border-2 border-dashed border-gray-100 rounded-[24px] text-gray-400 font-bold flex flex-col items-center justify-center gap-2 hover:border-brand-primary/30 hover:text-brand-primary hover:bg-brand-primary/5 transition-all text-xs"
+                >
+                   <Plus className="w-5 h-5" />
+                   <span>FAQ</span>
                 </button>
                 <button 
                   onClick={() => addSection('services_grid')}
@@ -462,6 +552,140 @@ function SectionEditor({ section, index, total, onUpdate, onRemove, onMove }: Se
               </div>
             </div>
           )}
+          {section.type === 'info_strip' && (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+               <div className="space-y-2">
+                <label className="text-xs font-black text-gray-400 uppercase tracking-widest">Phone Number</label>
+                <input 
+                  type="text" 
+                  value={section.phone} 
+                  onChange={(e) => onUpdate({ phone: e.target.value })}
+                  className="w-full p-4 bg-white border border-gray-100 rounded-2xl outline-none focus:ring-2 focus:ring-brand-primary" 
+                />
+              </div>
+              <div className="space-y-2">
+                <label className="text-xs font-black text-gray-400 uppercase tracking-widest">Working Hours</label>
+                <input 
+                  type="text" 
+                  value={section.hours} 
+                  onChange={(e) => onUpdate({ hours: e.target.value })}
+                  className="w-full p-4 bg-white border border-gray-100 rounded-2xl outline-none focus:ring-2 focus:ring-brand-primary" 
+                />
+              </div>
+            </div>
+          )}
+
+          {section.type === 'before_after' && (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="md:col-span-2 space-y-2">
+                <label className="text-xs font-black text-gray-400 uppercase tracking-widest">Heading</label>
+                <input 
+                  type="text" 
+                  value={section.title} 
+                  onChange={(e) => onUpdate({ title: e.target.value })}
+                  className="w-full p-4 bg-white border border-gray-100 rounded-2xl outline-none focus:ring-2 focus:ring-brand-primary" 
+                />
+              </div>
+              <div className="md:col-span-2 space-y-2">
+                <label className="text-xs font-black text-gray-400 uppercase tracking-widest">Description</label>
+                <textarea 
+                  value={section.description} 
+                  onChange={(e) => onUpdate({ description: e.target.value })}
+                  rows={2}
+                  className="w-full p-4 bg-white border border-gray-100 rounded-2xl outline-none focus:ring-2 focus:ring-brand-primary resize-none" 
+                />
+              </div>
+              <div className="space-y-2">
+                <ImageUpload 
+                  label="Before Image"
+                  value={section.image_before}
+                  onChange={(url) => onUpdate({ image_before: url })}
+                  folder="images"
+                />
+              </div>
+              <div className="space-y-2">
+                <ImageUpload 
+                  label="After Image"
+                  value={section.image_after}
+                  onChange={(url) => onUpdate({ image_after: url })}
+                  folder="images"
+                />
+              </div>
+            </div>
+          )}
+
+          {section.type === 'doctor_banner' && (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="space-y-2">
+                <label className="text-xs font-black text-gray-400 uppercase tracking-widest">Main Title</label>
+                <input 
+                  type="text" 
+                  value={section.title} 
+                  onChange={(e) => onUpdate({ title: e.target.value })}
+                  className="w-full p-4 bg-white border border-gray-100 rounded-2xl outline-none focus:ring-2 focus:ring-brand-primary" 
+                />
+              </div>
+              <div className="space-y-2">
+                <label className="text-xs font-black text-gray-400 uppercase tracking-widest">Doctor Quote</label>
+                <input 
+                  type="text" 
+                  value={section.quote} 
+                  onChange={(e) => onUpdate({ quote: e.target.value })}
+                  className="w-full p-4 bg-white border border-gray-100 rounded-2xl outline-none focus:ring-2 focus:ring-brand-primary" 
+                />
+              </div>
+              <div className="space-y-2">
+                <label className="text-xs font-black text-gray-400 uppercase tracking-widest">Years Experience</label>
+                <input 
+                  type="text" 
+                  value={section.experience} 
+                  onChange={(e) => onUpdate({ experience: e.target.value })}
+                  className="w-full p-4 bg-white border border-gray-100 rounded-2xl outline-none focus:ring-2 focus:ring-brand-primary" 
+                />
+              </div>
+              <div className="space-y-2">
+                <label className="text-xs font-black text-gray-400 uppercase tracking-widest">Happy Patients</label>
+                <input 
+                  type="text" 
+                  value={section.patients} 
+                  onChange={(e) => onUpdate({ patients: e.target.value })}
+                  className="w-full p-4 bg-white border border-gray-100 rounded-2xl outline-none focus:ring-2 focus:ring-brand-primary" 
+                />
+              </div>
+              <div className="md:col-span-2 space-y-2">
+                <ImageUpload 
+                  label="Doctor Photo"
+                  value={section.image}
+                  onChange={(url) => onUpdate({ image: url })}
+                  folder="images"
+                />
+              </div>
+            </div>
+          )}
+
+          {section.type === 'faq' && (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+               <div className="space-y-2">
+                <label className="text-xs font-black text-gray-400 uppercase tracking-widest">Section Heading</label>
+                <input 
+                  type="text" 
+                  value={section.title} 
+                  onChange={(e) => onUpdate({ title: e.target.value })}
+                  className="w-full p-4 bg-white border border-gray-100 rounded-2xl outline-none focus:ring-2 focus:ring-brand-primary" 
+                />
+              </div>
+              <div className="md:col-span-2 space-y-2">
+                <label className="text-xs font-black text-gray-400 uppercase tracking-widest">Subheading</label>
+                <textarea 
+                  value={section.description} 
+                  onChange={(e) => onUpdate({ description: e.target.value })}
+                  rows={2}
+                  className="w-full p-4 bg-white border border-gray-100 rounded-2xl outline-none focus:ring-2 focus:ring-brand-primary resize-none" 
+                />
+              </div>
+            </div>
+          )}
+
           {(section.type === 'services_grid' || section.type === 'team_grid' || section.type === 'blog_grid') && (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                <div className="space-y-2">
