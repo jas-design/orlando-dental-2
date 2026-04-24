@@ -133,7 +133,7 @@ export const FAQS: FAQItem[] = [
 export const CONTACT_INFO = {
   address: '5211 Curry Ford Rd. Suite 1, Orlando, FL 32812',
   phone: '407-737-9444',
-  whatsapp: '4077379444',
+  whatsapp: '',
   email: 'orlandodentalcare@gmail.com',
   logoUrl: '',
   hours: [

@@ -4,10 +4,10 @@ import { MessageCircle } from 'lucide-react';
 import { useContent } from '../context/ContentContext';
 
 export function WhatsAppButton() {
-  const { content } = useContent();
+  const { content, loading } = useContent();
   const whatsappNumber = content.contactInfo.whatsapp;
 
-  if (!whatsappNumber) return null;
+  if (loading || !whatsappNumber) return null;
 
   // Clean number just in case (though we handle it in admin)
   const cleanNumber = whatsappNumber.replace(/\D/g, '');
