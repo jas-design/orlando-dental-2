@@ -75,66 +75,73 @@ export function ImageUpload({ value, onChange, label, folder = 'images' }: Image
 
   return (
     <div className="space-y-4">
-      {label && <label className="text-xs font-black text-gray-400 uppercase tracking-widest block">{label}</label>}
+      {label && <label className="text-xs font-black text-gray-400 uppercase tracking-widest block mb-2">{label}</label>}
       
-      <div className="relative group">
-        <div className="flex flex-col md:flex-row gap-4">
-          <div className="flex-1 relative">
-            <LinkIcon className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-300" />
-            <input 
-              type="text" 
-              value={value} 
-              onChange={(e) => onChange(e.target.value)}
-              placeholder="Paste custom image URL here..."
-              className="w-full p-4 pl-12 bg-white border border-gray-100 rounded-2xl outline-none focus:ring-2 focus:ring-brand-primary placeholder:text-gray-300 text-sm" 
-            />
-          </div>
+      <div className="flex flex-col md:flex-row gap-4">
+        {/* Paste URL Input */}
+        <div className="flex-1 relative group">
+          <LinkIcon className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-300 group-focus-within:text-brand-primary transition-colors" />
+          <input 
+            type="text" 
+            value={value} 
+            onChange={(e) => onChange(e.target.value)}
+            placeholder="Paste image URL here..."
+            className="w-full p-4 pl-12 bg-white border border-gray-100 rounded-2xl outline-none focus:ring-2 focus:ring-brand-primary/20 focus:border-brand-primary transition-all placeholder:text-gray-300 text-sm font-medium" 
+          />
+        </div>
+
+        {/* Or Upload Button */}
+        <div className="relative">
           <button
             type="button"
             onClick={() => fileInputRef.current?.click()}
             disabled={uploading}
-            className="px-8 bg-brand-primary text-white rounded-2xl font-bold transition-all hover:bg-brand-dark disabled:opacity-50 flex items-center justify-center gap-3 shadow-lg shadow-brand-primary/10 whitespace-nowrap min-h-[56px]"
+            className="w-full md:w-auto px-8 bg-brand-primary text-white rounded-2xl font-bold transition-all hover:bg-brand-dark disabled:opacity-50 flex items-center justify-center gap-3 shadow-lg shadow-brand-primary/10 whitespace-nowrap min-h-[56px]"
           >
             {uploading ? <Loader2 className="w-5 h-5 animate-spin" /> : <Upload className="w-5 h-5" />}
             <span>{uploading ? 'Uploading...' : 'Upload File'}</span>
           </button>
+          
+          <input 
+            type="file" 
+            ref={fileInputRef} 
+            onChange={handleFileSelect} 
+            accept="image/*" 
+            className="hidden" 
+          />
         </div>
-
-        {uploading && (
-           <div className="absolute -bottom-2 left-0 right-0 h-1 bg-gray-100 rounded-full overflow-hidden">
-              <div className="h-full bg-brand-primary animate-pulse w-full" />
-           </div>
-        )}
-
-        <input 
-          type="file" 
-          ref={fileInputRef} 
-          onChange={handleFileSelect} 
-          accept="image/*" 
-          className="hidden" 
-        />
       </div>
 
+      {uploading && (
+        <div className="relative h-1 bg-gray-100 rounded-full overflow-hidden mt-2">
+          <div className="h-full bg-brand-primary animate-pulse w-full" />
+        </div>
+      )}
+
       {value && (
-        <div className="relative w-fit">
-          <div className="w-40 h-24 rounded-xl overflow-hidden border-2 border-white shadow-md bg-gray-50">
+        <div className="relative group mt-4">
+          <div className="w-full max-w-sm aspect-[16/9] rounded-3xl overflow-hidden border-4 border-white shadow-xl bg-gray-50 relative">
             <img 
               src={value} 
               alt="Preview" 
-              className="w-full h-full object-cover" 
+              className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" 
               referrerPolicy="no-referrer"
               onError={(e) => {
                 (e.target as HTMLImageElement).src = 'https://images.unsplash.com/photo-1629909613654-28e377c37b09?auto=format&fit=crop&q=80';
               }}
             />
+            {/* Overlay for actions */}
+            <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center backdrop-blur-[2px]">
+              <button 
+                type="button"
+                onClick={() => onChange('')}
+                className="bg-white text-brand-dark p-3 rounded-full hover:bg-red-500 hover:text-white transition-all transform hover:scale-110 shadow-lg"
+              >
+                <X className="w-6 h-6" />
+              </button>
+            </div>
           </div>
-          <button 
-            type="button"
-            onClick={() => onChange('')}
-            className="absolute -top-2 -right-2 w-6 h-6 bg-red-500 text-white rounded-full flex items-center justify-center hover:bg-red-600 transition-all shadow-lg"
-          >
-            <X className="w-4 h-4" />
-          </button>
+          <p className="text-[10px] text-gray-400 mt-2 text-center max-w-sm uppercase tracking-widest font-bold">Image Preview</p>
         </div>
       )}
     </div>

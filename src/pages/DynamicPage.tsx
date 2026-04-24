@@ -6,6 +6,7 @@ import { motion } from 'motion/react';
 import { Loader2, ArrowRight, Phone, Clock, MapPin, Mail, ChevronRight, FileText, Users as UsersIcon, Layout, Star } from 'lucide-react';
 import * as LucideIcons from 'lucide-react';
 import { Button } from '../components/Button';
+import { renderTitle } from '../lib/utils';
 
 export function DynamicPage() {
   const location = useLocation();
@@ -123,7 +124,13 @@ function RenderSection({ section }: { section: any; key?: any }) {
               transition={{ delay: 0.1 }}
               className="text-5xl md:text-7xl font-display font-bold text-brand-dark tracking-tighter leading-tight"
             >
-              {section.title}
+              {section.useStructuredTitle ? (
+                <>
+                  {section.line1} <br />
+                  <span style={{ color: section.line2Color || '#14e5db' }}>{section.line2}</span> <br />
+                  {section.line3}
+                </>
+              ) : section.title ? renderTitle(section.title) : 'New Hero' }
             </motion.h1>
             <motion.p 
               initial={{ opacity: 0, y: 20 }}

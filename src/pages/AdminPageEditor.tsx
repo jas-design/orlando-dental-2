@@ -75,7 +75,11 @@ export function AdminPageEditor() {
           {
             id: 'hero',
             type: 'hero',
-            title: 'Reveal the {Radiant Smile} You Deserve',
+            useStructuredTitle: true,
+            line1: 'Reveal the',
+            line2: 'Radiant Smile',
+            line3: 'You Deserve',
+            line2Color: '#14e5db',
             description: 'Experience dental care that combines advanced technology with a gentle, personalized touch in a comfortable environment.',
             cta: 'BOOK APPOINTMENT',
             image: 'https://images.unsplash.com/photo-1576091160550-217359f48f4c?auto=format&fit=crop&q=80'
@@ -588,17 +592,83 @@ function SectionEditor({ section, index, total, onUpdate, onRemove, onMove }: Se
                   className="w-full p-4 bg-white border border-gray-100 rounded-2xl outline-none focus:ring-2 focus:ring-brand-primary" 
                 />
               </div>
-              <div className="space-y-2">
-                <label className="text-xs font-black text-gray-400 uppercase tracking-widest">Main Title</label>
-                <input 
-                  type="text" 
-                  value={section.title} 
-                  onChange={(e) => onUpdate({ title: e.target.value })}
-                  className="w-full p-4 bg-white border border-gray-100 rounded-2xl outline-none focus:ring-2 focus:ring-brand-primary" 
-                />
-                <p className="text-[10px] text-gray-400 pl-1 italic">
-                  Tip: Use <b>{"{text}"}</b> to color text (ex: {"{Our Smile}"}) and <b>{"<br />"}</b> for new lines.
-                </p>
+
+              {/* Title Editor Selection */}
+              <div className="md:col-span-2 space-y-4">
+                <div className="flex items-center justify-between">
+                   <label className="text-xs font-black text-gray-400 uppercase tracking-widest">Hero Title Style</label>
+                   <div className="flex bg-white px-2 py-1 rounded-xl border border-gray-100">
+                      <button 
+                        onClick={() => onUpdate({ useStructuredTitle: false })}
+                        className={`px-4 py-2 rounded-lg text-[10px] font-bold uppercase transition-all ${!section.useStructuredTitle ? 'bg-brand-primary text-white shadow-md' : 'text-gray-400 hover:text-brand-dark'}`}
+                      >
+                         Single Line
+                      </button>
+                      <button 
+                        onClick={() => onUpdate({ useStructuredTitle: true })}
+                        className={`px-4 py-2 rounded-lg text-[10px] font-bold uppercase transition-all ${section.useStructuredTitle ? 'bg-brand-primary text-white shadow-md' : 'text-gray-400 hover:text-brand-dark'}`}
+                      >
+                         3 Lines (Custom Color)
+                      </button>
+                   </div>
+                </div>
+
+                {!section.useStructuredTitle ? (
+                  <div className="space-y-2">
+                    <input 
+                      type="text" 
+                      value={section.title} 
+                      onChange={(e) => onUpdate({ title: e.target.value })}
+                      placeholder="Enter full title..."
+                      className="w-full p-4 bg-white border border-gray-100 rounded-2xl outline-none focus:ring-2 focus:ring-brand-primary" 
+                    />
+                    <p className="text-[10px] text-gray-400 pl-1 italic">
+                      Tip: Use <b>{"{text}"}</b> to color text (ex: {"{Our Smile}"}) and <b>{"<br />"}</b> for new lines.
+                    </p>
+                  </div>
+                ) : (
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-6 p-6 bg-white rounded-[32px] border border-gray-100">
+                    <div className="space-y-2">
+                       <label className="text-[10px] font-black text-gray-300 uppercase tracking-widest">Line 1</label>
+                       <input 
+                         type="text" 
+                         value={section.line1} 
+                         onChange={(e) => onUpdate({ line1: e.target.value })}
+                         placeholder="Reveal the"
+                         className="w-full p-3 bg-gray-50 border-gray-50 rounded-xl outline-none focus:ring-2 focus:ring-brand-primary text-sm font-bold" 
+                       />
+                    </div>
+                    <div className="space-y-2">
+                       <label className="text-[10px] font-black text-brand-primary uppercase tracking-widest">Line 2 (Colored)</label>
+                       <input 
+                         type="text" 
+                         value={section.line2} 
+                         onChange={(e) => onUpdate({ line2: e.target.value })}
+                         placeholder="Radiant Smile"
+                         className="w-full p-3 bg-gray-50 border-gray-50 rounded-xl outline-none focus:ring-2 focus:ring-brand-primary text-sm font-bold" 
+                       />
+                       <div className="flex items-center gap-2 mt-2">
+                          <input 
+                            type="color" 
+                            value={section.line2Color || '#14e5db'} 
+                            onChange={(e) => onUpdate({ line2Color: e.target.value })}
+                            className="w-8 h-8 rounded-lg cursor-pointer border-none p-0 bg-transparent"
+                          />
+                          <span className="text-[10px] font-bold text-gray-400 uppercase">{section.line2Color || '#14e5db'}</span>
+                       </div>
+                    </div>
+                    <div className="space-y-2">
+                       <label className="text-[10px] font-black text-gray-300 uppercase tracking-widest">Line 3</label>
+                       <input 
+                         type="text" 
+                         value={section.line3} 
+                         onChange={(e) => onUpdate({ line3: e.target.value })}
+                         placeholder="You Deserve"
+                         className="w-full p-3 bg-gray-50 border-gray-50 rounded-xl outline-none focus:ring-2 focus:ring-brand-primary text-sm font-bold" 
+                       />
+                    </div>
+                  </div>
+                )}
               </div>
               <div className="md:col-span-2 space-y-2">
                 <label className="text-xs font-black text-gray-400 uppercase tracking-widest">Sub-description</label>
@@ -654,7 +724,7 @@ function SectionEditor({ section, index, total, onUpdate, onRemove, onMove }: Se
               </div>
               <div className="space-y-2 md:col-span-2">
                 <ImageUpload 
-                  label="Main Image"
+                  label={section.id === 'mission' || section.badge?.includes('CHOOSE') ? "Feature Image (e.g. 3D Tooth)" : "Main Section Image"}
                   value={section.image}
                   onChange={(url) => onUpdate({ image: url })}
                   folder="images"

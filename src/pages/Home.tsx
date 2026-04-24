@@ -97,7 +97,13 @@ export function Home() {
           <div className="max-w-3xl space-y-10">
             <div className="space-y-6">
                <h1 className="text-6xl md:text-8xl font-display font-bold text-brand-dark leading-[1.05] tracking-tight">
-                 {heroSection?.title ? renderTitle(heroSection.title) : (
+                 {heroSection?.useStructuredTitle ? (
+                   <>
+                     {heroSection.line1} <br />
+                     <span style={{ color: heroSection.line2Color || '#14e5db' }}>{heroSection.line2}</span> <br />
+                     {heroSection.line3}
+                   </>
+                 ) : heroSection?.title ? renderTitle(heroSection.title) : (
                     <>Reveal the <br /> <span className="text-brand-primary">Radiant Smile</span> <br /> You Deserve</>
                  )}
                </h1>
@@ -246,9 +252,9 @@ export function Home() {
                     </div>
                  </div>
                  <img 
-                   src="https://png.pngtree.com/png-vector/20231016/ourmid/pngtree-3d-render-teeth-isolated-white-transparent-background-png-image_10162590.png" 
+                   src={whyChooseUs?.image || "https://png.pngtree.com/png-vector/20231016/ourmid/pngtree-3d-render-teeth-isolated-white-transparent-background-png-image_10162590.png"} 
                    className="w-[340px] h-auto relative z-10 drop-shadow-[0_30px_60px_rgba(39,162,168,0.15)] hover:scale-105 transition-transform duration-700" 
-                   alt="3D Tooth"
+                   alt="Why Choose Us"
                  />
               </div>
 
