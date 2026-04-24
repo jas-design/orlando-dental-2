@@ -1,15 +1,13 @@
 import { useState, FormEvent } from 'react';
 import { Calendar, User, Phone, CheckCircle2 } from 'lucide-react';
 import { Button } from './Button';
-import { useContent } from '../context/ContentContext';
+import { CONTACT_INFO } from '../constants';
 
 interface AppointmentFormProps {
   layout?: 'horizontal' | 'vertical';
 }
 
 export function AppointmentForm({ layout = 'vertical' }: AppointmentFormProps) {
-  const { content } = useContent();
-  const { contactInfo } = content;
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [formData, setFormData] = useState({
     name: '',
@@ -35,7 +33,7 @@ Preferred Time: ${formData.time}
     `.trim();
 
     // Open mailto link
-    const mailtoUrl = `mailto:${contactInfo.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    const mailtoUrl = `mailto:${CONTACT_INFO.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
     window.location.href = mailtoUrl;
 
     // Show success state
@@ -55,7 +53,7 @@ Preferred Time: ${formData.time}
         <div className="space-y-2">
           <h3 className="text-xl font-bold text-green-900">Request Sent!</h3>
           <p className="text-green-700">
-            Thank you for reaching out. We've opened your email client to send the details to <strong>{contactInfo.email}</strong>. 
+            Thank you for reaching out. We've opened your email client to send the details to <strong>{CONTACT_INFO.email}</strong>. 
             We will contact you shortly to confirm.
           </p>
         </div>
