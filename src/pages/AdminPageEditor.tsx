@@ -150,7 +150,7 @@ export function AdminPageEditor() {
             id: 'footer_cta',
             type: 'hero',
             title: 'READY TO {TRANSFORM} YOUR SMILE?',
-            description: 'Join thousands of happy patients in Orlando. Book your consultation today.',
+            description: 'Join thousands of happy patients in our clinic. Book your consultation today.',
             cta: 'BOOK NOW',
             image: 'https://images.unsplash.com/photo-1598256989800-fe5f95da9787?auto=format&fit=crop&q=80'
           }
@@ -168,7 +168,7 @@ export function AdminPageEditor() {
             type: 'hero',
             badge: 'OUR STORY',
             title: 'We Care For Your {Dental Health}',
-            description: 'At Orlando Dental Care, we take pride in bringing added value to every patient by addressing all of your dental needs and concerns.',
+            description: 'At Dental Care Clinic, we take pride in bringing added value to every patient by addressing all of your dental needs and concerns.',
             cta: 'Learn More',
             image: 'https://images.unsplash.com/photo-1629909613654-28e377c37b09?auto=format&fit=crop&q=80'
           },
@@ -249,7 +249,7 @@ export function AdminPageEditor() {
             id: 'contact_strip',
             type: 'contact_strip',
             title: 'Contact Information',
-            description: 'Visit us in Orlando or reach out via phone or email for any inquiries about our services or insurance coverage.'
+            description: 'Visit us or reach out via phone or email for any inquiries about our services or insurance coverage.'
           }
         ]
       };
