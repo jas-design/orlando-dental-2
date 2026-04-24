@@ -29,11 +29,7 @@ export function Contact() {
 
   // Format address for Google Maps query
   const mapQuery = encodeURIComponent(contactInfo.address);
-  // Default Orlando coordinates if address is empty (fallback)
-  const mapEmbedUrl = `https://www.google.com/maps/embed/v1/place?key=${import.meta.env.VITE_GOOGLE_MAPS_API_KEY || ''}&q=${mapQuery}`;
-  
-  // Alternative: use iframe with search query directly (no API key required for simple search embed)
-  const mapIframeUrl = `https://maps.google.com/maps?q=${mapQuery}&t=&z=15&ie=UTF8&iwloc=&output=embed`;
+  const mapIframeUrl = `https://maps.google.com/maps?q=${mapQuery}&t=&z=15&ie=UTF-8&iwloc=&output=embed`;
 
   return (
     <div className="pt-24 min-h-screen">

@@ -142,3 +142,11 @@ export const CONTACT_INFO = {
     { day: 'Sunday', time: 'Closed' },
   ],
 };
+
+export const DEFAULT_THEME_COLORS = {
+  primary: '#27A2A8',
+  secondary: '#DEB80F',
+  dark: '#1a1d21',
+  light: '#f1f8f8',
+  accent: '#DEB80F',
+};

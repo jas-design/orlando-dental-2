@@ -9,18 +9,23 @@ import { ImageUpload } from '../components/ImageUpload';
 export function AdminSettings() {
   const { content, updateContent } = useContent();
   const [formData, setFormData] = useState(content.contactInfo);
+  const [themeColors, setThemeColors] = useState(content.themeColors);
   const [saving, setSaving] = useState(false);
   const { showNotification } = useNotification();
 
   useEffect(() => {
     setFormData(content.contactInfo);
-  }, [content.contactInfo]);
+    setThemeColors(content.themeColors);
+  }, [content.contactInfo, content.themeColors]);
 
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
     setSaving(true);
     try {
-      await updateContent({ contactInfo: formData });
+      await updateContent({ 
+        contactInfo: formData,
+        themeColors: themeColors
+      });
       showNotification('Settings updated successfully!');
     } catch (err) {
       console.error(err);
@@ -30,15 +35,73 @@ export function AdminSettings() {
     }
   };
 
+  const ColorInput = ({ label, value, onChange, icon: Icon }: any) => (
+    <div className="bg-white p-6 rounded-[32px] border border-gray-100 shadow-sm space-y-4">
+      <div className="flex items-center gap-3">
+        <div className="w-8 h-8 rounded-lg shadow-sm border border-gray-100" style={{ backgroundColor: value }}></div>
+        <span className="text-sm font-bold uppercase tracking-widest text-gray-500">{label}</span>
+      </div>
+      <div className="flex gap-2">
+        <input 
+          type="color"
+          value={value}
+          onChange={(e) => onChange(e.target.value)}
+          className="w-12 h-12 rounded-xl cursor-pointer border-0 p-0 overflow-hidden"
+        />
+        <input 
+          type="text"
+          value={value}
+          onChange={(e) => onChange(e.target.value)}
+          className="flex-1 px-4 py-3 bg-gray-50 border-gray-100 rounded-xl focus:ring-2 focus:ring-brand-primary outline-none font-mono text-sm transition-all"
+        />
+      </div>
+    </div>
+  );
+
   return (
     <div className="max-w-4xl space-y-12">
       <div>
          <p className="text-brand-primary font-black uppercase tracking-[0.3em] mb-2 text-xs">Settings</p>
-         <h1 className="text-4xl font-display font-bold text-brand-dark">General & Contact</h1>
-         <p className="text-gray-500 mt-2">Manage your clinic's basic information and contact details.</p>
+         <h1 className="text-4xl font-display font-bold text-brand-dark">General & Visuals</h1>
+         <p className="text-gray-500 mt-2">Manage your clinic's basic information and brand appearance.</p>
       </div>
 
-      <form onSubmit={handleSave} className="space-y-12">
+      <form onSubmit={handleSave} className="space-y-12 pb-24">
+         {/* Theme Colors Section */}
+         <section className="space-y-6">
+            <h2 className="text-xl font-display font-bold text-brand-dark flex items-center gap-2">
+               <span className="w-8 h-1 bg-brand-primary rounded-full"></span>
+               Brand Colors
+            </h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+               <ColorInput 
+                 label="Primary Color" 
+                 value={themeColors.primary} 
+                 onChange={(v: string) => setThemeColors({ ...themeColors, primary: v })} 
+               />
+               <ColorInput 
+                 label="Secondary Color" 
+                 value={themeColors.secondary} 
+                 onChange={(v: string) => setThemeColors({ ...themeColors, secondary: v })} 
+               />
+               <ColorInput 
+                 label="Dark Brand" 
+                 value={themeColors.dark} 
+                 onChange={(v: string) => setThemeColors({ ...themeColors, dark: v })} 
+               />
+               <ColorInput 
+                 label="Light Tint" 
+                 value={themeColors.light} 
+                 onChange={(v: string) => setThemeColors({ ...themeColors, light: v })} 
+               />
+               <ColorInput 
+                 label="Accent" 
+                 value={themeColors.accent} 
+                 onChange={(v: string) => setThemeColors({ ...themeColors, accent: v })} 
+               />
+            </div>
+         </section>
+
          {/* General Information Section */}
          <section className="space-y-6">
             <h2 className="text-xl font-display font-bold text-brand-dark flex items-center gap-2">
