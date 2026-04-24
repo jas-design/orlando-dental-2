@@ -204,23 +204,23 @@ export function AdminGallery() {
                      </div>
                   </div>
 
-                  <div className="pt-4 flex gap-4">
-                     <button 
-                        type="submit"
-                        disabled={saving}
-                        className="flex-1 py-4 bg-brand-primary text-white rounded-2xl font-bold uppercase tracking-widest shadow-xl shadow-brand-primary/20 hover:bg-brand-dark transition-all disabled:opacity-50 flex items-center justify-center gap-2"
-                     >
-                        {saving ? <Loader2 className="w-5 h-5 animate-spin" /> : <Check className="w-5 h-5" />}
-                        {saving ? 'Saving...' : (editingId ? 'Update Image' : 'Add to Gallery')}
-                     </button>
-                     <button 
-                        type="button"
-                        onClick={() => setIsModalOpen(false)}
-                        className="px-8 py-4 border border-gray-100 text-gray-400 rounded-2xl font-bold uppercase tracking-widest hover:bg-gray-50 transition-all"
-                     >
-                        Cancel
-                     </button>
-                  </div>
+                   <div className="sticky bottom-0 bg-white pt-6 border-t border-gray-50 flex gap-4 mt-auto">
+                      <button 
+                         type="submit"
+                         disabled={saving}
+                         className="flex-1 py-4 bg-brand-primary text-white rounded-2xl font-bold uppercase tracking-widest shadow-xl shadow-brand-primary/20 hover:bg-brand-dark transition-all disabled:opacity-50 flex items-center justify-center gap-2"
+                      >
+                         {saving ? <Loader2 className="w-5 h-5 animate-spin" /> : <Check className="w-5 h-5" />}
+                         {saving ? 'Saving...' : (editingId ? 'Save Changes' : 'Add to Gallery')}
+                      </button>
+                      <button 
+                         type="button"
+                         onClick={() => setIsModalOpen(false)}
+                         className="px-8 py-4 border border-gray-100 text-gray-400 rounded-2xl font-bold uppercase tracking-widest hover:bg-gray-50 transition-all"
+                      >
+                         Cancel
+                      </button>
+                   </div>
                </form>
             </div>
           </motion.div>

@@ -171,14 +171,14 @@ export function AdminTeam() {
                      </div>
                   </div>
 
-                  <div className="pt-4 flex gap-4">
+                  <div className="sticky bottom-0 bg-white pt-6 border-t border-gray-50 flex gap-4 mt-auto">
                      <button 
                         type="submit"
                         disabled={saving}
                         className="flex-1 py-4 bg-brand-primary text-white rounded-2xl font-bold uppercase tracking-widest shadow-xl shadow-brand-primary/20 hover:bg-brand-dark transition-all disabled:opacity-50 flex items-center justify-center gap-2"
                      >
                         {saving ? <Loader2 className="w-5 h-5 animate-spin" /> : <Check className="w-5 h-5" />}
-                        {saving ? 'Saving...' : 'Save Member'}
+                        {saving ? 'Saving...' : 'Save Changes'}
                      </button>
                      <button 
                         type="button"

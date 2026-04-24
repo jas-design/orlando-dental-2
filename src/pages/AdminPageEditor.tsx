@@ -367,13 +367,17 @@ export function AdminPageEditor() {
             <p className="text-sm text-gray-400">Manage the content and sections of this page</p>
           </div>
         </div>
+      </div>
+
+      {/* Floating Save Button */}
+      <div className="fixed bottom-8 right-8 z-50 flex items-center gap-3">
         <button 
           onClick={handleSave}
           disabled={saving}
-          className="flex items-center gap-3 px-8 py-4 bg-brand-primary text-white rounded-2xl font-bold uppercase tracking-widest shadow-xl shadow-brand-primary/20 hover:bg-brand-dark transition-all disabled:opacity-50"
+          className="flex items-center gap-3 px-10 py-5 bg-brand-dark text-white rounded-2xl font-bold uppercase tracking-[0.2em] shadow-2xl shadow-brand-dark/30 hover:bg-brand-primary hover:shadow-brand-primary/20 transition-all disabled:opacity-50"
         >
           {saving ? <Loader2 className="w-5 h-5 animate-spin" /> : <Save className="w-5 h-5" />}
-          <span>Save Changes</span>
+          <span>{saving ? 'Saving...' : 'Save Changes'}</span>
         </button>
       </div>
 
