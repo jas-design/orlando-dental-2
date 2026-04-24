@@ -65,7 +65,7 @@ export function Footer() {
         </div>
 
         <div className="pt-12 border-t border-white/10 flex flex-col md:flex-row justify-between items-center gap-6 text-white/40 text-xs font-bold uppercase tracking-widest">
-          <p>© {new Date().getFullYear()} Dental Care Clinic. All rights reserved.</p>
+          <p>© {new Date().getFullYear()} Orlando Dental Care. All rights reserved.</p>
           <div className="flex space-x-8">
             <Link to="/privacy-policy" className="hover:text-brand-primary transition-colors">Privacy Policy</Link>
             <Link to="#" className="hover:text-brand-primary transition-colors">Terms & Conditions</Link>

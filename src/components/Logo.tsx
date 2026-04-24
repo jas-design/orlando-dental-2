@@ -43,7 +43,7 @@ export function Logo({ className = "", variant = 'dark' }: LogoProps) {
     return (
       <img 
         src={dynamicLogo || IMAGES.logo} 
-        alt="Dental Care Clinic" 
+        alt="Orlando Dental Care" 
         className={`${variant === 'light' ? 'brightness-0 invert' : ''} h-full w-auto object-contain transition-transform hover:scale-[1.02] ${className}`}
         onError={() => setImageError(true)}
         referrerPolicy="no-referrer"
@@ -61,9 +61,9 @@ export function Logo({ className = "", variant = 'dark' }: LogoProps) {
       </div>
       <div className={`flex flex-col font-display font-bold text-2xl leading-none tracking-tight ${textColor}`}>
         <div className="flex items-center">
-          <span>Dental</span>
+          <span>Orlando</span>
           <div className="relative mx-1">
-            <span className="text-brand-primary">Care</span>
+            <span className="text-brand-primary">Dental</span>
             {/* The "Little Smile" Arc below the word Dental */}
             <svg 
               viewBox="0 0 100 20" 
@@ -79,7 +79,7 @@ export function Logo({ className = "", variant = 'dark' }: LogoProps) {
               />
             </svg>
           </div>
-          <span className="ml-1">Clinic</span>
+          <span className="ml-1">Care</span>
         </div>
       </div>
     </div>

@@ -66,7 +66,7 @@ export function About() {
             transition={{ delay: 0.2 }}
             className="text-xl text-gray-700/80 max-w-2xl mx-auto leading-relaxed"
           >
-            {heroSection?.description || 'At Dental Care Clinic, we take pride in bringing added value to every patient by addressing all of your dental needs and concerns.'}
+            {heroSection?.description || 'At Orlando Dental Care, we take pride in bringing added value to every patient by addressing all of your dental needs and concerns.'}
           </motion.p>
         </div>
       </section>
@@ -81,7 +81,7 @@ export function About() {
                    {renderTitle(missionSection?.title) || 'Our Mission'}
                  </h2>
                  <p className="text-gray-600 text-lg leading-relaxed">
-                    {missionSection?.description || 'Our mission is to provide the highest quality dental care in a comfortable and welcoming environment. We believe in educating our patients and providing them with all the necessary information to make informed decisions about their oral health.'}
+                   {missionSection?.description || 'Our mission is to provide the highest quality dental care in a comfortable and welcoming environment. We believe in educating our patients and providing them with all the necessary information to make informed decisions about their oral health.'}
                  </p>
                </div>
                <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
@@ -139,7 +139,7 @@ export function About() {
       <section className="py-24">
         <div className="container mx-auto px-4">
           <div className="text-center max-w-3xl mx-auto mb-16">
-            <h2 className="text-4xl md:text-5xl font-display font-bold mb-6">Why Choose Dental Care Clinic?</h2>
+            <h2 className="text-4xl md:text-5xl font-display font-bold mb-6">Why Choose Orlando Dental Care?</h2>
             <p className="text-gray-600">We go beyond routine checkups to provide a comprehensive dental experience based on trust and transparency.</p>
           </div>
           
