@@ -4,6 +4,7 @@ import { doc, getDoc, setDoc } from 'firebase/firestore';
 import { db } from '../lib/firebase';
 import { motion } from 'motion/react';
 import { Save, ChevronLeft, Loader2, Image as ImageIcon, Plus, Trash2, Eye, Type, Layout, Star, Search, Users, AlertCircle } from 'lucide-react';
+import * as Icons from 'lucide-react';
 import { useNotification } from '../context/NotificationContext';
 
 import { ImageUpload } from '../components/ImageUpload';
@@ -80,9 +81,9 @@ export function AdminPageEditor() {
             line2: 'Radiant Smile',
             line3: 'You Deserve',
             line2Color: '#14e5db',
-            description: 'Experience dental care that combines advanced technology with a gentle, personalized touch in a comfortable environment.',
+            description: "Experience dental care that combines advanced technology with a gentle, personalized touch in a comfortable environment.",
             cta: 'BOOK APPOINTMENT',
-            image: 'https://images.unsplash.com/photo-1576091160550-217359f48f4c?auto=format&fit=crop&q=80'
+            image: 'https://images.unsplash.com/photo-1588776814546-1ffcf47267a5?auto=format&fit=crop&q=80&w=1200'
           },
           {
             id: 'info_strip',
@@ -104,7 +105,17 @@ export function AdminPageEditor() {
             badge: 'WHY CHOOSE US',
             title: 'Diagnosis of {Dental Diseases}',
             description: 'We are committed to providing the highest quality dental care using state-of-the-art equipment.',
-            image: 'https://images.unsplash.com/photo-1629909613654-28e377c37b09?auto=format&fit=crop&q=80'
+            image: 'https://png.pngtree.com/png-vector/20231016/ourmid/pngtree-3d-render-teeth-isolated-white-transparent-background-png-image_10162590.png',
+            features_left: [
+              { title: 'Experienced Doctor', description: 'The goal of our clinic is to provide friendly, caring dentistry and the.', icon: 'UserCheck' },
+              { title: 'Personalized Care', description: 'The goal of our clinic is to provide friendly, caring dentistry and the.', icon: 'HeartPulse' },
+              { title: 'Flexible Payment Options', description: 'The goal of our clinic is to provide friendly, caring dentistry and the.', icon: 'Wallet2' },
+            ],
+            features_right: [
+              { title: 'Emergency Services', description: 'The goal of our clinic is to provide friendly, caring dentistry and the.', icon: 'Crosshair' },
+              { title: 'Positive Patient Reviews', description: 'The goal of our clinic is to provide friendly, caring dentistry and the.', icon: 'ThumbsUp' },
+              { title: 'Latest Technology', description: 'The goal of our clinic is to provide friendly, caring dentistry and the.', icon: 'CircuitBoard' },
+            ]
           },
           {
             id: 'before_after',
@@ -119,8 +130,16 @@ export function AdminPageEditor() {
             id: 'faq',
             type: 'faq',
             badge: 'FREQUENTLY ASKED QUESTIONS',
-            title: 'If You Have Questions? <br /> We\'ve Got {Answers}!',
-            description: 'Find answers to your most common dental health questions.'
+            title: "If You Have Questions? <br /> We've Got {Answers}!",
+            description: 'Find answers to your most common dental health questions.',
+            stat1: { value: '800+', label: 'Successful Projects' },
+            stat2: { value: '353+', label: 'Dental Hospital' },
+            items: [
+              { q: 'How often should I visit the doctor?', a: "Routine checkups are recommended once a year for adults. Frequency may increase with age or chronic conditions. Preventive visits help catch issues early. Always follow your doctor's advice. Schedule visits if symptoms arise." },
+              { q: 'How often should I see the dentist?', a: 'Regular dental visits should happen every six months for most people. This allows for professional cleaning and early detection of potential issues like decay or gum disease.' },
+              { q: 'What\'s included in a general health checkup?', a: 'A standard checkup usually includes a review of your medical history, vitals check, physical examination, and potentially blood tests or screenings tailored to your age and health focus.' },
+              { q: 'What causes tooth decay?', a: 'Tooth decay is caused by bacteria in the mouth that produce acids when consuming sugary foods. These acids gradually erode the tooth enamel over time.' }
+            ]
           },
           {
             id: 'doctor_banner',
@@ -730,6 +749,111 @@ function SectionEditor({ section, index, total, onUpdate, onRemove, onMove }: Se
                   folder="images"
                 />
               </div>
+
+              {/* Features List for Why Choose Us */}
+              {(section.features_left || section.features_right) && (
+                <div className="md:col-span-2 space-y-8 pt-8 border-t border-gray-100">
+                  <h4 className="text-sm font-bold uppercase tracking-widest text-brand-primary">Features List</h4>
+                  
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    {/* Left Features */}
+                    <div className="space-y-4">
+                      <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Left Column Features</p>
+                      {section.features_left?.map((feat: any, i: number) => (
+                        <div key={i} className="p-4 bg-white rounded-2xl border border-gray-100 space-y-3 shadow-sm">
+                          <input 
+                            placeholder="Feature Title"
+                            value={feat.title} 
+                            onChange={(e) => {
+                              const newFeats = [...section.features_left];
+                              newFeats[i] = { ...feat, title: e.target.value };
+                              onUpdate({ features_left: newFeats });
+                            }}
+                            className="w-full p-2 bg-gray-50 border-none rounded-lg text-sm font-bold"
+                          />
+                          <textarea 
+                            placeholder="Description"
+                            value={feat.description} 
+                            onChange={(e) => {
+                              const newFeats = [...section.features_left];
+                              newFeats[i] = { ...feat, description: e.target.value };
+                              onUpdate({ features_left: newFeats });
+                            }}
+                            rows={2}
+                            className="w-full p-2 bg-gray-50 border-none rounded-lg text-xs resize-none"
+                          />
+                           <div className="flex items-center space-x-3">
+                             <input 
+                              placeholder="Icon Name (Lucide)"
+                              value={feat.icon} 
+                              onChange={(e) => {
+                                const newFeats = [...section.features_left];
+                                newFeats[i] = { ...feat, icon: e.target.value };
+                                onUpdate({ features_left: newFeats });
+                              }}
+                              className="flex-1 p-2 bg-gray-50 border-none rounded-lg text-[10px] font-mono"
+                            />
+                             <div className="w-8 h-8 rounded-lg bg-brand-primary/10 flex items-center justify-center text-brand-primary">
+                               {Icons[feat.icon as keyof typeof Icons] ? 
+                                 React.createElement(Icons[feat.icon as keyof typeof Icons] as any, { size: 16 }) : 
+                                 <AlertCircle size={16} className="opacity-30" />
+                               }
+                             </div>
+                           </div>
+                        </div>
+                      ))}
+                    </div>
+
+                    {/* Right Features */}
+                    <div className="space-y-4">
+                      <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Right Column Features</p>
+                      {section.features_right?.map((feat: any, i: number) => (
+                        <div key={i} className="p-4 bg-white rounded-2xl border border-gray-100 space-y-3 shadow-sm">
+                          <input 
+                            placeholder="Feature Title"
+                            value={feat.title} 
+                            onChange={(e) => {
+                              const newFeats = [...section.features_right];
+                              newFeats[i] = { ...feat, title: e.target.value };
+                              onUpdate({ features_right: newFeats });
+                            }}
+                            className="w-full p-2 bg-gray-50 border-none rounded-lg text-sm font-bold"
+                          />
+                          <textarea 
+                            placeholder="Description"
+                            value={feat.description} 
+                            onChange={(e) => {
+                              const newFeats = [...section.features_right];
+                              newFeats[i] = { ...feat, description: e.target.value };
+                              onUpdate({ features_right: newFeats });
+                            }}
+                            rows={2}
+                            className="w-full p-2 bg-gray-50 border-none rounded-lg text-xs resize-none"
+                          />
+                           <div className="flex items-center space-x-3">
+                             <input 
+                              placeholder="Icon Name (Lucide)"
+                              value={feat.icon} 
+                              onChange={(e) => {
+                                const newFeats = [...section.features_right];
+                                newFeats[i] = { ...feat, icon: e.target.value };
+                                onUpdate({ features_right: newFeats });
+                              }}
+                              className="flex-1 p-2 bg-gray-50 border-none rounded-lg text-[10px] font-mono"
+                            />
+                             <div className="w-8 h-8 rounded-lg bg-brand-primary/10 flex items-center justify-center text-brand-primary">
+                               {Icons[feat.icon as keyof typeof Icons] ? 
+                                 React.createElement(Icons[feat.icon as keyof typeof Icons] as any, { size: 16 }) : 
+                                 <AlertCircle size={16} className="opacity-30" />
+                               }
+                             </div>
+                           </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
           )}
           {section.type === 'info_strip' && (
@@ -871,6 +995,89 @@ function SectionEditor({ section, index, total, onUpdate, onRemove, onMove }: Se
                   rows={2}
                   className="w-full p-4 bg-white border border-gray-100 rounded-2xl outline-none focus:ring-2 focus:ring-brand-primary resize-none" 
                 />
+              </div>
+
+               {/* FAQ Stats */}
+              <div className="md:col-span-2 grid grid-cols-2 gap-6 p-6 bg-brand-primary/5 rounded-[32px]">
+                 <div className="space-y-3">
+                    <p className="text-[10px] font-black text-brand-primary uppercase tracking-widest">Stat 1</p>
+                    <input 
+                      placeholder="Value (e.g. 800+)"
+                      value={section.stat1?.value} 
+                      onChange={(e) => onUpdate({ stat1: { ...section.stat1, value: e.target.value } })}
+                      className="w-full p-3 bg-white border-none rounded-xl text-sm font-bold"
+                    />
+                    <input 
+                      placeholder="Label"
+                      value={section.stat1?.label} 
+                      onChange={(e) => onUpdate({ stat1: { ...section.stat1, label: e.target.value } })}
+                      className="w-full p-3 bg-white border-none rounded-xl text-xs"
+                    />
+                 </div>
+                 <div className="space-y-3">
+                    <p className="text-[10px] font-black text-brand-primary uppercase tracking-widest">Stat 2</p>
+                    <input 
+                      placeholder="Value (e.g. 353+)"
+                      value={section.stat2?.value} 
+                      onChange={(e) => onUpdate({ stat2: { ...section.stat2, value: e.target.value } })}
+                      className="w-full p-3 bg-white border-none rounded-xl text-sm font-bold"
+                    />
+                    <input 
+                      placeholder="Label"
+                      value={section.stat2?.label} 
+                      onChange={(e) => onUpdate({ stat2: { ...section.stat2, label: e.target.value } })}
+                      className="w-full p-3 bg-white border-none rounded-xl text-xs"
+                    />
+                 </div>
+              </div>
+
+              {/* FAQ Items */}
+              <div className="md:col-span-2 space-y-4">
+                 <div className="flex items-center justify-between">
+                    <label className="text-xs font-black text-gray-400 uppercase tracking-widest">FAQ Items</label>
+                    <button 
+                      onClick={() => onUpdate({ items: [...(section.items || []), { q: 'New Question', a: 'Answer...' }] })}
+                      className="text-[10px] font-bold text-brand-primary uppercase hover:underline"
+                    >
+                      + Add Question
+                    </button>
+                 </div>
+                 <div className="space-y-3">
+                    {section.items?.map((item: any, i: number) => (
+                      <div key={i} className="p-6 bg-white rounded-3xl border border-gray-100 space-y-4 shadow-sm relative group">
+                        <button 
+                          onClick={() => {
+                            const newItems = section.items.filter((_: any, idx: number) => idx !== i);
+                            onUpdate({ items: newItems });
+                          }}
+                          className="absolute top-4 right-4 text-gray-300 hover:text-red-500 transition-colors opacity-0 group-hover:opacity-100"
+                        >
+                           <Trash2 className="w-4 h-4" />
+                        </button>
+                        <input 
+                          value={item.q} 
+                          onChange={(e) => {
+                            const newItems = [...section.items];
+                            newItems[i] = { ...item, q: e.target.value };
+                            onUpdate({ items: newItems });
+                          }}
+                          placeholder="Question"
+                          className="w-full p-2 bg-gray-50 border-none rounded-lg text-sm font-bold focus:ring-2 focus:ring-brand-primary"
+                        />
+                        <textarea 
+                          value={item.a} 
+                          onChange={(e) => {
+                            const newItems = [...section.items];
+                            newItems[i] = { ...item, a: e.target.value };
+                            onUpdate({ items: newItems });
+                          }}
+                          placeholder="Answer"
+                          rows={2}
+                          className="w-full p-2 bg-gray-50 border-none rounded-lg text-xs focus:ring-2 focus:ring-brand-primary resize-none"
+                        />
+                      </div>
+                    ))}
+                 </div>
               </div>
             </div>
           )}

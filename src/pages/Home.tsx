@@ -82,6 +82,39 @@ export function Home() {
 
   const displayServices = services.length > 0 ? services : DEFAULT_SERVICES;
 
+  // Why Choose Us / Diagnosis Section Features
+  const featuresLeft = whyChooseUs?.features_left || [
+    { title: 'Experienced Doctor', icon: 'UserCheck', description: 'The goal of our clinic is to provide friendly, caring dentistry and the.' },
+    { title: 'Personalized Care', icon: 'HeartPulse', description: 'The goal of our clinic is to provide friendly, caring dentistry and the.' },
+    { title: 'Flexible Payment Options', icon: 'Wallet2', description: 'The goal of our clinic is to provide friendly, caring dentistry and the.' },
+  ];
+
+  const featuresRight = whyChooseUs?.features_right || [
+    { title: 'Emergency Services', icon: 'Crosshair', description: 'The goal of our clinic is to provide friendly, caring dentistry and the.' },
+    { title: 'Positive Patient Reviews', icon: 'ThumbsUp', description: 'The goal of our clinic is to provide friendly, caring dentistry and the.' },
+    { title: 'Latest Technology', icon: 'CircuitBoard', description: 'The goal of our clinic is to provide friendly, caring dentistry and the.' },
+  ];
+
+  // FAQ Items
+  const faqItems = faqSection?.items || [
+    { 
+      q: 'How often should I visit the doctor?', 
+      a: 'Routine checkups are recommended once a year for adults. Frequency may increase with age or chronic conditions. Preventive visits help catch issues early. Always follow your doctor\'s advice. Schedule visits if symptoms arise.' 
+    },
+    { 
+      q: 'How often should I see the dentist?', 
+      a: 'Regular dental visits should happen every six months for most people. This allows for professional cleaning and early detection of potential issues like decay or gum disease.' 
+    },
+    { 
+      q: 'What\'s included in a general health checkup?', 
+      a: 'A standard checkup usually includes a review of your medical history, vitals check, physical examination, and potentially blood tests or screenings tailored to your age and health focus.' 
+    },
+    { 
+      q: 'What causes tooth decay?', 
+      a: 'Tooth decay is caused by bacteria in the mouth that produce acids when consuming sugary foods. These acids gradually erode the tooth enamel over time.' 
+    }
+  ];
+
   const TESTIMONIALS = [
     { name: 'Sarah Miller', pos: 'Cosmetic Patient', text: 'The level of care here is unmatched. They really took the time to explain every step of my treatment. The results are better than I ever imagined.' },
     { name: 'John Peterson', pos: 'Orthodontics', text: 'I finally have the straight teeth I always wanted. The process was way faster than I expected! The team was incredibly supportive throughout.' },
@@ -166,7 +199,7 @@ export function Home() {
               </div>
               <div className="flex items-center">
                  <Link to="/contact" className="w-full h-16 border-2 border-white/20 rounded-xl flex items-center justify-center font-bold uppercase tracking-widest text-xs hover:bg-brand-primary hover:border-brand-primary transition-all">
-                    Book an Appointment
+                    {infoStrip?.cta || 'Book an Appointment'}
                  </Link>
               </div>
            </div>
@@ -178,7 +211,7 @@ export function Home() {
         <div className="container mx-auto px-4">
            <div className="text-center max-w-2xl mx-auto space-y-6 mb-24">
               <span className="text-brand-primary font-black uppercase text-xs tracking-[0.4em] flex items-center justify-center space-x-2">
-                 <span>+ OUR SERVICES</span>
+                 <span>+ {servicesIntro?.badge || 'OUR SERVICES'}</span>
               </span>
               <h2 className="text-5xl font-display font-bold text-brand-dark tracking-tighter">
                 {servicesIntro?.title ? renderTitle(servicesIntro.title) : 'Complete Dental Care'}
@@ -212,7 +245,7 @@ export function Home() {
         <div className="container mx-auto px-4 relative z-10">
            <div className="text-center max-w-2xl mx-auto space-y-6 mb-24">
               <span className="text-brand-primary font-black uppercase text-xs tracking-[0.4em] flex items-center justify-center space-x-2">
-                <span>+ WHY CHOOSE US</span>
+                <span>+ {whyChooseUs?.badge || 'WHY CHOOSE US'}</span>
               </span>
               <h2 className="text-6xl font-display font-bold text-[#1a3a4a] tracking-tight">
                 {whyChooseUs?.title ? renderTitle(whyChooseUs.title) : (
@@ -220,28 +253,27 @@ export function Home() {
                 )}
               </h2>
               <p className="text-gray-400 font-medium leading-relaxed">
-                {whyChooseUs?.description || "We are committed to sustainability, eco-friendly initiatives."}
+                {whyChooseUs?.description || "We are committed to providing the highest quality dental care using state-of-the-art equipment."}
               </p>
            </div>
 
            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-center">
               {/* Left Column */}
               <div className="space-y-20 lg:text-right">
-                 {[
-                   { title: 'Experienced Doctor', icon: Icons.UserCheck, desc: 'The goal of our clinic is to provide friendly, caring dentistry and the.' },
-                   { title: 'Personalized Care', icon: Icons.HeartPulse, desc: 'The goal of our clinic is to provide friendly, caring dentistry and the.' },
-                   { title: 'Flexible Payment Options', icon: Icons.Wallet2, desc: 'The goal of our clinic is to provide friendly, caring dentistry and the.' },
-                 ].map((item, i) => (
-                   <div key={i} className="flex flex-col lg:flex-row items-center lg:items-center justify-end gap-6 group">
-                      <div className="order-2 lg:order-1">
-                         <h3 className="text-2xl font-display font-bold text-brand-dark group-hover:text-brand-primary transition-colors">{item.title}</h3>
-                         <p className="text-gray-400 text-sm mt-2 leading-relaxed max-w-xs ml-auto">{item.desc}</p>
-                      </div>
-                      <div className="w-16 h-16 rounded-2xl bg-white shadow-lg flex items-center justify-center text-brand-primary order-1 lg:order-2 group-hover:bg-brand-primary group-hover:text-white transition-all shrink-0">
-                         <item.icon className="w-8 h-8" />
-                      </div>
-                   </div>
-                 ))}
+                 {featuresLeft.map((item, i) => {
+                   const IconComp = (Icons as any)[item.icon] || Icons.CheckCircle;
+                   return (
+                    <div key={i} className="flex flex-col lg:flex-row items-center lg:items-center justify-end gap-6 group">
+                        <div className="order-2 lg:order-1">
+                          <h3 className="text-2xl font-display font-bold text-brand-dark group-hover:text-brand-primary transition-colors">{item.title}</h3>
+                          <p className="text-gray-400 text-sm mt-2 leading-relaxed max-w-xs ml-auto">{item.description || item.desc}</p>
+                        </div>
+                        <div className="w-16 h-16 rounded-2xl bg-white shadow-lg flex items-center justify-center text-brand-primary order-1 lg:order-2 group-hover:bg-brand-primary group-hover:text-white transition-all shrink-0">
+                          <IconComp className="w-8 h-8" />
+                        </div>
+                    </div>
+                  );
+                 })}
               </div>
 
               {/* Center Image */}
@@ -272,21 +304,20 @@ export function Home() {
 
               {/* Right Column */}
               <div className="space-y-20">
-                 {[
-                   { title: 'Emergency Services', icon: Icons.Crosshair, desc: 'The goal of our clinic is to provide friendly, caring dentistry and the.' },
-                   { title: 'Positive Patient Reviews', icon: Icons.ThumbsUp, desc: 'The goal of our clinic is to provide friendly, caring dentistry and the.' },
-                   { title: 'Latest Technology', icon: Icons.CircuitBoard, desc: 'The goal of our clinic is to provide friendly, caring dentistry and the.' },
-                 ].map((item, i) => (
-                   <div key={i} className="flex flex-col lg:flex-row items-center lg:items-center gap-6 group">
-                      <div className="w-16 h-16 rounded-2xl bg-white shadow-lg flex items-center justify-center text-brand-primary group-hover:bg-brand-primary group-hover:text-white transition-all shrink-0">
-                         <item.icon className="w-8 h-8" />
-                      </div>
-                      <div>
-                         <h3 className="text-2xl font-display font-bold text-brand-dark group-hover:text-brand-primary transition-colors">{item.title}</h3>
-                         <p className="text-gray-400 text-sm mt-2 leading-relaxed max-w-xs">{item.desc}</p>
-                      </div>
-                   </div>
-                 ))}
+                 {featuresRight.map((item, i) => {
+                   const IconComp = (Icons as any)[item.icon] || Icons.CheckCircle;
+                   return (
+                    <div key={i} className="flex flex-col lg:flex-row items-center lg:items-center gap-6 group">
+                        <div className="w-16 h-16 rounded-2xl bg-white shadow-lg flex items-center justify-center text-brand-primary group-hover:bg-brand-primary group-hover:text-white transition-all shrink-0">
+                          <IconComp className="w-8 h-8" />
+                        </div>
+                        <div>
+                          <h3 className="text-2xl font-display font-bold text-brand-dark group-hover:text-brand-primary transition-colors">{item.title}</h3>
+                          <p className="text-gray-400 text-sm mt-2 leading-relaxed max-w-xs">{item.description || item.desc}</p>
+                        </div>
+                    </div>
+                  );
+                 })}
               </div>
            </div>
         </div>
@@ -335,7 +366,7 @@ export function Home() {
               {/* Content on the Right */}
               <div className="space-y-8 order-1 lg:order-2">
                  <div className="space-y-4">
-                    <span className="text-brand-primary font-black uppercase text-xs tracking-[0.4em] block mb-4">+ BEFORE AND AFTER</span>
+                    <span className="text-brand-primary font-black uppercase text-xs tracking-[0.4em] block mb-4">+ {beforeAfterSection?.badge || 'BEFORE AND AFTER'}</span>
                     <h2 className="text-5xl md:text-7xl font-display font-medium text-white tracking-tight">
                        {beforeAfterSection?.title ? renderTitle(beforeAfterSection.title) : 'Get a Hollywood Smile Today!'}
                     </h2>
@@ -359,13 +390,16 @@ export function Home() {
            {/* Section Headers */}
            <div className="text-center max-w-3xl mx-auto space-y-4 mb-24">
               <span className="text-brand-primary font-black uppercase text-xs tracking-[0.4em] flex items-center justify-center space-x-2">
-                 <span>+ FREQUENTLY ASKED QUESTIONS</span>
+                 <span>+ {faqSection?.badge || 'FREQUENTLY ASKED QUESTIONS'}</span>
               </span>
               <h2 className="text-5xl md:text-7xl font-display font-medium text-[#1e293b] tracking-tight leading-tight">
                  {faqSection?.title ? renderTitle(faqSection.title) : (
                     <>If You Have Questions? <br /> We've Got Answers!</>
                  )}
               </h2>
+              {faqSection?.description && (
+                <p className="text-gray-500 font-medium leading-relaxed max-w-2xl mx-auto">{faqSection.description}</p>
+              )}
            </div>
 
            <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-start">
@@ -378,62 +412,45 @@ export function Home() {
                       alt="Dentist consultation" 
                     />
                  </div>
-                 {/* Stats Box - Exactly as per image */}
+                 {/* Stats Box */}
                  <div className="absolute bottom-[-40px] left-[-20px] right-[-20px] md:left-4 md:right-4 bg-brand-primary rounded-[30px] p-10 flex items-center shadow-2xl text-white">
                     <div className="flex-1 text-center border-r border-white/20 px-6">
-                       <h3 className="text-4xl md:text-5xl font-display font-bold mb-2">800+</h3>
-                       <p className="text-sm font-medium text-white/80">Successful Projects</p>
+                       <h3 className="text-4xl md:text-5xl font-display font-bold mb-2">{faqSection?.stat1?.value || '800+'}</h3>
+                       <p className="text-sm font-medium text-white/80">{faqSection?.stat1?.label || 'Successful Projects'}</p>
                     </div>
                     <div className="flex-1 text-center px-6">
-                       <h3 className="text-4xl md:text-5xl font-display font-bold mb-2">353+</h3>
-                       <p className="text-sm font-medium text-white/80">Dental Hospital</p>
+                       <h3 className="text-4xl md:text-5xl font-display font-bold mb-2">{faqSection?.stat2?.value || '353+'}</h3>
+                       <p className="text-sm font-medium text-white/80">{faqSection?.stat2?.label || 'Dental Hospital'}</p>
                     </div>
                  </div>
               </div>
 
               {/* Right Column: Accordion */}
               <div className="space-y-4 pt-12 lg:pt-0">
-                 {[
-                   { 
-                     q: 'How often should I visit the doctor?', 
-                     a: 'Routine checkups are recommended once a year for adults. Frequency may increase with age or chronic conditions. Preventive visits help catch issues early. Always follow your doctor\'s advice. Schedule visits if symptoms arise.' 
-                   },
-                   { 
-                     q: 'How often should I see the dentist?', 
-                     a: 'Regular dental visits should happen every six months for most people. This allows for professional cleaning and early detection of potential issues like decay or gum disease.' 
-                   },
-                   { 
-                     q: 'What\'s included in a general health checkup?', 
-                     a: 'A standard checkup usually includes a review of your medical history, vitals check, physical examination, and potentially blood tests or screenings tailored to your age and health focus.' 
-                   },
-                   { 
-                     q: 'What causes tooth decay?', 
-                     a: 'Tooth decay is caused by bacteria in the mouth that produce acids when consuming sugary foods. These acids gradually erode the tooth enamel over time.' 
-                   }
-                 ].map((faq, i) => (
-                   <div 
-                     key={i} 
-                     className={`border rounded-2xl overflow-hidden transition-all duration-300 ${activeFaq === i ? 'border-brand-primary ring-1 ring-brand-primary/20' : 'border-gray-200'}`}
-                   >
-                      <button 
-                        onClick={() => setActiveFaq(activeFaq === i ? null : i)}
-                        className="w-full flex items-center justify-between p-8 text-left group"
-                      >
-                         <span className={`text-xl font-display font-medium transition-colors ${activeFaq === i ? 'text-brand-primary' : 'text-brand-dark'}`}>
-                            {faq.q}
-                         </span>
-                         <Icons.ArrowUpRight className={`w-5 h-5 transition-transform duration-300 ${activeFaq === i ? 'rotate-90 text-brand-primary' : 'text-gray-400 group-hover:text-brand-primary'}`} />
-                      </button>
-                      <motion.div 
-                        initial={false}
-                        animate={{ height: activeFaq === i ? 'auto' : 0, opacity: activeFaq === i ? 1 : 0 }}
-                        className="overflow-hidden"
-                      >
-                         <div className="p-8 pt-0 text-gray-500 leading-relaxed text-lg border-t border-gray-50">
-                            {faq.a}
-                         </div>
-                      </motion.div>
-                   </div>
+                 {faqItems.map((faq: any, i: number) => (
+                    <div 
+                      key={i} 
+                      className={`border rounded-2xl overflow-hidden transition-all duration-300 ${activeFaq === i ? 'border-brand-primary ring-1 ring-brand-primary/20' : 'border-gray-200'}`}
+                    >
+                       <button 
+                         onClick={() => setActiveFaq(activeFaq === i ? null : i)}
+                         className="w-full flex items-center justify-between p-8 text-left group"
+                       >
+                          <span className={`text-xl font-display font-medium transition-colors ${activeFaq === i ? 'text-brand-primary' : 'text-brand-dark'}`}>
+                             {faq.q}
+                          </span>
+                          <Icons.ArrowUpRight className={`w-5 h-5 transition-transform duration-300 ${activeFaq === i ? 'rotate-90 text-brand-primary' : 'text-gray-400 group-hover:text-brand-primary'}`} />
+                       </button>
+                       <motion.div 
+                         initial={false}
+                         animate={{ height: activeFaq === i ? 'auto' : 0, opacity: activeFaq === i ? 1 : 0 }}
+                         className="overflow-hidden"
+                       >
+                          <div className="p-8 pt-0 text-gray-500 leading-relaxed text-lg border-t border-gray-50">
+                             {faq.a}
+                          </div>
+                       </motion.div>
+                    </div>
                  ))}
               </div>
            </div>
@@ -543,7 +560,7 @@ export function Home() {
                 <button 
                   key={i}
                   onClick={() => setTestimonialIndex(i)}
-                  className={`w-2.5 h-2.5 rounded-full transition-all ${testimonialIndex === i ? 'bg-brand-primary w-8' : 'bg-gray-200'}`}
+                  className={`width-2.5 height-2.5 rounded-full transition-all ${testimonialIndex === i ? 'bg-brand-primary w-8' : 'bg-gray-200'}`}
                 />
               ))}
             </div>

@@ -146,13 +146,21 @@ export function AdminServices() {
                      </div>
                      <div className="space-y-2">
                         <label className="text-xs font-black text-gray-400 uppercase tracking-widest pl-1">Icon Name (Lucide)</label>
-                        <input 
-                           type="text"
-                           value={currentService.icon}
-                           onChange={(e) => setCurrentService({...currentService, icon: e.target.value})}
-                           className="w-full p-4 bg-gray-50 border border-gray-100 rounded-2xl outline-none focus:bg-white focus:ring-2 focus:ring-brand-primary transition-all"
-                           placeholder="Stethoscope, Activity, Sparkles..."
-                        />
+                        <div className="flex items-center gap-4">
+                           <input 
+                              type="text"
+                              value={currentService.icon}
+                              onChange={(e) => setCurrentService({...currentService, icon: e.target.value})}
+                              className="flex-1 p-4 bg-gray-50 border border-gray-100 rounded-2xl outline-none focus:bg-white focus:ring-2 focus:ring-brand-primary transition-all"
+                              placeholder="Stethoscope, Activity, Sparkles..."
+                           />
+                           <div className="w-14 h-14 bg-brand-primary/10 rounded-2xl flex items-center justify-center text-brand-primary shrink-0">
+                              {Icons[currentService.icon as keyof typeof Icons] ? 
+                                 React.createElement(Icons[currentService.icon as keyof typeof Icons] as any, { size: 24 }) : 
+                                 <Stethoscope size={24} className="opacity-30" />
+                              }
+                           </div>
+                        </div>
                      </div>
                      <div className="space-y-2">
                         <label className="text-xs font-black text-gray-400 uppercase tracking-widest pl-1">Display Order</label>
