@@ -61,13 +61,15 @@ export function Home() {
   const heroSection = pageData?.sections?.find((s: any) => s.type === 'hero');
   const infoStrip = pageData?.sections?.find((s: any) => s.type === 'info_strip');
   const servicesIntro = pageData?.sections?.find((s: any) => s.type === 'services_grid');
-  const whyChooseUs = pageData?.sections?.find((s: any) => s.id === 'mission' || s.id === 'services_intro' || s.type === 'text_with_image');
+  const whyChooseUs = pageData?.sections?.find((s: any) => s.id?.toLowerCase() === 'mission') || 
+                      pageData?.sections?.find((s: any) => s.id?.toLowerCase() === 'services_intro') ||
+                      pageData?.sections?.find((s: any) => s.type === 'text_with_image');
   const beforeAfterSection = pageData?.sections?.find((s: any) => s.type === 'before_after');
   const faqSection = pageData?.sections?.find((s: any) => s.type === 'faq');
   const doctorBanner = pageData?.sections?.find((s: any) => s.type === 'doctor_banner');
-  const testimonialsIntro = pageData?.sections?.find((s: any) => s.id === 'testimonials');
-  const blogIntro = pageData?.sections?.find((s: any) => s.id === 'blog');
-  const footerCta = pageData?.sections?.find((s: any) => s.id === 'footer_cta');
+  const testimonialsIntro = pageData?.sections?.find((s: any) => s.id?.toLowerCase() === 'testimonials');
+  const blogIntro = pageData?.sections?.find((s: any) => s.id?.toLowerCase() === 'blog');
+  const footerCta = pageData?.sections?.find((s: any) => s.id?.toLowerCase() === 'footer_cta');
 
   const DEFAULT_SERVICES = [
     { title: 'General Dental Care', icon: 'Stethoscope' },

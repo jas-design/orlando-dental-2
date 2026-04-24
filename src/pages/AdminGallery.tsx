@@ -67,7 +67,7 @@ export function AdminGallery() {
       }
       setIsModalOpen(false);
       setEditingId(null);
-      setImageForm({ title: '', url: '', category: 'Cosmetic' });
+      setImageForm({ title: '', caption: '', url: '', category: 'Cosmetic' });
       fetchImages();
     } catch (error) {
       console.error("Error saving image:", error);
