@@ -552,26 +552,26 @@ export function Home() {
       </section>
 
       {/* Latest News (Blog) */}
-      {blogPosts.length > 0 && (
-        <section className="py-40 bg-gray-50/50">
-          <div className="container mx-auto px-4">
-            <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-24">
-              <div className="max-w-2xl space-y-6">
-                 <span className="text-brand-primary font-black uppercase text-xs tracking-[0.4em] block">+ {blogIntro?.badge || 'LATEST NEWS'}</span>
-                 <h2 className="text-5xl md:text-7xl font-display font-bold text-brand-dark tracking-tighter leading-none">
-                   {renderTitle(blogIntro?.title) || <>Oral Health <br /> <span className="text-brand-primary">Tips & Insights</span></>}
-                 </h2>
-                 {blogIntro?.description && (
-                   <p className="text-gray-500 font-medium leading-relaxed">{blogIntro.description}</p>
-                 )}
-              </div>
-              <Link to="/blog" className="px-10 py-5 bg-white text-brand-dark rounded-2xl font-bold uppercase tracking-widest text-[11px] border border-gray-100 hover:bg-brand-primary hover:text-white hover:border-brand-primary transition-all shadow-xl shadow-gray-200/50">
-                 View All Articles
-              </Link>
+      <section className="py-40 bg-gray-50/50">
+        <div className="container mx-auto px-4">
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-24">
+            <div className="max-w-2xl space-y-6">
+               <span className="text-brand-primary font-black uppercase text-xs tracking-[0.4em] block">+ {blogIntro?.badge || 'LATEST NEWS'}</span>
+               <h2 className="text-5xl md:text-7xl font-display font-bold text-brand-dark tracking-tighter leading-none">
+                 {renderTitle(blogIntro?.title) || <>Oral Health <br /> <span className="text-brand-primary">Tips & Insights</span></>}
+               </h2>
+               {blogIntro?.description && (
+                 <p className="text-gray-500 font-medium leading-relaxed">{blogIntro.description}</p>
+               )}
             </div>
+            <Link to="/blog" className="px-10 py-5 bg-white text-brand-dark rounded-2xl font-bold uppercase tracking-widest text-[11px] border border-gray-100 hover:bg-brand-primary hover:text-white hover:border-brand-primary transition-all shadow-xl shadow-gray-200/50">
+               View All Articles
+            </Link>
+          </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
-              {blogPosts.map((post: any, i: number) => (
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
+            {blogPosts.length > 0 ? (
+              blogPosts.map((post: any, i: number) => (
                 <motion.div 
                   key={post.id}
                   initial={{ opacity: 0, y: 20 }}
@@ -598,11 +598,19 @@ export function Home() {
                     </Link>
                   </div>
                 </motion.div>
-              ))}
-            </div>
+              ))
+            ) : (
+              // Fallback cards if no posts in DB
+              [1, 2, 3].map((_, i) => (
+                <div key={i} className="bg-white/50 rounded-[40px] border border-dashed border-gray-200 p-12 text-center flex flex-col items-center justify-center space-y-4">
+                  <Icons.FileText className="w-12 h-12 text-gray-200" />
+                  <p className="text-gray-400 font-bold uppercase tracking-widest text-xs">Awaiting Articles</p>
+                </div>
+              ))
+            )}
           </div>
-        </section>
-      )}
+        </div>
+      </section>
 
       {/* 9. Call to Action */}
       <section className="py-40 bg-brand-primary relative overflow-hidden">

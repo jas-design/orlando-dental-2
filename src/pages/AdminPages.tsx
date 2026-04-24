@@ -335,7 +335,7 @@ export function AdminPages() {
                      </p>
                   </div>
 
-                  <div className="sticky bottom-0 bg-white pt-6 border-t border-gray-50 flex gap-4 mt-auto">
+                  <div className="pt-4 flex gap-4">
                      <button 
                         type="submit"
                         className="flex-1 py-4 bg-brand-primary text-white rounded-2xl font-bold uppercase tracking-widest shadow-xl shadow-brand-primary/20 hover:bg-brand-dark transition-all"
