@@ -1,6 +1,6 @@
 import React, { useRef, useState } from 'react';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
-import { storage } from '../lib/firebase';
+import { storage, auth } from '../lib/firebase';
 import { Upload, X, Loader2, Link as LinkIcon } from 'lucide-react';
 import { useNotification } from '../context/NotificationContext';
 
@@ -17,6 +17,12 @@ export function ImageUpload({ value, onChange, label, folder = 'images' }: Image
   const { showNotification } = useNotification();
 
   const handleFileSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    // Check if user is authenticated
+    if (!auth.currentUser) {
+      showNotification("You must be logged in to upload images.", "error");
+      return;
+    }
+
     const file = e.target.files?.[0];
     if (!file) return;
 
@@ -48,14 +54,16 @@ export function ImageUpload({ value, onChange, label, folder = 'images' }: Image
       console.error("FULL Upload error:", error);
       
       let message = "Upload failed.";
-      if (error.code === 'storage/unauthorized') {
-        message = "Permission denied. Check your Firebase Storage Rules: set rule to 'allow read, write: if request.auth != null;'.";
-      } else if (error.code === 'storage/retry-limit-exceeded') {
-        message = "Upload timed out. This often means Firebase Storage isn't fully set up or CORS is blocking the request.";
-      } else if (error.message?.includes('CORS')) {
-        message = "CORS Blocked. You must configure CORS on your Firebase bucket for this domain.";
+      const errorCode = error.code || 'unknown';
+
+      if (errorCode === 'storage/unauthorized') {
+        message = "Permission Denied. 1. Go to Firebase Console > Storage > Rules. 2. Set to: allow read, write: if request.auth != null;";
+      } else if (errorCode === 'storage/retry-limit-exceeded' || error.message?.includes('CORS')) {
+        message = "CORS Blocked. You must configure CORS in Google Cloud Shell: GSUTIL set cors [JSON_FILE] gs://[BUCKET]";
+      } else if (errorCode === 'storage/project-not-found') {
+        message = "Storage not initialized. Go to Firebase Console > Storage and click 'Get Started'.";
       } else {
-        message = `Upload failed (${error.code || 'unknown'}). Try pasting a direct image URL instead.`;
+        message = `Upload failed (${errorCode}). Check Console for details or paste a direct image URL instead.`;
       }
       
       showNotification(message, "error");
