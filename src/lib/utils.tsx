@@ -14,7 +14,10 @@ export function cn(...inputs: ClassValue[]) {
 export function renderTitle(title: string) {
   if (!title) return null;
   
-  return title.split('<br />').map((line, lineIndex) => {
+  // Robust split for <br>, <br/>, <br />, <BR>, etc.
+  const lines = title.split(/<br\s*\/?>/i);
+  
+  return lines.map((line, lineIndex) => {
     const parts = line.split(/(\{.*?\})/);
     
     return (
@@ -22,11 +25,11 @@ export function renderTitle(title: string) {
         {parts.map((part, partIndex) => {
           if (part.startsWith('{') && part.endsWith('}')) {
             const text = part.slice(1, -1);
-            return <span key={partIndex} className="text-brand-primary">{text}</span>;
+            return <span key={partIndex} className="text-brand-primary font-bold">{text}</span>;
           }
           return part;
         })}
-        {lineIndex < title.split('<br />').length - 1 && <br />}
+        {lineIndex < lines.length - 1 && <br />}
       </React.Fragment>
     );
   });

@@ -16,6 +16,7 @@ export function Home() {
   const [pageData, setPageData] = useState<any>(null);
   const [services, setServices] = useState<any[]>([]);
   const [blogPosts, setBlogPosts] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const checkMobile = () => setIsMobile(window.innerWidth < 1024);
@@ -24,6 +25,7 @@ export function Home() {
     
     async function fetchData() {
       try {
+        setLoading(true);
         // Fetch Home Page Content
         const pageSnap = await getDoc(doc(db, 'pages', 'home'));
         if (pageSnap.exists()) setPageData(pageSnap.data());
@@ -39,12 +41,22 @@ export function Home() {
         setBlogPosts(blogData);
       } catch (error) {
         console.error("Error loading data:", error);
+      } finally {
+        setLoading(false);
       }
     }
     fetchData();
 
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-white flex items-center justify-center">
+        <Icons.Loader2 className="w-12 h-12 text-brand-primary animate-spin" />
+      </div>
+    );
+  }
 
   const heroSection = pageData?.sections?.find((s: any) => s.type === 'hero');
   const infoStrip = pageData?.sections?.find((s: any) => s.type === 'info_strip');
