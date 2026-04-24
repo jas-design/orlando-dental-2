@@ -48,18 +48,70 @@ export function AdminDashboard() {
             image: 'https://images.unsplash.com/photo-1588776814546-1ffcf47267a5?auto=format&fit=crop&q=80'
           },
           {
+            id: 'info_strip',
+            type: 'info_strip',
+            phone: '+ 386 40 111 5555',
+            hours: 'Mon - Sat: 7:00 - 17:00',
+            cta: 'BOOK AN APPOINTMENT'
+          },
+          {
             id: 'services_intro',
             type: 'services_grid',
+            badge: 'OUR SERVICES',
             title: 'Complete {Dental Care}',
             description: 'Dedicated to providing the best dental experience for our community with a focus on comfort and high-end results.'
           },
           {
              id: 'mission',
              type: 'text_with_image',
-             badge: '+ WHY CHOOSE US',
+             badge: 'WHY CHOOSE US',
              title: 'Diagnosis of {Dental Diseases}',
-             description: 'We are committed to sustainability, eco-friendly initiatives and providing the most advanced dental diagnostics available today.',
-             image: 'https://png.pngtree.com/png-vector/20231016/ourmid/pngtree-3d-render-teeth-isolated-white-transparent-background-png-image_10162590.png'
+             description: 'We are committed to providing the highest quality dental care using state-of-the-art equipment.',
+             image: 'https://png.pngtree.com/png-vector/20231016/ourmid/pngtree-3d-render-teeth-isolated-white-transparent-background-png-image_10162590.png',
+             features_left: [
+               { title: 'Experienced Doctor', description: 'The goal of our clinic is to provide friendly, caring dentistry and the.', icon: 'UserCheck' },
+               { title: 'Personalized Care', description: 'The goal of our clinic is to provide friendly, caring dentistry and the.', icon: 'HeartPulse' },
+               { title: 'Flexible Payment Options', description: 'The goal of our clinic is to provide friendly, caring dentistry and the.', icon: 'Wallet2' },
+             ],
+             features_right: [
+               { title: 'Emergency Services', description: 'The goal of our clinic is to provide friendly, caring dentistry and the.', icon: 'Crosshair' },
+               { title: 'Positive Patient Reviews', description: 'The goal of our clinic is to provide friendly, caring dentistry and the.', icon: 'ThumbsUp' },
+               { title: 'Latest Technology', description: 'The goal of our clinic is to provide friendly, caring dentistry and the.', icon: 'CircuitBoard' },
+             ]
+          },
+          {
+            id: 'before_after',
+            type: 'before_after',
+            badge: 'BEFORE AND AFTER',
+            title: 'Get a {Hollywood Smile} Today!',
+            description: 'Experience life-changing results with our advanced cosmetic dentistry procedures.',
+            image_before: 'https://images.unsplash.com/photo-1593059080506-3458322287bd?auto=format&fit=crop&q=80',
+            image_after: 'https://images.unsplash.com/photo-1629909613654-28e377c37b09?auto=format&fit=crop&q=80'
+          },
+          {
+            id: 'faq',
+            type: 'faq',
+            badge: 'FREQUENTLY ASKED QUESTIONS',
+            title: "If You Have Questions? <br /> We've Got {Answers}!",
+            description: 'Find answers to your most common dental health questions.',
+            stat1: { value: '800+', label: 'Successful Projects' },
+            stat2: { value: '353+', label: 'Dental Hospital' },
+            items: [
+              { q: 'How often should I visit the doctor?', a: "Routine checkups are recommended once a year for adults. Frequency may increase with age or chronic conditions." },
+              { q: 'How often should I see the dentist?', a: 'Regular dental visits should happen every six months for most people.' },
+              { q: 'What\'s included in a general health checkup?', a: 'A standard checkup usually includes a review of your medical history, vitals check, and physical examination.' },
+              { q: 'What causes tooth decay?', a: 'Tooth decay is caused by bacteria in the mouth that produce acids when consuming sugary foods.' }
+            ]
+          },
+          {
+            id: 'doctor_banner',
+            type: 'doctor_banner',
+            badge: 'MEDICAL DIRECTOR',
+            title: 'Lead by Dr. A. {Viviana Santos}',
+            quote: 'Every smile tells a story. Our mission is to make sure yours is one of health, confidence, and joy.',
+            experience: '25+',
+            patients: '18k+',
+            image: 'https://images.unsplash.com/photo-1559839734-2b71ea197ec2?auto=format&fit=crop&q=80'
           }
         ]
       };
