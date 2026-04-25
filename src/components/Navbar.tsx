@@ -81,21 +81,21 @@ export function Navbar() {
         <div className="container mx-auto px-4 flex justify-between items-center">
           <div className="flex items-center space-x-6">
             <div className="flex items-center space-x-2">
-              <MapPin className="w-3.5 h-3.5 text-brand-primary" />
+              <MapPin className="w-3.5 h-3.5 text-brand-secondary" />
               <span>{CONTACT_INFO.address}</span>
             </div>
             <div className="flex items-center space-x-2 border-l border-white/10 pl-6">
-              <Icons.Clock className="w-3.5 h-3.5 text-brand-primary" />
+              <Icons.Clock className="w-3.5 h-3.5 text-brand-secondary" />
               <span>{CONTACT_INFO.hours[0].day}: {CONTACT_INFO.hours[0].time}</span>
             </div>
             <div className="flex items-center space-x-2 border-l border-white/10 pl-6">
-              <Phone className="w-3.5 h-3.5 text-brand-primary" />
+              <Phone className="w-3.5 h-3.5 text-brand-secondary" />
               <span>{CONTACT_INFO.phone}</span>
             </div>
           </div>
           <div className="flex items-center space-x-6">
             <div className="flex items-center space-x-2">
-              <Mail className="w-3.5 h-3.5 text-brand-primary" />
+              <Mail className="w-3.5 h-3.5 text-brand-secondary" />
               <span>{CONTACT_INFO.email}</span>
             </div>
             <div className="flex items-center space-x-4 border-l border-white/10 pl-6 h-3">
@@ -148,7 +148,7 @@ export function Navbar() {
 
             {/* Mobile Menu Button */}
             <div className="lg:hidden flex items-center space-x-4">
-               <a href="tel:407-737-9444" className="text-brand-primary">
+               <a href={`tel:${CONTACT_INFO.phone}`} className="text-brand-primary">
                  <Phone className="w-5 h-5" />
                </a>
               <button

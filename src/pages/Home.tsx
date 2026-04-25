@@ -154,7 +154,7 @@ export function Home() {
                      {heroSection.line3}
                    </>
                  ) : heroSection?.title ? renderTitle(heroSection.title) : (
-                    <>Reveal the <br /> <span className="text-brand-primary">Radiant Smile</span> <br /> You Deserve</>
+                    <>Reveal the <br /> <span className="text-brand-secondary">Radiant Smile</span> <br /> You Deserve</>
                  )}
                </h1>
                <p className="text-xl text-gray-500 max-w-xl leading-relaxed font-medium">
@@ -197,21 +197,21 @@ export function Home() {
         <div className="container mx-auto px-4">
            <div className="grid grid-cols-1 md:grid-cols-3 gap-12 items-center">
               <div className="flex items-center space-x-6">
-                 <div className="w-16 h-16 bg-white text-brand-primary rounded-xl flex items-center justify-center shadow-lg">
+                 <div className="w-16 h-16 bg-brand-secondary text-brand-dark rounded-xl flex items-center justify-center shadow-lg">
                     <Icons.Phone className="w-7 h-7" />
                  </div>
                  <div>
                     <h3 className="font-bold uppercase tracking-tight text-[11px] opacity-50 mb-1">Give us a call</h3>
-                    <p className="text-2xl font-display font-bold tracking-tight">{infoStrip?.phone || '+ 386 40 111 5555'}</p>
+                    <p className="text-2xl font-display font-bold tracking-tight">{infoStrip?.phone || content.contactInfo.phone}</p>
                  </div>
               </div>
               <div className="flex items-center space-x-6 border-white/5 md:border-x px-0 md:px-12 h-full">
-                 <div className="w-16 h-16 bg-white text-brand-primary rounded-xl flex items-center justify-center shadow-lg">
+                 <div className="w-16 h-16 bg-brand-secondary text-brand-dark rounded-xl flex items-center justify-center shadow-lg">
                     <Icons.Clock className="w-7 h-7" />
                  </div>
                  <div>
                     <h3 className="font-bold uppercase tracking-tight text-[11px] opacity-50 mb-1">Working Hours</h3>
-                    <p className="text-2xl font-display font-bold tracking-tight">{infoStrip?.hours || 'Mon - Sat: 7:00 - 17:00'}</p>
+                    <p className="text-2xl font-display font-bold tracking-tight">{infoStrip?.hours || `${content.contactInfo.hours[0].day}: ${content.contactInfo.hours[0].time}`}</p>
                  </div>
               </div>
               <div className="flex items-center">
@@ -239,7 +239,7 @@ export function Home() {
         <div className="container mx-auto px-4">
            <div className="text-center max-w-2xl mx-auto space-y-6 mb-24">
               <span className="text-brand-primary font-black uppercase text-xs tracking-[0.4em] flex items-center justify-center space-x-2">
-                 <span>+ {servicesIntro?.badge || 'OUR SERVICES'}</span>
+                 <span className="text-brand-secondary">+</span> <span>{servicesIntro?.badge || 'OUR SERVICES'}</span>
               </span>
               <h2 className="text-5xl font-display font-bold text-brand-dark tracking-tighter">
                 {servicesIntro?.title ? renderTitle(servicesIntro.title) : 'Complete Dental Care'}
@@ -252,7 +252,7 @@ export function Home() {
                 const IconComponent = (Icons as any)[service.icon] || Icons.Stethoscope;
                 return (
                   <div key={i} className="group p-10 bg-white border border-gray-100 rounded-[40px] hover:shadow-3xl transition-all duration-500 text-center space-y-6 flex flex-col items-center">
-                    <div className="w-20 h-20 bg-white text-brand-primary rounded-2xl flex items-center justify-center shadow-lg transition-transform duration-500 group-hover:scale-110 group-hover:rotate-6">
+                    <div className="w-20 h-20 bg-white text-brand-secondary rounded-2xl flex items-center justify-center shadow-lg transition-transform duration-500 group-hover:scale-110 group-hover:rotate-6">
                        <IconComponent className="w-10 h-10" />
                     </div>
                     <h3 className="font-bold text-brand-dark uppercase tracking-[0.2em] text-[10px]">{service.title || service.name}</h3>
@@ -273,11 +273,11 @@ export function Home() {
         <div className="container mx-auto px-4 relative z-10">
            <div className="text-center max-w-2xl mx-auto space-y-6 mb-24">
               <span className="text-brand-primary font-black uppercase text-xs tracking-[0.4em] flex items-center justify-center space-x-2">
-                <span>+ {whyChooseUs?.badge || 'WHY CHOOSE US'}</span>
+                <span className="text-brand-secondary">+</span> <span>{whyChooseUs?.badge || 'WHY CHOOSE US'}</span>
               </span>
               <h2 className="text-6xl font-display font-bold text-[#1a3a4a] tracking-tight">
                 {whyChooseUs?.title ? renderTitle(whyChooseUs.title) : (
-                   <>Diagnosis of <span className="text-brand-primary font-bold">Dental Diseases</span></>
+                   <>Diagnosis of <span className="text-brand-secondary font-bold">Dental Diseases</span></>
                 )}
               </h2>
               <p className="text-gray-400 font-medium leading-relaxed">
@@ -296,7 +296,7 @@ export function Home() {
                           <h3 className="text-2xl font-display font-bold text-brand-dark group-hover:text-brand-primary transition-colors">{item.title}</h3>
                           <p className="text-gray-400 text-sm mt-2 leading-relaxed max-w-xs ml-auto">{item.description || item.desc}</p>
                         </div>
-                        <div className="w-16 h-16 rounded-2xl bg-white shadow-lg flex items-center justify-center text-brand-primary order-1 lg:order-2 group-hover:bg-brand-primary group-hover:text-white transition-all shrink-0">
+                        <div className="w-16 h-16 rounded-2xl bg-white shadow-lg flex items-center justify-center text-brand-secondary order-1 lg:order-2 group-hover:bg-brand-secondary group-hover:text-white transition-all shrink-0">
                           <IconComp className="w-8 h-8" />
                         </div>
                     </div>
@@ -310,10 +310,10 @@ export function Home() {
                     {/* Circle Ring */}
                     <div className="w-[450px] h-[450px] border border-brand-primary/10 rounded-full relative">
                        {/* Perimeter Dots */}
-                       {[0, 60, 120, 180, 240, 300].map((deg) => (
+                       {[0, 60, 120, 180, 240, 300].map((deg, idx) => (
                          <div 
                            key={deg}
-                           className="absolute w-2.5 h-2.5 bg-brand-primary rounded-full shadow-[0_0_10px_rgba(39,162,168,0.5)]"
+                           className={`absolute w-2.5 h-2.5 rounded-full ${idx % 2 === 0 ? 'bg-brand-primary shadow-[0_0_10px_rgba(39,162,168,0.5)]' : 'bg-brand-secondary shadow-[0_0_10px_rgba(222,184,15,0.5)]'}`}
                            style={{ 
                              top: `${50 + 50 * Math.sin((deg * Math.PI) / 180)}%`, 
                              left: `${50 + 50 * Math.cos((deg * Math.PI) / 180)}%`,
@@ -336,7 +336,7 @@ export function Home() {
                    const IconComp = (Icons as any)[item.icon] || Icons.CheckCircle;
                    return (
                     <div key={i} className="flex flex-col lg:flex-row items-center lg:items-center gap-6 group">
-                        <div className="w-16 h-16 rounded-2xl bg-white shadow-lg flex items-center justify-center text-brand-primary group-hover:bg-brand-primary group-hover:text-white transition-all shrink-0">
+                        <div className="w-16 h-16 rounded-2xl bg-white shadow-lg flex items-center justify-center text-brand-secondary group-hover:bg-brand-secondary group-hover:text-white transition-all shrink-0">
                           <IconComp className="w-8 h-8" />
                         </div>
                         <div>
@@ -367,7 +367,7 @@ export function Home() {
                   </span>
                 </div>
                 <div className="absolute top-6 right-6 z-20 pointer-events-none">
-                  <span className="bg-brand-primary/90 backdrop-blur-md text-white text-[10px] font-black uppercase tracking-[0.2em] px-4 py-2 rounded-full shadow-xl">
+                  <span className="bg-brand-secondary/90 backdrop-blur-md text-white text-[10px] font-black uppercase tracking-[0.2em] px-4 py-2 rounded-full shadow-xl">
                     After
                   </span>
                 </div>
@@ -394,7 +394,7 @@ export function Home() {
               {/* Content on the Right */}
               <div className="space-y-8 order-1 lg:order-2">
                  <div className="space-y-4">
-                    <span className="text-brand-primary font-black uppercase text-xs tracking-[0.4em] block mb-4">+ {beforeAfterSection?.badge || 'BEFORE AND AFTER'}</span>
+                    <span className="text-brand-secondary font-black uppercase text-xs tracking-[0.4em] block mb-4">+ {beforeAfterSection?.badge || 'BEFORE AND AFTER'}</span>
                     <h2 className="text-5xl md:text-7xl font-display font-medium text-white tracking-tight">
                        {beforeAfterSection?.title ? renderTitle(beforeAfterSection.title) : 'Get a Hollywood Smile Today!'}
                     </h2>
@@ -441,7 +441,7 @@ export function Home() {
                     />
                  </div>
                  {/* Stats Box */}
-                 <div className="absolute bottom-[-40px] left-[-20px] right-[-20px] md:left-4 md:right-4 bg-brand-primary rounded-[30px] p-10 flex items-center shadow-2xl text-white">
+                 <div className="absolute bottom-[-40px] left-[-20px] right-[-20px] md:left-4 md:right-4 bg-brand-secondary rounded-[30px] p-10 flex items-center shadow-2xl text-white">
                     <div className="flex-1 text-center border-r border-white/20 px-6">
                        <h3 className="text-4xl md:text-5xl font-display font-bold mb-2">{faqSection?.stat1?.value || '800+'}</h3>
                        <p className="text-sm font-medium text-white/80">{faqSection?.stat1?.label || 'Successful Projects'}</p>
@@ -458,16 +458,16 @@ export function Home() {
                  {faqItems.map((faq: any, i: number) => (
                     <div 
                       key={i} 
-                      className={`border rounded-2xl overflow-hidden transition-all duration-300 ${activeFaq === i ? 'border-brand-primary ring-1 ring-brand-primary/20' : 'border-gray-200'}`}
+                      className={`border rounded-2xl overflow-hidden transition-all duration-300 ${activeFaq === i ? 'border-brand-secondary ring-1 ring-brand-secondary/20' : 'border-gray-200'}`}
                     >
                        <button 
                          onClick={() => setActiveFaq(activeFaq === i ? null : i)}
                          className="w-full flex items-center justify-between p-8 text-left group"
                        >
-                          <span className={`text-xl font-display font-medium transition-colors ${activeFaq === i ? 'text-brand-primary' : 'text-brand-dark'}`}>
+                          <span className={`text-xl font-display font-medium transition-colors ${activeFaq === i ? 'text-brand-secondary' : 'text-brand-dark'}`}>
                              {faq.q}
                           </span>
-                          <Icons.ArrowUpRight className={`w-5 h-5 transition-transform duration-300 ${activeFaq === i ? 'rotate-90 text-brand-primary' : 'text-gray-400 group-hover:text-brand-primary'}`} />
+                          <Icons.ArrowUpRight className={`w-5 h-5 transition-transform duration-300 ${activeFaq === i ? 'rotate-90 text-brand-secondary' : 'text-gray-400 group-hover:text-brand-secondary'}`} />
                        </button>
                        <motion.div 
                          initial={false}
@@ -491,17 +491,17 @@ export function Home() {
            <div className="bg-white rounded-[100px] overflow-hidden flex flex-col lg:flex-row items-center border border-gray-100 shadow-3xl">
               <div className="lg:w-3/5 p-20 space-y-12">
                  <div className="space-y-6">
-                    <span className="text-brand-primary font-black uppercase text-xs tracking-[0.4em] block mb-4">+ MEDICAL DIRECTOR</span>
+                    <span className="text-brand-secondary font-black uppercase text-xs tracking-[0.4em] block mb-4">+ MEDICAL DIRECTOR</span>
                     <h2 className="text-6xl md:text-8xl font-display font-bold text-brand-dark leading-[0.9] tracking-tighter">
                        {doctorBanner?.title ? renderTitle(doctorBanner.title) : 'Lead by Dr. A. Viviana Santos'}
                     </h2>
                  </div>
-                 <p className="text-gray-400 text-2xl font-medium leading-relaxed italic border-l-4 border-brand-primary pl-10">
+                 <p className="text-gray-400 text-2xl font-medium leading-relaxed italic border-l-4 border-brand-secondary pl-10">
                     "{doctorBanner?.quote || 'Every smile tells a story. Our mission is to make sure yours is one of health, confidence, and joy.'}"
                  </p>
                  <div className="flex items-center space-x-12">
                     <div className="space-y-2">
-                       <p className="text-5xl font-display font-bold text-brand-primary">{doctorBanner?.experience || '25+'}</p>
+                       <p className="text-5xl font-display font-bold text-brand-secondary">{doctorBanner?.experience || '25+'}</p>
                        <p className="text-[11px] font-black uppercase tracking-widest text-brand-dark/40">Years of Practice</p>
                     </div>
                     <div className="w-px h-16 bg-gray-100" />
@@ -523,7 +523,7 @@ export function Home() {
       <section className="py-40 bg-white">
         <div className="container mx-auto px-4">
           <div className="text-center max-w-2xl mx-auto space-y-8 mb-24">
-            <span className="text-brand-primary font-black uppercase text-xs tracking-[0.4em] flex items-center justify-center space-x-2">
+            <span className="text-brand-secondary font-black uppercase text-xs tracking-[0.4em] flex items-center justify-center space-x-2">
                <span>+ {testimonialsIntro?.badge || 'TESTIMONIALS'}</span>
             </span>
             <h2 className="text-5xl md:text-7xl font-display font-bold text-brand-dark tracking-tighter leading-none">
@@ -556,10 +556,10 @@ export function Home() {
                         <div className="w-12 h-12 lg:w-14 lg:h-14 bg-gray-200 rounded-full flex-shrink-0" />
                         <div>
                           <h4 className="font-bold text-brand-dark text-lg leading-none">{t.name}</h4>
-                          <p className="text-[10px] font-black text-brand-primary uppercase tracking-[0.2em] mt-2">{t.pos}</p>
+                          <p className="text-[10px] font-black text-brand-secondary uppercase tracking-[0.2em] mt-2">{t.pos}</p>
                         </div>
                       </div>
-                      <Icons.Quote className="absolute top-8 right-8 lg:top-10 lg:right-10 w-10 h-10 lg:w-16 lg:h-16 text-brand-primary/5 transition-transform group-hover:scale-110" />
+                      <Icons.Quote className="absolute top-8 right-8 lg:top-10 lg:right-10 w-10 h-10 lg:w-16 lg:h-16 text-brand-secondary/5 transition-transform group-hover:scale-110" />
                     </div>
                   </div>
                 ))}
@@ -570,13 +570,13 @@ export function Home() {
             <div className="flex justify-center space-x-4 mt-16">
               <button 
                 onClick={() => setTestimonialIndex(prev => (prev > 0 ? prev - 1 : maxIndex))}
-                className="w-16 h-16 rounded-full border border-gray-200 flex items-center justify-center text-brand-dark hover:bg-brand-primary hover:text-white transition-all shadow-xl"
+                className="w-16 h-16 rounded-full border border-gray-200 flex items-center justify-center text-brand-dark hover:bg-brand-secondary hover:text-white transition-all shadow-xl"
               >
                 <Icons.ArrowLeft className="w-6 h-6" />
               </button>
               <button 
                 onClick={() => setTestimonialIndex(prev => (prev < maxIndex ? prev + 1 : 0))}
-                className="w-16 h-16 rounded-full border border-gray-200 flex items-center justify-center text-brand-dark hover:bg-brand-primary hover:text-white transition-all shadow-xl"
+                className="w-16 h-16 rounded-full border border-gray-200 flex items-center justify-center text-brand-dark hover:bg-brand-secondary hover:text-white transition-all shadow-xl"
               >
                 <Icons.ArrowRight className="w-6 h-6" />
               </button>
@@ -588,7 +588,7 @@ export function Home() {
                 <button 
                   key={i}
                   onClick={() => setTestimonialIndex(i)}
-                  className={`width-2.5 height-2.5 rounded-full transition-all ${testimonialIndex === i ? 'bg-brand-primary w-8' : 'bg-gray-200'}`}
+                  className={`width-2.5 height-2.5 rounded-full transition-all ${testimonialIndex === i ? 'bg-brand-secondary w-8' : 'bg-gray-200'}`}
                 />
               ))}
             </div>
@@ -602,15 +602,15 @@ export function Home() {
           <div className="container mx-auto px-4">
             <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-24">
               <div className="max-w-2xl space-y-6">
-                 <span className="text-brand-primary font-black uppercase text-xs tracking-[0.4em] block">+ {blogIntro?.badge || 'LATEST NEWS'}</span>
+                 <span className="text-brand-secondary font-black uppercase text-xs tracking-[0.4em] block">+ {blogIntro?.badge || 'LATEST NEWS'}</span>
                  <h2 className="text-5xl md:text-7xl font-display font-bold text-brand-dark tracking-tighter leading-none">
-                   {renderTitle(blogIntro?.title) || <>Oral Health <br /> <span className="text-brand-primary">Tips & Insights</span></>}
+                   {renderTitle(blogIntro?.title) || <>Oral Health <br /> <span className="text-brand-secondary">Tips & Insights</span></>}
                  </h2>
                  {blogIntro?.description && (
                    <p className="text-gray-500 font-medium leading-relaxed">{blogIntro.description}</p>
                  )}
               </div>
-              <Link to="/blog" className="px-10 py-5 bg-white text-brand-dark rounded-2xl font-bold uppercase tracking-widest text-[11px] border border-gray-100 hover:bg-brand-primary hover:text-white hover:border-brand-primary transition-all shadow-xl shadow-gray-200/50">
+              <Link to="/blog" className="px-10 py-5 bg-white text-brand-dark rounded-2xl font-bold uppercase tracking-widest text-[11px] border border-gray-100 hover:bg-brand-secondary hover:text-white hover:border-brand-secondary transition-all shadow-xl shadow-gray-200/50">
                  View All Articles
               </Link>
             </div>
@@ -629,15 +629,15 @@ export function Home() {
                     <img src={post.image} alt={post.title} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
                   </div>
                   <div className="p-10 space-y-6">
-                    <div className="flex items-center gap-4 text-[10px] font-black uppercase tracking-widest text-brand-primary">
+                    <div className="flex items-center gap-4 text-[10px] font-black uppercase tracking-widest text-brand-secondary">
                       <span>{post.category}</span>
                       <span className="w-1 h-1 bg-gray-200 rounded-full" />
                       <span className="text-gray-400">{post.date}</span>
                     </div>
-                    <h3 className="text-2xl font-display font-bold text-brand-dark group-hover:text-brand-primary transition-colors line-clamp-2">
+                    <h3 className="text-2xl font-display font-bold text-brand-dark group-hover:text-brand-secondary transition-colors line-clamp-2">
                        {post.title}
                     </h3>
-                    <Link to={`/blog/${post.id}`} className="inline-flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-brand-dark group-hover:text-brand-primary transition-colors">
+                    <Link to={`/blog/${post.id}`} className="inline-flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-brand-dark group-hover:text-brand-secondary transition-colors">
                       <span>Read More</span>
                       <Icons.ArrowRight className="w-3.5 h-3.5" />
                     </Link>
@@ -655,7 +655,7 @@ export function Home() {
         <div className="container mx-auto px-4 text-center space-y-16 relative z-10">
           <h2 className="text-6xl md:text-[120px] font-display font-bold text-white leading-[0.85] tracking-tighter">
             {footerCta?.title ? renderTitle(footerCta.title) : (
-               <>READY TO <br /> <span className="text-brand-dark">TRANSFORM</span> <br /> YOUR SMILE?</>
+               <>READY TO <br /> <span className="text-brand-secondary">TRANSFORM</span> <br /> YOUR SMILE?</>
             )}
           </h2>
           <div className="flex flex-col md:flex-row items-center justify-center gap-10">
@@ -679,7 +679,7 @@ export function Home() {
                    </span>
                 </Link>
              )}
-             <a href="tel:+386401115555" className="bg-white text-brand-primary px-16 py-8 rounded-[30px] font-black text-xl hover:bg-brand-dark hover:text-white transition-all shadow-3xl">
+             <a href={`tel:${content.contactInfo.phone}`} className="bg-white text-brand-primary px-16 py-8 rounded-[30px] font-black text-xl hover:bg-brand-dark hover:text-white transition-all shadow-3xl">
                 CALL CLINIC
              </a>
           </div>

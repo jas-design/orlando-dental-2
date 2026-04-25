@@ -60,7 +60,7 @@ export function About() {
           <motion.span 
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="text-brand-primary font-black uppercase tracking-widest text-xs"
+            className="text-brand-secondary font-black uppercase tracking-widest text-xs"
           >
             {heroSection?.badge || 'Our Story'}
           </motion.span>
@@ -101,7 +101,7 @@ export function About() {
                    const IconComponent = (Icons as any)[item.icon] || Icons.HelpCircle;
                    return (
                      <div key={i} className="flex gap-4">
-                       <div className="w-12 h-12 bg-white text-brand-primary rounded-xl flex items-center justify-center flex-shrink-0 shadow-md border border-gray-100">
+                       <div className="w-12 h-12 bg-white text-brand-secondary rounded-xl flex items-center justify-center flex-shrink-0 shadow-md border border-gray-100">
                          <IconComponent className="w-6 h-6" />
                        </div>
                        <div>
@@ -122,7 +122,7 @@ export function About() {
                 />
 
               </div>
-              <div className="absolute -bottom-10 -right-10 bg-brand-primary p-8 rounded-3xl shadow-xl flex items-center gap-4">
+              <div className="absolute -bottom-10 -right-10 bg-brand-secondary p-8 rounded-3xl shadow-xl flex items-center gap-4">
                  <div className="text-5xl font-display font-bold text-brand-dark">15</div>
                  <div className="text-sm font-bold text-brand-dark/70 uppercase leading-tight tracking-widest">Years of <br /> Excellence</div>
               </div>
@@ -173,7 +173,7 @@ export function About() {
               }
             ].map((item, i) => (
               <div key={i} className="space-y-6">
-                <div className="rounded-full overflow-hidden w-48 h-48 mx-auto border-4 border-brand-primary shadow-lg">
+                <div className="rounded-full overflow-hidden w-48 h-48 mx-auto border-4 border-brand-secondary shadow-lg">
                   <img src={item.image} alt={item.title} className="w-full h-full object-cover" />
                 </div>
                 <h3 className="text-2xl font-display font-bold">{item.title}</h3>
@@ -188,7 +188,7 @@ export function About() {
       <section className="py-24 bg-brand-dark text-white overflow-hidden">
         <div className="container mx-auto px-4">
           <div className="text-center max-w-3xl mx-auto mb-20 space-y-4">
-            <span className="text-brand-primary font-black uppercase tracking-widest text-xs">{teamSection?.badge || '+ OUR SPECIALISTS'}</span>
+            <span className="text-brand-secondary font-black uppercase tracking-widest text-xs">{teamSection?.badge || '+ OUR SPECIALISTS'}</span>
             <h2 className="text-5xl font-display font-bold leading-none">{renderTitle(teamSection?.title) || <>Meet the Experts Behind <br /> Your Radiant Smile</>}</h2>
           </div>
 
@@ -206,7 +206,7 @@ export function About() {
                    <img src={member.image} alt={member.name} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
                    <div className="absolute inset-0 bg-gradient-to-t from-brand-dark via-transparent to-transparent opacity-60" />
                    <div className="absolute bottom-8 left-0 right-0 px-6">
-                      <span className="inline-block px-4 py-1.5 bg-brand-primary text-white font-bold text-[10px] rounded-full uppercase tracking-widest mb-3">
+                      <span className="inline-block px-4 py-1.5 bg-brand-secondary text-brand-dark font-bold text-[10px] rounded-full uppercase tracking-widest mb-3">
                          {member.specialty}
                       </span>
                       <h4 className="text-2xl font-display font-bold leading-none">{member.name}</h4>
@@ -228,7 +228,7 @@ export function About() {
            <p className="text-xl text-gray-700 max-w-2xl mx-auto">
              Contact us today and schedule an appointment to start your journey towards a healthier, brighter smile.
            </p>
-           <Button to="/contact" className="!px-12 py-5 text-xl">Book Appointment</Button>
+           <Button to="/contact" className="!px-12 py-5 text-xl !bg-brand-secondary !text-brand-dark">Book Appointment</Button>
         </div>
       </section>
     </div>
