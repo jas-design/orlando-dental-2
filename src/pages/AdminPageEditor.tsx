@@ -8,6 +8,7 @@ import * as Icons from 'lucide-react';
 import { useNotification } from '../context/NotificationContext';
 
 import { ImageUpload } from '../components/ImageUpload';
+import { IconPickerModal } from '../components/IconPickerModal';
 
 export function AdminPageEditor() {
   const { pageId } = useParams();
@@ -16,6 +17,17 @@ export function AdminPageEditor() {
   const [saving, setSaving] = useState(false);
   const [pageData, setPageData] = useState<any>(null);
   const [activeTab, setActiveTab] = useState('content');
+  const [iconPicker, setIconPicker] = useState<{ 
+    isOpen: boolean, 
+    sectionIndex: number, 
+    featureIndex: number, 
+    column: 'left' | 'right' 
+  }>({
+    isOpen: false,
+    sectionIndex: -1,
+    featureIndex: -1,
+    column: 'left'
+  });
   const { showNotification } = useNotification();
 
   useEffect(() => {
@@ -196,7 +208,15 @@ export function AdminPageEditor() {
              type: 'text_with_image',
              title: 'Our Mission',
              description: 'Our mission is to provide the highest quality dental care in a comfortable and welcoming environment. We believe in educating our patients and providing them with all the necessary information to make informed decisions about their oral health.',
-             image: 'https://images.unsplash.com/photo-1629907326852-b8356ee70666?auto=format&fit=crop&q=80'
+             image: 'https://images.unsplash.com/photo-1629907326852-b8356ee70666?auto=format&fit=crop&q=80',
+             features_left: [
+               { title: 'Patient Focused', description: 'Every treatment plan is tailored to your unique needs.', icon: 'Target' },
+               { title: 'Certified Care', description: 'Highly trained professionals you can trust.', icon: 'ShieldCheck' },
+             ],
+             features_right: [
+               { title: 'Modern Tech', description: 'Using state-of-the-art equipment for precision.', icon: 'Award' },
+               { title: 'Family Driven', description: 'Comprehensive care for all generations.', icon: 'Users' },
+             ]
           },
           {
              id: 'team_grid',
@@ -344,6 +364,25 @@ export function AdminPageEditor() {
     setPageData({ ...pageData, sections: newSections });
   };
 
+  const handleIconSelect = (iconName: string) => {
+    if (!pageData || iconPicker.sectionIndex === -1) return;
+    
+    const newSections = [...pageData.sections];
+    const section = { ...newSections[iconPicker.sectionIndex] };
+    const columnKey = iconPicker.column === 'left' ? 'features_left' : 'features_right';
+    
+    if (section[columnKey]) {
+      const newFeatures = [...section[columnKey]];
+      newFeatures[iconPicker.featureIndex] = { 
+        ...newFeatures[iconPicker.featureIndex], 
+        icon: iconName 
+      };
+      section[columnKey] = newFeatures;
+      newSections[iconPicker.sectionIndex] = section;
+      setPageData({ ...pageData, sections: newSections });
+    }
+  };
+
   if (loading) {
     return (
       <div className="min-h-[60vh] flex items-center justify-center">
@@ -440,6 +479,12 @@ export function AdminPageEditor() {
                   onUpdate={(data) => updateSection(index, data)} 
                   onRemove={() => removeSection(index)}
                   onMove={(dir) => moveSection(index, dir)}
+                  onOpenIconPicker={(column, featureIndex) => setIconPicker({ 
+                    isOpen: true, 
+                    sectionIndex: index, 
+                    featureIndex, 
+                    column 
+                  })}
                 />
               ))}
 
@@ -540,6 +585,17 @@ export function AdminPageEditor() {
           )}
         </div>
       </div>
+
+      <IconPickerModal 
+        isOpen={iconPicker.isOpen}
+        onClose={() => setIconPicker({ ...iconPicker, isOpen: false })}
+        onSelect={handleIconSelect}
+        currentIcon={
+          iconPicker.sectionIndex !== -1 
+            ? pageData?.sections[iconPicker.sectionIndex][iconPicker.column === 'left' ? 'features_left' : 'features_right']?.[iconPicker.featureIndex]?.icon 
+            : undefined
+        }
+      />
     </div>
   );
 }
@@ -551,10 +607,11 @@ interface SectionEditorProps {
   onUpdate: (data: any) => void;
   onRemove: () => void;
   onMove: (direction: 'up' | 'down') => void;
+  onOpenIconPicker?: (column: 'left' | 'right', featureIndex: number) => void;
   key?: any;
 }
 
-function SectionEditor({ section, index, total, onUpdate, onRemove, onMove }: SectionEditorProps) {
+function SectionEditor({ section, index, total, onUpdate, onRemove, onMove, onOpenIconPicker }: SectionEditorProps) {
   const [isOpen, setIsOpen] = useState(true);
 
   return (
@@ -753,8 +810,24 @@ function SectionEditor({ section, index, total, onUpdate, onRemove, onMove }: Se
               {/* Features List for Why Choose Us */}
               {(section.features_left || section.features_right) && (
                 <div className="md:col-span-2 space-y-8 pt-8 border-t border-gray-100">
-                  <h4 className="text-sm font-bold uppercase tracking-widest text-brand-primary">Features List</h4>
-                  
+                  <div className="flex items-center justify-between">
+                    <h4 className="text-sm font-bold uppercase tracking-widest text-brand-primary">Features List</h4>
+                    <button 
+                      onClick={() => onUpdate({ 
+                        features_left: [
+                          { title: 'Patient Focused', description: 'Every treatment plan is tailored to your unique needs.', icon: 'Target' },
+                          { title: 'Certified Care', description: 'Highly trained professionals you can trust.', icon: 'ShieldCheck' },
+                        ],
+                        features_right: [
+                          { title: 'Modern Tech', description: 'Using state-of-the-art equipment for precision.', icon: 'Award' },
+                          { title: 'Family Driven', description: 'Comprehensive care for all generations.', icon: 'Users' },
+                        ]
+                      })}
+                      className="text-[10px] font-bold text-brand-primary/60 hover:text-brand-primary uppercase tracking-widest transition-colors"
+                    >
+                      Reset to Defaults
+                    </button>
+                  </div>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                     {/* Left Features */}
                     <div className="space-y-4">
@@ -793,15 +866,34 @@ function SectionEditor({ section, index, total, onUpdate, onRemove, onMove }: Se
                               }}
                               className="flex-1 p-2 bg-gray-50 border-none rounded-lg text-[10px] font-mono"
                             />
-                             <div className="w-8 h-8 rounded-lg bg-brand-primary/10 flex items-center justify-center text-brand-primary">
+                             <button 
+                               onClick={() => onOpenIconPicker?.(section.features_left?.includes(feat) ? 'left' : 'right', i)}
+                               className="w-10 h-10 rounded-lg bg-brand-primary/10 flex items-center justify-center text-brand-primary hover:bg-brand-primary hover:text-white transition-all group shrink-0 shadow-sm border border-brand-primary/5"
+                               title="Click to choose icon"
+                             >
                                {Icons[feat.icon as keyof typeof Icons] ? 
-                                 React.createElement(Icons[feat.icon as keyof typeof Icons] as any, { size: 16 }) : 
-                                 <AlertCircle size={16} className="opacity-30" />
+                                 React.createElement(Icons[feat.icon as keyof typeof Icons] as any, { size: 18, className: "group-hover:scale-110 transition-transform" }) : 
+                                 <AlertCircle size={18} className="opacity-30" />
                                }
-                             </div>
+                             </button>
+                             <button 
+                               onClick={() => {
+                                 const newFeats = section.features_left.filter((_: any, idx: number) => idx !== i);
+                                 onUpdate({ features_left: newFeats });
+                               }}
+                               className="p-1.5 text-gray-300 hover:text-red-500 transition-colors"
+                             >
+                               <Trash2 className="w-3.5 h-3.5" />
+                             </button>
                            </div>
                         </div>
                       ))}
+                      <button 
+                        onClick={() => onUpdate({ features_left: [...(section.features_left || []), { title: 'New Feature', description: '', icon: 'Star' }] })}
+                        className="w-full py-3 border border-dashed border-gray-200 rounded-2xl text-[10px] font-bold text-gray-400 hover:text-brand-primary hover:border-brand-primary/30 transition-all uppercase tracking-widest"
+                      >
+                        + Add Left Feature
+                      </button>
                     </div>
 
                     {/* Right Features */}
@@ -841,17 +933,48 @@ function SectionEditor({ section, index, total, onUpdate, onRemove, onMove }: Se
                               }}
                               className="flex-1 p-2 bg-gray-50 border-none rounded-lg text-[10px] font-mono"
                             />
-                             <div className="w-8 h-8 rounded-lg bg-brand-primary/10 flex items-center justify-center text-brand-primary">
+                             <button 
+                               onClick={() => onOpenIconPicker?.(section.features_left?.includes(feat) ? 'left' : 'right', i)}
+                               className="w-10 h-10 rounded-lg bg-brand-primary/10 flex items-center justify-center text-brand-primary hover:bg-brand-primary hover:text-white transition-all group shrink-0 shadow-sm border border-brand-primary/5"
+                               title="Click to choose icon"
+                             >
                                {Icons[feat.icon as keyof typeof Icons] ? 
-                                 React.createElement(Icons[feat.icon as keyof typeof Icons] as any, { size: 16 }) : 
-                                 <AlertCircle size={16} className="opacity-30" />
+                                 React.createElement(Icons[feat.icon as keyof typeof Icons] as any, { size: 18, className: "group-hover:scale-110 transition-transform" }) : 
+                                 <AlertCircle size={18} className="opacity-30" />
                                }
-                             </div>
+                             </button>
+                             <button 
+                               onClick={() => {
+                                 const newFeats = section.features_right.filter((_: any, idx: number) => idx !== i);
+                                 onUpdate({ features_right: newFeats });
+                               }}
+                               className="p-1.5 text-gray-300 hover:text-red-500 transition-colors"
+                             >
+                               <Trash2 className="w-3.5 h-3.5" />
+                             </button>
                            </div>
                         </div>
                       ))}
+                      <button 
+                        onClick={() => onUpdate({ features_right: [...(section.features_right || []), { title: 'New Feature', description: '', icon: 'Star' }] })}
+                        className="w-full py-3 border border-dashed border-gray-200 rounded-2xl text-[10px] font-bold text-gray-400 hover:text-brand-primary hover:border-brand-primary/30 transition-all uppercase tracking-widest"
+                      >
+                        + Add Right Feature
+                      </button>
                     </div>
+
                   </div>
+                </div>
+              )}
+
+              {!section.features_left && !section.features_right && (
+                <div className="md:col-span-2 pt-4">
+                  <button 
+                    onClick={() => onUpdate({ features_left: [], features_right: [] })}
+                    className="w-full py-4 border-2 border-dashed border-gray-100 rounded-3xl text-gray-300 font-bold uppercase tracking-widest text-xs hover:border-brand-primary/20 hover:text-brand-primary transition-all"
+                  >
+                    + Enable Features List
+                  </button>
                 </div>
               )}
             </div>

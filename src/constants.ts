@@ -142,3 +142,9 @@ export const CONTACT_INFO = {
     { day: 'Sunday', time: 'Closed' },
   ],
 };
+
+export const BRANDING = {
+  primaryColor: '#27A2A8',
+  secondaryColor: '#DEB80F',
+};
+

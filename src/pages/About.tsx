@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'motion/react';
-import { Target, Award, Users, ShieldCheck, Loader2 } from 'lucide-react';
+import * as Icons from 'lucide-react';
 import { Button } from '../components/Button';
 import { collection, getDocs, query, orderBy, doc, getDoc } from 'firebase/firestore';
 import { db } from '../lib/firebase';
@@ -38,6 +38,18 @@ export function About() {
   const missionSection = pageData?.sections?.find((s: any) => s.id === 'mission' || s.type === 'text_with_image');
   const heroSection = pageData?.sections?.find((s: any) => s.type === 'hero');
   const teamSection = pageData?.sections?.find((s: any) => s.type === 'team_grid');
+
+  const allFeatures = [
+    ...(missionSection?.features_left || []),
+    ...(missionSection?.features_right || [])
+  ];
+
+  const displayFeatures = allFeatures.length > 0 ? allFeatures : [
+    { icon: 'Target', title: 'Patient Focused', description: 'Every treatment plan is tailored to your unique needs.' },
+    { icon: 'Award', title: 'Modern Tech', description: 'Using state-of-the-art equipment for precision.' },
+    { icon: 'ShieldCheck', title: 'Certified Care', description: 'Highly trained professionals you can trust.' },
+    { icon: 'Users', title: 'Family Driven', description: 'Comprehensive care for all generations.' }
+  ];
 
   return (
     <div className="pt-24">
@@ -85,31 +97,30 @@ export function About() {
                  </p>
                </div>
                <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
-                 {[
-                   { icon: Target, title: 'Patient Focused', desc: 'Every treatment plan is tailored to your unique needs.' },
-                   { icon: Award, title: 'Modern Tech', desc: 'Using state-of-the-art equipment for precision.' },
-                   { icon: ShieldCheck, title: 'Certified Care', desc: 'Highly trained professionals you can trust.' },
-                   { icon: Users, title: 'Family Driven', desc: 'Comprehensive care for all generations.' }
-                 ].map((item, i) => (
-                   <div key={i} className="flex gap-4">
-                     <div className="w-12 h-12 bg-white text-brand-primary rounded-xl flex items-center justify-center flex-shrink-0 shadow-md border border-gray-100">
-                       <item.icon className="w-6 h-6" />
+                 {displayFeatures.map((item, i) => {
+                   const IconComponent = (Icons as any)[item.icon] || Icons.HelpCircle;
+                   return (
+                     <div key={i} className="flex gap-4">
+                       <div className="w-12 h-12 bg-white text-brand-primary rounded-xl flex items-center justify-center flex-shrink-0 shadow-md border border-gray-100">
+                         <IconComponent className="w-6 h-6" />
+                       </div>
+                       <div>
+                         <h4 className="font-bold text-gray-900">{item.title}</h4>
+                         <p className="text-sm text-gray-500">{item.description || (item as any).desc}</p>
+                       </div>
                      </div>
-                     <div>
-                       <h4 className="font-bold text-gray-900">{item.title}</h4>
-                       <p className="text-sm text-gray-500">{item.desc}</p>
-                     </div>
-                   </div>
-                 ))}
+                   );
+                 })}
                </div>
             </div>
             <div className="relative">
               <div className="rounded-[48px] overflow-hidden shadow-2xl">
                 <img 
-                  src={missionSection?.image || "https://images.unsplash.com/photo-1629909613654-28e377c37b09?auto=format&fit=crop&q=80&w=800"} 
+                  src={(missionSection?.image && missionSection.image !== '') ? missionSection.image : (heroSection?.image && heroSection.image !== '') ? heroSection.image : "https://images.unsplash.com/photo-1629909613654-28e377c37b09?auto=format&fit=crop&q=80&w=800"} 
                   alt="Our Office" 
                   className="w-full aspect-[4/3] object-cover"
                 />
+
               </div>
               <div className="absolute -bottom-10 -right-10 bg-brand-primary p-8 rounded-3xl shadow-xl flex items-center gap-4">
                  <div className="text-5xl font-display font-bold text-brand-dark">15</div>

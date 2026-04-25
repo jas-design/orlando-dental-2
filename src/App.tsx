@@ -15,6 +15,7 @@ import { PrivacyPolicy } from './pages/PrivacyPolicy';
 import { AdminLogin } from './pages/AdminLogin';
 import { AdminLayout } from './components/AdminLayout';
 import { AdminDashboard } from './pages/AdminDashboard';
+import { AdminGlobal } from './pages/AdminGlobal';
 import { AdminSettings } from './pages/AdminSettings';
 import { ScrollToTop } from './components/ScrollToTop';
 import { ContentProvider } from './context/ContentContext';
@@ -60,6 +61,7 @@ function AppContent() {
         <Routes>
           {/* Private Admin Routes */}
           <Route path="/admin" element={<AdminLayout children={<AdminDashboard />} />} />
+          <Route path="/admin/global" element={<AdminLayout children={<AdminGlobal />} />} />
           <Route path="/admin/settings" element={<AdminLayout children={<AdminSettings />} />} />
           <Route path="/admin/pages" element={<AdminLayout children={<AdminPages />} />} />
           <Route path="/admin/pages/edit/:pageId" element={<AdminLayout children={<AdminPageEditor />} />} />

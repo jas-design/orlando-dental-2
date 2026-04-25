@@ -2,12 +2,14 @@ import React, { useState, useEffect } from 'react';
 import { motion } from 'motion/react';
 import { Phone, Mail, MapPin, Clock, ExternalLink } from 'lucide-react';
 import { AppointmentForm } from '../components/AppointmentForm';
-import { CONTACT_INFO } from '../constants';
+import { useContent } from '../context/ContentContext';
 import { doc, getDoc } from 'firebase/firestore';
 import { db } from '../lib/firebase';
 import { renderTitle } from '../lib/utils';
 
 export function Contact() {
+  const { content } = useContent();
+  const { contactInfo } = content;
   const [pageData, setPageData] = useState<any>(null);
 
   useEffect(() => {
@@ -73,7 +75,7 @@ export function Contact() {
                     </div>
                     <div>
                       <h4 className="font-bold text-gray-900">Phone</h4>
-                      <a href={`tel:${CONTACT_INFO.phone}`} className="text-brand-dark font-medium hover:underline">{CONTACT_INFO.phone}</a>
+                      <a href={`tel:${contactInfo.phone}`} className="text-brand-dark font-medium hover:underline">{contactInfo.phone}</a>
                     </div>
                   </div>
                   <div className="flex gap-4">
@@ -82,7 +84,7 @@ export function Contact() {
                     </div>
                     <div>
                       <h4 className="font-bold text-gray-900">Email</h4>
-                      <a href={`mailto:${CONTACT_INFO.email}`} className="text-brand-dark font-medium hover:underline break-all">{CONTACT_INFO.email}</a>
+                      <a href={`mailto:${contactInfo.email}`} className="text-brand-dark font-medium hover:underline break-all">{contactInfo.email}</a>
                     </div>
                   </div>
                   <div className="flex gap-4">
@@ -91,7 +93,7 @@ export function Contact() {
                     </div>
                     <div>
                       <h4 className="font-bold text-gray-900">Location</h4>
-                      <p className="text-gray-600 text-sm leading-tight">{CONTACT_INFO.address}</p>
+                      <p className="text-gray-600 text-sm leading-tight">{contactInfo.address}</p>
                     </div>
                   </div>
                   <div className="flex gap-4">
@@ -101,7 +103,7 @@ export function Contact() {
                     <div>
                       <h4 className="font-bold text-gray-900">Working Hours</h4>
                       <div className="space-y-1">
-                        {CONTACT_INFO.hours.map((h, i) => (
+                        {contactInfo.hours.map((h, i) => (
                           <p key={i} className="text-gray-600 text-xs flex justify-between gap-4">
                             <span>{h.day}</span>
                             <span className="font-bold">{h.time}</span>
@@ -113,26 +115,35 @@ export function Contact() {
                 </div>
               </div>
 
-              {/* Mock Google Map */}
-              <div className="relative group overflow-hidden rounded-[40px] shadow-2xl h-[400px] bg-gray-200">
-                <img 
-                  src="https://images.unsplash.com/photo-1526778548025-fa2f459cd5c1?auto=format&fit=crop&q=80&w=1200" 
-                  alt="City Map" 
-                  className="w-full h-full object-cover"
-                />
-                <div className="absolute inset-0 bg-brand-dark/20 flex items-center justify-center">
-                  <div className="bg-white p-6 rounded-3xl shadow-2xl text-center space-y-4 max-w-[280px]">
-                    <div className="w-12 h-12 bg-white rounded-full flex items-center justify-center mx-auto shadow-lg text-brand-primary">
-                      <MapPin className="w-6 h-6" />
+              {/* Google Map */}
+              <div className="relative group overflow-hidden rounded-[40px] shadow-2xl h-[450px] bg-gray-100 border border-gray-100">
+                <iframe 
+                  width="100%" 
+                  height="100%" 
+                  style={{ border: 0 }} 
+                  loading="lazy" 
+                  allowFullScreen 
+                  referrerPolicy="no-referrer-when-downgrade"
+                  src={`https://maps.google.com/maps?q=${encodeURIComponent(contactInfo.address)}&t=&z=15&ie=UTF8&iwloc=&output=embed`}
+                ></iframe>
+                
+                {/* Floating Info Box on top of Map */}
+                <div className="absolute bottom-8 left-8 right-8 md:right-auto md:w-80">
+                  <div className="bg-white/95 backdrop-blur-md p-8 rounded-3xl shadow-2xl border border-white/20 space-y-4">
+                    <div className="w-10 h-10 bg-brand-primary rounded-xl flex items-center justify-center text-white shadow-lg">
+                      <MapPin className="w-5 h-5" />
                     </div>
-                    <p className="font-bold text-gray-900 leading-tight">Find us on curry Ford Rd. Suite 1</p>
+                    <div>
+                      <p className="font-display font-bold text-gray-900 leading-tight text-lg">Find us at</p>
+                      <p className="text-gray-500 text-sm mt-1">{contactInfo.address}</p>
+                    </div>
                     <a 
-                      href="https://www.google.com/maps/search/?api=1&query=5211+Curry+Ford+Rd+Suite+1+Orlando+FL+32812" 
+                      href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(contactInfo.address)}`} 
                       target="_blank" 
                       rel="noopener noreferrer"
-                      className="inline-flex items-center gap-2 text-brand-dark font-bold underline"
+                      className="inline-flex items-center gap-2 text-brand-primary font-bold text-xs uppercase tracking-widest hover:text-brand-dark transition-colors"
                     >
-                      Get Directions <ExternalLink className="w-4 h-4" />
+                      Get Directions <ExternalLink className="w-3.5 h-3.5" />
                     </a>
                   </div>
                 </div>

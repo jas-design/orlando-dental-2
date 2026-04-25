@@ -63,8 +63,9 @@ export function AdminLayout({ children }: { children: ReactNode }) {
     { name: 'Team', path: '/admin/team', icon: Users },
     { name: 'Blog', path: '/admin/blog', icon: Newspaper },
     { name: 'Smile Gallery', path: '/admin/gallery', icon: ImageIcon },
-    { name: 'Contact Info', path: '/admin/settings', icon: Settings },
+    { name: 'Global Changes', path: '/admin/global', icon: Settings },
   ];
+
 
   return (
     <div className="min-h-screen bg-[#F8FAFB] flex font-sans">
