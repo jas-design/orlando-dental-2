@@ -7,6 +7,7 @@ import { Logo } from './Logo';
 import { useContent } from '../context/ContentContext';
 import { collection, query, onSnapshot } from 'firebase/firestore';
 import { db } from '../lib/firebase';
+import { CalendlyModal } from './CalendlyModal';
 
 interface NavPage {
   id: string;
@@ -27,6 +28,7 @@ export function Navbar() {
   const { content } = useContent();
   const { contactInfo: CONTACT_INFO } = content;
   const [isOpen, setIsOpen] = useState(false);
+  const [isCalendlyOpen, setIsCalendlyOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [navLinks, setNavLinks] = useState<any[]>([]);
   const location = useLocation();
@@ -136,12 +138,12 @@ export function Navbar() {
                 ))}
               </div>
               
-              <Link
-                to="/contact"
+              <button
+                onClick={() => setIsCalendlyOpen(true)}
                 className="bg-brand-primary text-white px-8 py-3.5 rounded-lg text-[11px] font-bold uppercase tracking-[0.2em] hover:bg-brand-dark transition-all shadow-lg shadow-brand-primary/20"
               >
                 Book a Call
-              </Link>
+              </button>
             </div>
 
             {/* Mobile Menu Button */}
@@ -179,18 +181,26 @@ export function Navbar() {
                     {link.name}
                   </Link>
                 ))}
-                <Link
-                  to="/contact"
+                <button
+                  onClick={() => {
+                    setIsOpen(false);
+                    setIsCalendlyOpen(true);
+                  }}
                   className="bg-brand-primary text-white px-8 py-4 rounded-xl text-center font-bold"
-                  onClick={() => setIsOpen(false)}
                 >
                   Book a Call
-                </Link>
+                </button>
               </div>
             </motion.div>
           )}
         </AnimatePresence>
       </nav>
+
+      <CalendlyModal 
+        isOpen={isCalendlyOpen} 
+        onClose={() => setIsCalendlyOpen(false)} 
+        calendlyLink={content.contactInfo.calendlyLink || 'https://calendly.com'} 
+      />
     </header>
   );
 }

@@ -16,7 +16,8 @@ import {
   Loader2,
   Newspaper,
   Stethoscope,
-  Users
+  Users,
+  Calendar
 } from 'lucide-react';
 import { cn } from '../lib/utils';
 
@@ -63,6 +64,7 @@ export function AdminLayout({ children }: { children: ReactNode }) {
     { name: 'Team', path: '/admin/team', icon: Users },
     { name: 'Blog', path: '/admin/blog', icon: Newspaper },
     { name: 'Smile Gallery', path: '/admin/gallery', icon: ImageIcon },
+    { name: 'Appointment', path: '/admin/appointments', icon: Calendar },
     { name: 'Global Changes', path: '/admin/global', icon: Settings },
   ];
 

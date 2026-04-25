@@ -1,13 +1,18 @@
 import { useState, FormEvent } from 'react';
 import { Calendar, User, Phone, CheckCircle2 } from 'lucide-react';
+import { cn } from '../lib/utils';
 import { Button } from './Button';
 import { CONTACT_INFO } from '../constants';
+import { useContent } from '../context/ContentContext';
+import { ExternalLink } from 'lucide-react';
 
 interface AppointmentFormProps {
   layout?: 'horizontal' | 'vertical';
 }
 
 export function AppointmentForm({ layout = 'vertical' }: AppointmentFormProps) {
+  const { content } = useContent();
+  const { calendlyLink } = content.contactInfo;
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [formData, setFormData] = useState({
     name: '',
@@ -33,7 +38,7 @@ Preferred Time: ${formData.time}
     `.trim();
 
     // Open mailto link
-    const mailtoUrl = `mailto:${CONTACT_INFO.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    const mailtoUrl = `mailto:${content.contactInfo.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
     window.location.href = mailtoUrl;
 
     // Show success state
@@ -60,6 +65,7 @@ Preferred Time: ${formData.time}
       </div>
     );
   }
+
 
   if (layout === 'horizontal') {
     return (

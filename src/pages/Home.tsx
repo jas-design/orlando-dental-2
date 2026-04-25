@@ -7,8 +7,11 @@ import { TEAM, BLOG_POSTS } from '../constants';
 import { doc, getDoc, collection, getDocs, query, orderBy, limit } from 'firebase/firestore';
 import { db } from '../lib/firebase';
 import { renderTitle } from '../lib/utils';
+import { useContent } from '../context/ContentContext';
 
 export function Home() {
+  const { content } = useContent();
+  const { calendlyLink } = content.contactInfo;
   const [sliderPosition, setSliderPosition] = useState(50);
   const [activeFaq, setActiveFaq] = useState<number | null>(0);
   const [testimonialIndex, setTestimonialIndex] = useState(0);
@@ -158,10 +161,22 @@ export function Home() {
                  {heroSection?.description || "Experience dental care with a personal touch. Dr. Santos and our team combine artistry and precision to give you the healthy, confident smile you've always wanted."}
                </p>
             </div>
-            <Link to="/contact" className="inline-flex items-center space-x-3 bg-brand-primary text-white px-10 py-5 rounded-md font-bold text-sm uppercase tracking-widest hover:bg-brand-dark transition-all shadow-2xl shadow-brand-primary/30">
-               <span>{heroSection?.cta || 'Make an Appointment'}</span>
-               <Icons.ArrowRight className="w-4 h-4" />
-            </Link>
+            {calendlyLink ? (
+               <a 
+                 href={calendlyLink} 
+                 target="_blank" 
+                 rel="noopener noreferrer" 
+                 className="inline-flex items-center space-x-3 bg-brand-primary text-white px-10 py-5 rounded-md font-bold text-sm uppercase tracking-widest hover:bg-brand-dark transition-all shadow-2xl shadow-brand-primary/30"
+               >
+                  <span>{heroSection?.cta || 'Make an Appointment'}</span>
+                  <Icons.ArrowRight className="w-4 h-4" />
+               </a>
+            ) : (
+               <Link to="/contact" className="inline-flex items-center space-x-3 bg-brand-primary text-white px-10 py-5 rounded-md font-bold text-sm uppercase tracking-widest hover:bg-brand-dark transition-all shadow-2xl shadow-brand-primary/30">
+                  <span>{heroSection?.cta || 'Make an Appointment'}</span>
+                  <Icons.ArrowRight className="w-4 h-4" />
+               </Link>
+            )}
           </div>
         </div>
 
@@ -200,9 +215,20 @@ export function Home() {
                  </div>
               </div>
               <div className="flex items-center">
-                 <Link to="/contact" className="w-full h-16 border-2 border-white/20 rounded-xl flex items-center justify-center font-bold uppercase tracking-widest text-xs hover:bg-brand-primary hover:border-brand-primary transition-all">
-                    {infoStrip?.cta || 'Book an Appointment'}
-                 </Link>
+                 {calendlyLink ? (
+                   <a 
+                     href={calendlyLink} 
+                     target="_blank" 
+                     rel="noopener noreferrer" 
+                     className="w-full h-16 border-2 border-white/20 rounded-xl flex items-center justify-center font-bold uppercase tracking-widest text-xs hover:bg-brand-primary hover:border-brand-primary transition-all"
+                   >
+                      {infoStrip?.cta || 'Book an Appointment'}
+                   </a>
+                 ) : (
+                   <Link to="/contact" className="w-full h-16 border-2 border-white/20 rounded-xl flex items-center justify-center font-bold uppercase tracking-widest text-xs hover:bg-brand-primary hover:border-brand-primary transition-all">
+                      {infoStrip?.cta || 'Book an Appointment'}
+                   </Link>
+                 )}
               </div>
            </div>
         </div>
@@ -633,12 +659,26 @@ export function Home() {
             )}
           </h2>
           <div className="flex flex-col md:flex-row items-center justify-center gap-10">
-             <Link to="/contact" className="bg-brand-dark text-white px-16 py-8 rounded-[30px] font-black text-xl hover:bg-white hover:text-brand-primary transition-all shadow-3xl group">
-                <span className="flex items-center space-x-4">
-                   <span>{footerCta?.cta || 'BOOK NOW'}</span>
-                   <Icons.ArrowUpRight className="w-6 h-6 transition-transform group-hover:rotate-45" />
-                </span>
-             </Link>
+             {calendlyLink ? (
+                <a 
+                  href={calendlyLink} 
+                  target="_blank" 
+                  rel="noopener noreferrer" 
+                  className="bg-brand-dark text-white px-16 py-8 rounded-[30px] font-black text-xl hover:bg-white hover:text-brand-primary transition-all shadow-3xl group"
+                >
+                   <span className="flex items-center space-x-4">
+                      <span>{footerCta?.cta || 'BOOK NOW'}</span>
+                      <Icons.ArrowUpRight className="w-6 h-6 transition-transform group-hover:rotate-45" />
+                   </span>
+                </a>
+             ) : (
+                <Link to="/contact" className="bg-brand-dark text-white px-16 py-8 rounded-[30px] font-black text-xl hover:bg-white hover:text-brand-primary transition-all shadow-3xl group">
+                   <span className="flex items-center space-x-4">
+                      <span>{footerCta?.cta || 'BOOK NOW'}</span>
+                      <Icons.ArrowUpRight className="w-6 h-6 transition-transform group-hover:rotate-45" />
+                   </span>
+                </Link>
+             )}
              <a href="tel:+386401115555" className="bg-white text-brand-primary px-16 py-8 rounded-[30px] font-black text-xl hover:bg-brand-dark hover:text-white transition-all shadow-3xl">
                 CALL CLINIC
              </a>

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useContent } from '../context/ContentContext';
 import { motion } from 'motion/react';
-import { Save, Phone, Mail, MapPin, Clock, Loader2, CheckCircle, MessageCircle, Palette, Globe } from 'lucide-react';
+import { Save, Phone, Mail, MapPin, Clock, Loader2, CheckCircle, MessageCircle, Palette, Globe, Calendar, Link2, Key } from 'lucide-react';
 import { useNotification } from '../context/NotificationContext';
 import { ImageUpload } from '../components/ImageUpload';
 
@@ -254,6 +254,56 @@ export function AdminGlobal() {
                       </div>
                     ))}
                   </div>
+               </div>
+            </div>
+         </section>
+
+         {/* 3. Calendly Integration Section */}
+         <section className="space-y-8">
+            <h2 className="text-xl font-display font-bold text-brand-dark flex items-center gap-3">
+               <div className="w-10 h-10 bg-brand-primary/10 text-brand-primary rounded-xl flex items-center justify-center">
+                  <Calendar className="w-5 h-5" />
+               </div>
+               Calendly Integration
+            </h2>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+               {/* Calendly Link */}
+               <div className="bg-white p-8 rounded-[32px] border border-gray-100 shadow-sm space-y-4">
+                  <div className="flex items-center gap-3 text-brand-primary">
+                     <Link2 className="w-5 h-5" />
+                     <span className="text-sm font-bold uppercase tracking-widest">Calendly Booking Link</span>
+                  </div>
+                  <input 
+                    type="url"
+                    placeholder="https://calendly.com/your-name/appointment"
+                    value={formData.contactInfo.calendlyLink || ''}
+                    onChange={(e) => setFormData({ 
+                      ...formData, 
+                      contactInfo: { ...formData.contactInfo, calendlyLink: e.target.value } 
+                    })}
+                    className="w-full px-4 py-3 bg-gray-50 border-gray-100 rounded-xl focus:ring-2 focus:ring-brand-primary outline-none font-medium transition-all"
+                  />
+                  <p className="text-[10px] text-gray-400">The public link for patients to schedule appointments.</p>
+               </div>
+
+               {/* Calendly Token */}
+               <div className="bg-white p-8 rounded-[32px] border border-gray-100 shadow-sm space-y-4">
+                  <div className="flex items-center gap-3 text-brand-primary">
+                     <Key className="w-5 h-5" />
+                     <span className="text-sm font-bold uppercase tracking-widest">Personal Access Token</span>
+                  </div>
+                  <input 
+                    type="password"
+                    placeholder="Bearer token..."
+                    value={formData.contactInfo.calendlyToken || ''}
+                    onChange={(e) => setFormData({ 
+                      ...formData, 
+                      contactInfo: { ...formData.contactInfo, calendlyToken: e.target.value } 
+                    })}
+                    className="w-full px-4 py-3 bg-gray-50 border-gray-100 rounded-xl focus:ring-2 focus:ring-brand-primary outline-none font-medium transition-all"
+                  />
+                  <p className="text-[10px] text-gray-400">Required to display upcoming appointments in the admin panel.</p>
                </div>
             </div>
          </section>

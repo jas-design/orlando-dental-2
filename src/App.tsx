@@ -27,6 +27,7 @@ import { AdminBlog } from './pages/AdminBlog';
 import { AdminGallery } from './pages/AdminGallery';
 import { AdminServices } from './pages/AdminServices';
 import { AdminTeam } from './pages/AdminTeam';
+import { AdminAppointments } from './pages/AdminAppointments';
 import { WhatsAppButton } from './components/WhatsAppButton';
 
 import { DynamicPage } from './pages/DynamicPage';
@@ -69,6 +70,7 @@ function AppContent() {
           <Route path="/admin/gallery" element={<AdminLayout children={<AdminGallery />} />} />
           <Route path="/admin/services" element={<AdminLayout children={<AdminServices />} />} />
           <Route path="/admin/team" element={<AdminLayout children={<AdminTeam />} />} />
+          <Route path="/admin/appointments" element={<AdminLayout children={<AdminAppointments />} />} />
           <Route path="/admin/media" element={<AdminLayout children={<div className="p-12 text-center text-gray-400 font-bold bg-white rounded-[40px] border border-dashed border-gray-200">Media Library Module Coming Soon</div>} />} />
           
           {/* Public Routes */}
