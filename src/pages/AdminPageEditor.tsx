@@ -8,7 +8,7 @@ import * as Icons from 'lucide-react';
 import { useNotification } from '../context/NotificationContext';
 
 import { ImageUpload } from '../components/ImageUpload';
-import { IconPickerModal } from '../components/IconPickerModal';
+import { IconInput } from '../components/IconInput';
 
 export function AdminPageEditor() {
   const { pageId } = useParams();
@@ -17,17 +17,7 @@ export function AdminPageEditor() {
   const [saving, setSaving] = useState(false);
   const [pageData, setPageData] = useState<any>(null);
   const [activeTab, setActiveTab] = useState('content');
-  const [iconPicker, setIconPicker] = useState<{ 
-    isOpen: boolean, 
-    sectionIndex: number, 
-    featureIndex: number, 
-    column: 'left' | 'right' 
-  }>({
-    isOpen: false,
-    sectionIndex: -1,
-    featureIndex: -1,
-    column: 'left'
-  });
+
   const { showNotification } = useNotification();
 
   useEffect(() => {
@@ -374,24 +364,7 @@ export function AdminPageEditor() {
     setPageData({ ...pageData, sections: newSections });
   };
 
-  const handleIconSelect = (iconName: string) => {
-    if (!pageData || iconPicker.sectionIndex === -1) return;
-    
-    const newSections = [...pageData.sections];
-    const section = { ...newSections[iconPicker.sectionIndex] };
-    const columnKey = iconPicker.column === 'left' ? 'features_left' : 'features_right';
-    
-    if (section[columnKey]) {
-      const newFeatures = [...section[columnKey]];
-      newFeatures[iconPicker.featureIndex] = { 
-        ...newFeatures[iconPicker.featureIndex], 
-        icon: iconName 
-      };
-      section[columnKey] = newFeatures;
-      newSections[iconPicker.sectionIndex] = section;
-      setPageData({ ...pageData, sections: newSections });
-    }
-  };
+
 
   if (loading) {
     return (
@@ -489,12 +462,6 @@ export function AdminPageEditor() {
                   onUpdate={(data) => updateSection(index, data)} 
                   onRemove={() => removeSection(index)}
                   onMove={(dir) => moveSection(index, dir)}
-                  onOpenIconPicker={(column, featureIndex) => setIconPicker({ 
-                    isOpen: true, 
-                    sectionIndex: index, 
-                    featureIndex, 
-                    column 
-                  })}
                 />
               ))}
 
@@ -596,16 +563,7 @@ export function AdminPageEditor() {
         </div>
       </div>
 
-      <IconPickerModal 
-        isOpen={iconPicker.isOpen}
-        onClose={() => setIconPicker({ ...iconPicker, isOpen: false })}
-        onSelect={handleIconSelect}
-        currentIcon={
-          iconPicker.sectionIndex !== -1 
-            ? pageData?.sections[iconPicker.sectionIndex][iconPicker.column === 'left' ? 'features_left' : 'features_right']?.[iconPicker.featureIndex]?.icon 
-            : undefined
-        }
-      />
+
     </div>
   );
 }
@@ -617,11 +575,11 @@ interface SectionEditorProps {
   onUpdate: (data: any) => void;
   onRemove: () => void;
   onMove: (direction: 'up' | 'down') => void;
-  onOpenIconPicker?: (column: 'left' | 'right', featureIndex: number) => void;
+
   key?: any;
 }
 
-function SectionEditor({ section, index, total, onUpdate, onRemove, onMove, onOpenIconPicker }: SectionEditorProps) {
+function SectionEditor({ section, index, total, onUpdate, onRemove, onMove }: SectionEditorProps) {
   const [isOpen, setIsOpen] = useState(true);
 
   return (
@@ -865,37 +823,23 @@ function SectionEditor({ section, index, total, onUpdate, onRemove, onMove, onOp
                             rows={2}
                             className="w-full p-2 bg-gray-50 border-none rounded-lg text-xs resize-none"
                           />
-                           <div className="flex items-center space-x-3">
-                             <input 
-                              placeholder="Icon Name (Lucide)"
-                              value={feat.icon} 
-                              onChange={(e) => {
-                                const newFeats = [...section.features_left];
-                                newFeats[i] = { ...feat, icon: e.target.value };
-                                onUpdate({ features_left: newFeats });
-                              }}
-                              className="flex-1 p-2 bg-gray-50 border-none rounded-lg text-[10px] font-mono"
-                            />
-                             <button 
-                               onClick={() => onOpenIconPicker?.(section.features_left?.includes(feat) ? 'left' : 'right', i)}
-                               className="w-10 h-10 rounded-lg bg-brand-primary/10 flex items-center justify-center text-brand-primary hover:bg-brand-primary hover:text-white transition-all group shrink-0 shadow-sm border border-brand-primary/5"
-                               title="Click to choose icon"
-                             >
-                               {Icons[feat.icon as keyof typeof Icons] ? 
-                                 React.createElement(Icons[feat.icon as keyof typeof Icons] as any, { size: 18, className: "group-hover:scale-110 transition-transform" }) : 
-                                 <AlertCircle size={18} className="opacity-30" />
-                               }
-                             </button>
-                             <button 
-                               onClick={() => {
-                                 const newFeats = section.features_left.filter((_: any, idx: number) => idx !== i);
-                                 onUpdate({ features_left: newFeats });
-                               }}
-                               className="p-1.5 text-gray-300 hover:text-red-500 transition-colors"
-                             >
-                               <Trash2 className="w-3.5 h-3.5" />
-                             </button>
-                           </div>
+                           <IconInput 
+                             value={feat.icon}
+                             onChange={(icon) => {
+                               const newFeats = [...section.features_left];
+                               newFeats[i] = { ...feat, icon };
+                               onUpdate({ features_left: newFeats });
+                             }}
+                           />
+                           <button 
+                             onClick={() => {
+                               const newFeats = section.features_left.filter((_: any, idx: number) => idx !== i);
+                               onUpdate({ features_left: newFeats });
+                             }}
+                             className="p-1.5 text-gray-300 hover:text-red-500 transition-colors"
+                           >
+                             <Trash2 className="w-3.5 h-3.5" />
+                           </button>
                         </div>
                       ))}
                       <button 
@@ -932,37 +876,23 @@ function SectionEditor({ section, index, total, onUpdate, onRemove, onMove, onOp
                             rows={2}
                             className="w-full p-2 bg-gray-50 border-none rounded-lg text-xs resize-none"
                           />
-                           <div className="flex items-center space-x-3">
-                             <input 
-                              placeholder="Icon Name (Lucide)"
-                              value={feat.icon} 
-                              onChange={(e) => {
-                                const newFeats = [...section.features_right];
-                                newFeats[i] = { ...feat, icon: e.target.value };
-                                onUpdate({ features_right: newFeats });
-                              }}
-                              className="flex-1 p-2 bg-gray-50 border-none rounded-lg text-[10px] font-mono"
-                            />
-                             <button 
-                               onClick={() => onOpenIconPicker?.(section.features_left?.includes(feat) ? 'left' : 'right', i)}
-                               className="w-10 h-10 rounded-lg bg-brand-primary/10 flex items-center justify-center text-brand-primary hover:bg-brand-primary hover:text-white transition-all group shrink-0 shadow-sm border border-brand-primary/5"
-                               title="Click to choose icon"
-                             >
-                               {Icons[feat.icon as keyof typeof Icons] ? 
-                                 React.createElement(Icons[feat.icon as keyof typeof Icons] as any, { size: 18, className: "group-hover:scale-110 transition-transform" }) : 
-                                 <AlertCircle size={18} className="opacity-30" />
-                               }
-                             </button>
-                             <button 
-                               onClick={() => {
-                                 const newFeats = section.features_right.filter((_: any, idx: number) => idx !== i);
-                                 onUpdate({ features_right: newFeats });
-                               }}
-                               className="p-1.5 text-gray-300 hover:text-red-500 transition-colors"
-                             >
-                               <Trash2 className="w-3.5 h-3.5" />
-                             </button>
-                           </div>
+                           <IconInput 
+                             value={feat.icon}
+                             onChange={(icon) => {
+                               const newFeats = [...section.features_right];
+                               newFeats[i] = { ...feat, icon };
+                               onUpdate({ features_right: newFeats });
+                             }}
+                           />
+                           <button 
+                             onClick={() => {
+                               const newFeats = section.features_right.filter((_: any, idx: number) => idx !== i);
+                               onUpdate({ features_right: newFeats });
+                             }}
+                             className="p-1.5 text-gray-300 hover:text-red-500 transition-colors"
+                           >
+                             <Trash2 className="w-3.5 h-3.5" />
+                           </button>
                         </div>
                       ))}
                       <button 
@@ -1256,28 +1186,26 @@ function SectionEditor({ section, index, total, onUpdate, onRemove, onMove, onOp
                         <div className="w-10 h-10 bg-brand-primary/5 rounded-xl flex items-center justify-center text-brand-primary">
                           {Icons[item.icon as keyof typeof Icons] ? React.createElement(Icons[item.icon as keyof typeof Icons] as any, { size: 18 }) : <Stethoscope size={18} />}
                         </div>
-                        <div className="flex-1 space-y-1">
-                          <input 
-                            value={item.title} 
-                            onChange={(e) => {
-                              const newItems = [...section.items];
-                              newItems[i] = { ...item, title: e.target.value };
-                              onUpdate({ items: newItems });
-                            }}
-                            placeholder="Service Label"
-                            className="w-full bg-transparent border-none p-0 text-sm font-bold focus:ring-0"
-                          />
-                          <input 
-                            value={item.icon} 
-                            onChange={(e) => {
-                              const newItems = [...section.items];
-                              newItems[i] = { ...item, icon: e.target.value };
-                              onUpdate({ items: newItems });
-                            }}
-                            placeholder="Icon Name"
-                            className="w-full bg-transparent border-none p-0 text-[10px] text-gray-400 font-mono focus:ring-0"
-                          />
-                        </div>
+                         <div className="flex-1">
+                           <IconInput 
+                             value={item.icon}
+                             onChange={(icon) => {
+                               const newItems = [...section.items];
+                               newItems[i] = { ...item, icon };
+                               onUpdate({ items: newItems });
+                             }}
+                           />
+                           <input 
+                             value={item.title} 
+                             onChange={(e) => {
+                               const newItems = [...section.items];
+                               newItems[i] = { ...item, title: e.target.value };
+                               onUpdate({ items: newItems });
+                             }}
+                             placeholder="Service Label"
+                             className="w-full bg-transparent border-none p-2 text-sm font-bold focus:ring-0"
+                           />
+                         </div>
                         <button 
                           onClick={() => {
                             const newItems = section.items.filter((_: any, idx: number) => idx !== i);
