@@ -92,12 +92,12 @@ export function Services() {
                          {service.description} We use modern technology and advanced techniques to ensure the best possible results and patient comfort.
                       </p>
                       <ul className="grid grid-cols-1 sm:grid-cols-2 gap-4 py-4">
-                        {[
+                        {(service.features ? service.features.split(',').map((f: string) => f.trim()) : [
                           'Pain-free experience',
                           'State-of-the-art tech',
                           'Expert care',
                           'Same-day visits'
-                        ].map((feature, i) => (
+                        ]).map((feature: string, i: number) => (
                           <li key={i} className="flex items-center gap-3 text-gray-700 font-medium">
                             <CheckCircle2 className="w-5 h-5 text-brand-primary" />
                             {feature}
@@ -105,7 +105,7 @@ export function Services() {
                         ))}
                       </ul>
                       <div className="pt-4">
-                        <Button to="/contact">Schedule This Service</Button>
+                        <Button to="/contact">{service.ctaText || 'Schedule This Service'}</Button>
                       </div>
                     </div>
                   </motion.div>

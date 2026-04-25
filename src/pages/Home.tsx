@@ -247,19 +247,24 @@ export function Home() {
               <p className="text-gray-500 font-medium leading-relaxed">{servicesIntro?.description || 'Dedicated to providing the best dental experience for our community with a focus on comfort and high-end results.'}</p>
            </div>
 
-           <div className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-10">
-              {displayServices.map((service: any, i: number) => {
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-10">
+              {(servicesIntro?.items || services).map((service: any, i: number) => {
                 const IconComponent = (Icons as any)[service.icon] || Icons.Stethoscope;
                 return (
-                  <div key={i} className="group p-10 bg-white border border-gray-100 rounded-[40px] hover:shadow-3xl transition-all duration-500 text-center space-y-6 flex flex-col items-center">
-                    <div className="w-20 h-20 bg-white text-brand-secondary rounded-2xl flex items-center justify-center shadow-lg transition-transform duration-500 group-hover:scale-110 group-hover:rotate-6">
+                  <div 
+                    key={i} 
+                    className="group p-12 bg-white border border-gray-50 rounded-[60px] md:rounded-[80px] hover:shadow-2xl hover:shadow-brand-primary/10 transition-all duration-500 text-center space-y-8 flex flex-col items-center"
+                  >
+                    <div className="w-24 h-24 bg-white text-brand-primary rounded-3xl flex items-center justify-center shadow-[0_20px_50px_rgba(0,0,0,0.08)] transition-all duration-500 group-hover:scale-110 group-hover:shadow-brand-primary/20">
                        <IconComponent className="w-10 h-10" />
                     </div>
-                    <h3 className="font-bold text-brand-dark uppercase tracking-[0.2em] text-[10px]">{service.title || service.name}</h3>
+                    <h3 className="font-bold text-brand-dark uppercase tracking-[0.2em] text-[10px] leading-relaxed max-w-[120px]">
+                      {service.title || service.name}
+                    </h3>
                   </div>
                 );
               })}
-           </div>
+            </div>
         </div>
       </section>
 

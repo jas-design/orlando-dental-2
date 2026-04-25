@@ -109,7 +109,17 @@ export function AdminPageEditor() {
             type: 'services_grid',
             badge: 'OUR SERVICES',
             title: 'Complete {Dental Care}',
-            description: 'Dedicated to providing the best dental experience for our community with a focus on comfort and high-end results.'
+            description: 'Dedicated to providing the best dental experience for our community with a focus on comfort and high-end results.',
+            items: [
+              { title: 'General Dental Care', icon: 'Stethoscope' },
+              { title: 'Dental Orthodontics', icon: 'Activity' },
+              { title: 'Dental Implants', icon: 'Syringe' },
+              { title: 'Advanced Dentistry', icon: 'ClipboardCheck' },
+              { title: 'Teeth Whitening', icon: 'Sparkles' },
+              { title: 'Crowns & Bridges', icon: 'Crown' },
+              { title: 'Dental Veneers', icon: 'Smile' },
+              { title: 'Emergency Procedures', icon: 'ShieldAlert' },
+            ]
           },
           {
             id: 'mission',
@@ -1228,6 +1238,60 @@ function SectionEditor({ section, index, total, onUpdate, onRemove, onMove, onOp
                   className="w-full p-4 bg-white border border-gray-100 rounded-2xl outline-none focus:ring-2 focus:ring-brand-primary resize-none" 
                 />
               </div>
+
+              {section.type === 'services_grid' && (
+                <div className="md:col-span-2 space-y-4 pt-6 border-t border-gray-100">
+                  <div className="flex items-center justify-between">
+                    <label className="text-xs font-black text-gray-400 uppercase tracking-widest">Grid Items</label>
+                    <button 
+                      onClick={() => onUpdate({ items: [...(section.items || []), { title: 'New Service', icon: 'Stethoscope' }] })}
+                      className="text-[10px] font-bold text-brand-primary uppercase hover:underline"
+                    >
+                      + Add Item
+                    </button>
+                  </div>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {section.items?.map((item: any, i: number) => (
+                      <div key={i} className="p-4 bg-white rounded-2xl border border-gray-100 flex items-center gap-4 group relative">
+                        <div className="w-10 h-10 bg-brand-primary/5 rounded-xl flex items-center justify-center text-brand-primary">
+                          {Icons[item.icon as keyof typeof Icons] ? React.createElement(Icons[item.icon as keyof typeof Icons] as any, { size: 18 }) : <Stethoscope size={18} />}
+                        </div>
+                        <div className="flex-1 space-y-1">
+                          <input 
+                            value={item.title} 
+                            onChange={(e) => {
+                              const newItems = [...section.items];
+                              newItems[i] = { ...item, title: e.target.value };
+                              onUpdate({ items: newItems });
+                            }}
+                            placeholder="Service Label"
+                            className="w-full bg-transparent border-none p-0 text-sm font-bold focus:ring-0"
+                          />
+                          <input 
+                            value={item.icon} 
+                            onChange={(e) => {
+                              const newItems = [...section.items];
+                              newItems[i] = { ...item, icon: e.target.value };
+                              onUpdate({ items: newItems });
+                            }}
+                            placeholder="Icon Name"
+                            className="w-full bg-transparent border-none p-0 text-[10px] text-gray-400 font-mono focus:ring-0"
+                          />
+                        </div>
+                        <button 
+                          onClick={() => {
+                            const newItems = section.items.filter((_: any, idx: number) => idx !== i);
+                            onUpdate({ items: newItems });
+                          }}
+                          className="p-2 text-gray-200 hover:text-red-500 transition-colors opacity-0 group-hover:opacity-100"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
           )}
 

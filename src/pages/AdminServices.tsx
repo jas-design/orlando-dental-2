@@ -23,7 +23,9 @@ export function AdminServices() {
     icon: 'Stethoscope',
     image: '',
     category: 'General Care',
-    order: 0
+    order: 0,
+    features: 'Pain-free experience, State-of-the-art tech, Expert care, Same-day visits',
+    ctaText: 'Schedule This Service'
   };
 
   useEffect(() => {
@@ -179,14 +181,34 @@ export function AdminServices() {
                           folder="images"
                         />
                      </div>
-                     <div className="md:col-span-2 space-y-2">
+                      <div className="md:col-span-2 space-y-2">
                         <label className="text-xs font-black text-gray-400 uppercase tracking-widest pl-1">Description</label>
                         <textarea 
                            required
-                           rows={4}
+                           rows={3}
                            value={currentService.description}
                            onChange={(e) => setCurrentService({...currentService, description: e.target.value})}
                            className="w-full p-4 bg-gray-50 border border-gray-100 rounded-2xl outline-none focus:bg-white focus:ring-2 focus:ring-brand-primary transition-all resize-none"
+                        />
+                     </div>
+                     <div className="md:col-span-2 space-y-2">
+                        <label className="text-xs font-black text-gray-400 uppercase tracking-widest pl-1">Features (Comma separated)</label>
+                        <input 
+                           type="text"
+                           value={currentService.features}
+                           onChange={(e) => setCurrentService({...currentService, features: e.target.value})}
+                           className="w-full p-4 bg-gray-50 border border-gray-100 rounded-2xl outline-none focus:bg-white focus:ring-2 focus:ring-brand-primary transition-all"
+                           placeholder="Pain-free experience, Expert care..."
+                        />
+                     </div>
+                     <div className="md:col-span-2 space-y-2">
+                        <label className="text-xs font-black text-gray-400 uppercase tracking-widest pl-1">Button Text (CTA)</label>
+                        <input 
+                           type="text"
+                           value={currentService.ctaText}
+                           onChange={(e) => setCurrentService({...currentService, ctaText: e.target.value})}
+                           className="w-full p-4 bg-gray-50 border border-gray-100 rounded-2xl outline-none focus:bg-white focus:ring-2 focus:ring-brand-primary transition-all"
+                           placeholder="Schedule This Service"
                         />
                      </div>
                   </div>
