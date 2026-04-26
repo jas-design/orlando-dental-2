@@ -98,17 +98,15 @@ export function AdminPageEditor() {
             id: 'services_grid',
             type: 'services_grid',
             badge: 'OUR SERVICES',
-            title: 'Complete {Dental Care}',
-            description: 'Dedicated to providing the best dental experience for our community with a focus on comfort and high-end results.',
+            title: 'High Quality {Services} for You.',
+            description: 'We are committed to sustainability. eco-friendly initiatives.',
+            bottomText: 'We believe in using the latest technology and techniques to ensure the best outcomes for our patients.',
+            bottomCta: 'View All Service',
             items: [
-              { title: 'General Dental Care', icon: 'Stethoscope' },
-              { title: 'Dental Orthodontics', icon: 'Activity' },
-              { title: 'Dental Implants', icon: 'Syringe' },
-              { title: 'Advanced Dentistry', icon: 'ClipboardCheck' },
-              { title: 'Teeth Whitening', icon: 'Sparkles' },
-              { title: 'Crowns & Bridges', icon: 'Crown' },
-              { title: 'Dental Veneers', icon: 'Smile' },
-              { title: 'Emergency Procedures', icon: 'ShieldAlert' },
+              { title: 'General Dental Care', icon: 'Stethoscope', description: 'We are excited to meet you and provide the best dental care for your family.' },
+              { title: 'Dental Implants', icon: 'Syringe', description: 'We are excited to meet you and provide the best dental care for your family.' },
+              { title: 'Cosmetic Dentistry', icon: 'Sparkles', description: 'We are excited to meet you and provide the best dental care for your family.' },
+              { title: 'Teeth Whitening', icon: 'Smile', description: 'We are excited to meet you and provide the best dental care for your family.' },
             ]
           },
           {
@@ -233,6 +231,7 @@ export function AdminPageEditor() {
               {
                 title: 'Expert Specialists',
                 description: 'Our team includes specialists in all fields of dentistry, from surgery to pediatric care.',
+
                 image: 'https://images.unsplash.com/photo-1559839734-2b71ea197ec2?auto=format&fit=crop&q=80&w=400'
               },
               {
@@ -1208,53 +1207,89 @@ function SectionEditor({ section, index, total, onUpdate, onRemove, onMove }: Se
               </div>
 
               {section.type === 'services_grid' && (
-                <div className="md:col-span-2 space-y-4 pt-6 border-t border-gray-100">
-                  <div className="flex items-center justify-between">
-                    <label className="text-xs font-black text-gray-400 uppercase tracking-widest">Grid Items</label>
-                    <button
-                      onClick={() => onUpdate({ items: [...(section.items || []), { title: 'New Service', icon: 'Stethoscope' }] })}
-                      className="text-[10px] font-bold text-brand-primary uppercase hover:underline"
-                    >
-                      + Add Item
-                    </button>
+                <div className="md:col-span-2 space-y-8 pt-6 border-t border-gray-100">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div className="space-y-2">
+                      <label className="text-xs font-black text-gray-400 uppercase tracking-widest">Bottom Quote/Text</label>
+                      <textarea
+                        value={section.bottomText}
+                        onChange={(e) => onUpdate({ bottomText: e.target.value })}
+                        rows={2}
+                        className="w-full p-4 bg-white border border-gray-100 rounded-2xl outline-none focus:ring-2 focus:ring-brand-primary resize-none text-sm italic"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <label className="text-xs font-black text-gray-400 uppercase tracking-widest">Bottom Button Text</label>
+                      <input
+                        type="text"
+                        value={section.bottomCta}
+                        onChange={(e) => onUpdate({ bottomCta: e.target.value })}
+                        className="w-full p-4 bg-white border border-gray-100 rounded-2xl outline-none focus:ring-2 focus:ring-brand-primary"
+                      />
+                    </div>
                   </div>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    {section.items?.map((item: any, i: number) => (
-                      <div key={i} className="p-4 bg-white rounded-2xl border border-gray-100 flex items-center gap-4 group relative">
-                        <div className="w-10 h-10 bg-brand-primary/5 rounded-xl flex items-center justify-center text-brand-primary">
-                          {Icons[item.icon as keyof typeof Icons] ? React.createElement(Icons[item.icon as keyof typeof Icons] as any, { size: 18 }) : <Stethoscope size={18} />}
-                        </div>
-                        <div className="flex-1">
-                          <IconInput
-                            value={item.icon}
-                            onChange={(icon) => {
-                              const newItems = [...section.items];
-                              newItems[i] = { ...item, icon };
-                              onUpdate({ items: newItems });
-                            }}
-                          />
-                          <input
-                            value={item.title}
+
+                  <div className="space-y-4">
+                    <div className="flex items-center justify-between">
+                      <label className="text-xs font-black text-gray-400 uppercase tracking-widest">Grid Items (Services)</label>
+                      <button
+                        onClick={() => onUpdate({ items: [...(section.items || []), { title: 'New Service', icon: 'Stethoscope', description: 'Brief description here...' }] })}
+                        className="text-[10px] font-bold text-brand-primary uppercase hover:underline"
+                      >
+                        + Add Item
+                      </button>
+                    </div>
+                    <div className="grid grid-cols-1 gap-4">
+                      {section.items?.map((item: any, i: number) => (
+                        <div key={i} className="p-6 bg-white rounded-2xl border border-gray-100 space-y-4 group relative">
+                          <div className="flex items-center gap-4">
+                            <div className="w-12 h-12 bg-brand-primary/5 rounded-xl flex items-center justify-center text-brand-primary shrink-0">
+                              {Icons[item.icon as keyof typeof Icons] ? React.createElement(Icons[item.icon as keyof typeof Icons] as any, { size: 24 }) : <Stethoscope size={24} />}
+                            </div>
+                            <div className="flex-1">
+                              <IconInput
+                                value={item.icon}
+                                onChange={(icon) => {
+                                  const newItems = [...section.items];
+                                  newItems[i] = { ...item, icon };
+                                  onUpdate({ items: newItems });
+                                }}
+                              />
+                              <input
+                                value={item.title}
+                                onChange={(e) => {
+                                  const newItems = [...section.items];
+                                  newItems[i] = { ...item, title: e.target.value };
+                                  onUpdate({ items: newItems });
+                                }}
+                                placeholder="Service Title"
+                                className="w-full bg-transparent border-none p-0 text-lg font-bold focus:ring-0 mt-1"
+                              />
+                            </div>
+                            <button
+                              onClick={() => {
+                                const newItems = section.items.filter((_: any, idx: number) => idx !== i);
+                                onUpdate({ items: newItems });
+                              }}
+                              className="p-2 text-gray-200 hover:text-red-500 transition-colors opacity-0 group-hover:opacity-100"
+                            >
+                              <Trash2 className="w-5 h-5" />
+                            </button>
+                          </div>
+                          <textarea
+                            value={item.description}
                             onChange={(e) => {
                               const newItems = [...section.items];
-                              newItems[i] = { ...item, title: e.target.value };
+                              newItems[i] = { ...item, description: e.target.value };
                               onUpdate({ items: newItems });
                             }}
-                            placeholder="Service Label"
-                            className="w-full bg-transparent border-none p-2 text-sm font-bold focus:ring-0"
+                            placeholder="Short description for the card..."
+                            rows={2}
+                            className="w-full p-3 bg-gray-50 border-none rounded-xl text-sm focus:ring-2 focus:ring-brand-primary resize-none"
                           />
                         </div>
-                        <button
-                          onClick={() => {
-                            const newItems = section.items.filter((_: any, idx: number) => idx !== i);
-                            onUpdate({ items: newItems });
-                          }}
-                          className="p-2 text-gray-200 hover:text-red-500 transition-colors opacity-0 group-hover:opacity-100"
-                        >
-                          <Trash2 className="w-4 h-4" />
-                        </button>
-                      </div>
-                    ))}
+                      ))}
+                    </div>
                   </div>
                 </div>
               )}

@@ -235,35 +235,67 @@ export function Home() {
       </div>
 
       {/* 3. Services Grid */}
-      <section className="py-32 bg-white">
+      <section className="py-32 bg-[#f0f9ff]">
         <div className="container mx-auto px-4">
            <div className="text-center max-w-2xl mx-auto space-y-6 mb-24">
-              <span className="text-brand-primary font-black uppercase text-xs tracking-[0.4em] flex items-center justify-center space-x-2">
-                 <span className="text-brand-secondary">+</span> <span>{servicesIntro?.badge || 'OUR SERVICES'}</span>
+              <span className="font-black uppercase text-xs tracking-[0.4em] flex items-center justify-center space-x-3">
+                 <span className="text-brand-secondary text-lg">+</span> 
+                 <span className="text-brand-primary">{servicesIntro?.badge || 'OUR SERVICES'}</span>
               </span>
-              <h2 className="text-5xl font-display font-bold text-brand-dark tracking-tighter">
-                {servicesIntro?.title ? renderTitle(servicesIntro.title) : 'Complete Dental Care'}
+              <h2 className="text-5xl md:text-7xl font-display font-bold text-brand-dark tracking-tighter">
+                {servicesIntro?.title ? renderTitle(servicesIntro.title) : <>High Quality <span className="text-brand-secondary">Services</span> for You.</>}
               </h2>
-              <p className="text-gray-500 font-medium leading-relaxed">{servicesIntro?.description || 'Dedicated to providing the best dental experience for our community with a focus on comfort and high-end results.'}</p>
+              <p className="text-gray-500 font-medium leading-relaxed">
+                {servicesIntro?.description || 'We are committed to sustainability. eco-friendly initiatives.'}
+              </p>
            </div>
-
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-10">
-              {(servicesIntro?.items || services).map((service: any, i: number) => {
+ 
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-24">
+              {(servicesIntro?.items || displayServices).slice(0, 4).map((service: any, i: number) => {
                 const IconComponent = (Icons as any)[service.icon] || Icons.Stethoscope;
                 return (
-                  <div 
+                  <motion.div 
                     key={i} 
-                    className="group p-12 bg-white border border-gray-50 rounded-[60px] md:rounded-[80px] hover:shadow-2xl hover:shadow-brand-primary/10 transition-all duration-500 text-center space-y-8 flex flex-col items-center"
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: i * 0.1 }}
+                    className="bg-white p-10 rounded-[40px] shadow-xl shadow-blue-900/5 hover:shadow-2xl hover:shadow-blue-900/10 transition-all duration-500 space-y-6 group"
                   >
-                    <div className="w-24 h-24 bg-white text-brand-primary rounded-3xl flex items-center justify-center shadow-[0_20px_50px_rgba(0,0,0,0.08)] transition-all duration-500 group-hover:scale-110 group-hover:shadow-brand-primary/20">
-                       <IconComponent className="w-10 h-10" />
+                    <div className="w-16 h-16 text-brand-primary">
+                       <IconComponent className="w-full h-full stroke-1" />
                     </div>
-                    <h3 className="font-bold text-brand-dark uppercase tracking-[0.2em] text-[10px] leading-relaxed max-w-[120px]">
-                      {service.title || service.name}
-                    </h3>
-                  </div>
+                    <div className="space-y-4">
+                      <h3 className="text-2xl font-display font-bold text-brand-dark">
+                        {service.title || service.name}
+                      </h3>
+                      <p className="text-gray-500 text-sm leading-relaxed">
+                        {service.description || 'We are excited to meet you and provide the best dental care for your family.'}
+                      </p>
+                    </div>
+                    <Link to="/services" className="inline-flex items-center gap-2 text-brand-primary font-bold text-sm group/link">
+                      <span>Read More</span>
+                      <div className="w-8 h-8 rounded-full bg-brand-primary text-white flex items-center justify-center transition-transform group-hover/link:translate-x-1">
+                        <Icons.ArrowUpRight className="w-4 h-4" />
+                      </div>
+                    </Link>
+                  </motion.div>
                 );
               })}
+            </div>
+
+            <div className="text-center space-y-10">
+              <p className="text-gray-500 font-medium max-w-2xl mx-auto italic">
+                {servicesIntro?.bottomText || 'We believe in using the latest technology and techniques to ensure the best outcomes for our patients.'}
+              </p>
+              <div className="flex justify-center">
+                <Link to="/services" className="inline-flex items-center gap-3 bg-brand-primary text-white px-10 py-5 rounded-full font-bold shadow-xl shadow-brand-primary/20 hover:bg-brand-dark transition-all group">
+                   <span>{servicesIntro?.bottomCta || 'View All Service'}</span>
+                   <div className="w-8 h-8 rounded-full bg-white text-brand-primary flex items-center justify-center transition-transform group-hover:rotate-45">
+                      <Icons.ArrowUpRight className="w-4 h-4" />
+                   </div>
+                </Link>
+              </div>
             </div>
         </div>
       </section>
@@ -277,8 +309,9 @@ export function Home() {
 
         <div className="container mx-auto px-4 relative z-10">
            <div className="text-center max-w-2xl mx-auto space-y-6 mb-24">
-              <span className="text-brand-primary font-black uppercase text-xs tracking-[0.4em] flex items-center justify-center space-x-2">
-                <span className="text-brand-secondary">+</span> <span>{whyChooseUs?.badge || 'WHY CHOOSE US'}</span>
+              <span className="font-black uppercase text-xs tracking-[0.4em] flex items-center justify-center space-x-3">
+                <span className="text-brand-secondary text-lg">+</span> 
+                <span className="text-brand-primary">{whyChooseUs?.badge || 'WHY CHOOSE US'}</span>
               </span>
               <h2 className="text-6xl font-display font-bold text-[#1a3a4a] tracking-tight">
                 {whyChooseUs?.title ? renderTitle(whyChooseUs.title) : (
@@ -399,7 +432,7 @@ export function Home() {
               {/* Content on the Right */}
               <div className="space-y-8 order-1 lg:order-2">
                  <div className="space-y-4">
-                    <span className="text-brand-secondary font-black uppercase text-xs tracking-[0.4em] block mb-4">+ {beforeAfterSection?.badge || 'BEFORE AND AFTER'}</span>
+                    <span className="text-brand-secondary font-black uppercase text-xs tracking-[0.4em] block mb-4"><span className="text-brand-secondary text-lg">+</span> <span className="text-brand-primary">{beforeAfterSection?.badge || 'BEFORE AND AFTER'}</span></span>
                     <h2 className="text-5xl md:text-7xl font-display font-medium text-white tracking-tight">
                        {beforeAfterSection?.title ? renderTitle(beforeAfterSection.title) : 'Get a Hollywood Smile Today!'}
                     </h2>
@@ -422,8 +455,9 @@ export function Home() {
         <div className="container mx-auto px-4">
            {/* Section Headers */}
            <div className="text-center max-w-3xl mx-auto space-y-4 mb-24">
-              <span className="text-brand-primary font-black uppercase text-xs tracking-[0.4em] flex items-center justify-center space-x-2">
-                 <span>+ {faqSection?.badge || 'FREQUENTLY ASKED QUESTIONS'}</span>
+              <span className="font-black uppercase text-xs tracking-[0.4em] flex items-center justify-center space-x-3">
+                 <span className="text-brand-secondary text-lg">+</span>
+                 <span className="text-brand-primary">{faqSection?.badge || 'FREQUENTLY ASKED QUESTIONS'}</span>
               </span>
               <h2 className="text-5xl md:text-7xl font-display font-medium text-[#1e293b] tracking-tight leading-tight">
                  {faqSection?.title ? renderTitle(faqSection.title) : (
@@ -446,7 +480,7 @@ export function Home() {
                     />
                  </div>
                  {/* Stats Box */}
-                 <div className="absolute bottom-[-40px] left-[-20px] right-[-20px] md:left-4 md:right-4 bg-brand-secondary rounded-[30px] p-10 flex items-center shadow-2xl text-white">
+                 <div className="absolute bottom-[-40px] left-[-20px] right-[-20px] md:left-4 md:right-4 bg-brand-primary rounded-[30px] p-10 flex items-center shadow-2xl text-white">
                     <div className="flex-1 text-center border-r border-white/20 px-6">
                        <h3 className="text-4xl md:text-5xl font-display font-bold mb-2">{faqSection?.stat1?.value || '800+'}</h3>
                        <p className="text-sm font-medium text-white/80">{faqSection?.stat1?.label || 'Successful Projects'}</p>
@@ -496,7 +530,7 @@ export function Home() {
            <div className="bg-white rounded-[100px] overflow-hidden flex flex-col lg:flex-row items-center border border-gray-100 shadow-3xl">
               <div className="lg:w-3/5 p-20 space-y-12">
                  <div className="space-y-6">
-                    <span className="text-brand-secondary font-black uppercase text-xs tracking-[0.4em] block mb-4">+ MEDICAL DIRECTOR</span>
+                    <span className="text-brand-secondary font-black uppercase text-xs tracking-[0.4em] block mb-4"><span className="text-brand-secondary text-lg">+</span> <span className="text-brand-primary">MEDICAL DIRECTOR</span></span>
                     <h2 className="text-6xl md:text-8xl font-display font-bold text-brand-dark leading-[0.9] tracking-tighter">
                        {doctorBanner?.title ? renderTitle(doctorBanner.title) : 'Lead by Dr. A. Viviana Santos'}
                     </h2>
@@ -528,8 +562,9 @@ export function Home() {
       <section className="py-40 bg-white">
         <div className="container mx-auto px-4">
           <div className="text-center max-w-2xl mx-auto space-y-8 mb-24">
-            <span className="text-brand-secondary font-black uppercase text-xs tracking-[0.4em] flex items-center justify-center space-x-2">
-               <span>+ {testimonialsIntro?.badge || 'TESTIMONIALS'}</span>
+            <span className="font-black uppercase text-xs tracking-[0.4em] flex items-center justify-center space-x-3">
+               <span className="text-brand-secondary text-lg">+</span>
+               <span className="text-brand-primary">{testimonialsIntro?.badge || 'TESTIMONIALS'}</span>
             </span>
             <h2 className="text-5xl md:text-7xl font-display font-bold text-brand-dark tracking-tighter leading-none">
               {renderTitle(testimonialsIntro?.title) || 'What Our Patients Say'}
@@ -607,7 +642,7 @@ export function Home() {
           <div className="container mx-auto px-4">
             <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-24">
               <div className="max-w-2xl space-y-6">
-                 <span className="text-brand-secondary font-black uppercase text-xs tracking-[0.4em] block">+ {blogIntro?.badge || 'LATEST NEWS'}</span>
+                 <span className="text-brand-secondary font-black uppercase text-xs tracking-[0.4em] block"><span className="text-brand-secondary text-lg">+</span> <span className="text-brand-primary">{blogIntro?.badge || 'LATEST NEWS'}</span></span>
                  <h2 className="text-5xl md:text-7xl font-display font-bold text-brand-dark tracking-tighter leading-none">
                    {renderTitle(blogIntro?.title) || <>Oral Health <br /> <span className="text-brand-secondary">Tips & Insights</span></>}
                  </h2>
