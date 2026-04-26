@@ -57,14 +57,14 @@ export function About() {
       <section className="bg-[#D4ECEE] py-24 text-brand-dark relative overflow-hidden">
         <div className="absolute top-0 right-0 w-96 h-96 bg-brand-primary/10 rounded-full blur-[100px]" />
         <div className="container mx-auto px-4 text-center relative z-10">
-          <motion.span 
+          <motion.span
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             className="text-brand-secondary font-black uppercase tracking-widest text-xs"
           >
             {heroSection?.badge || 'Our Story'}
           </motion.span>
-          <motion.h1 
+          <motion.h1
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
@@ -72,13 +72,13 @@ export function About() {
           >
             {renderTitle(heroSection?.title) || 'We Care For Your Dental Health'}
           </motion.h1>
-          <motion.p 
+          <motion.p
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
             className="text-xl text-gray-700/80 max-w-2xl mx-auto leading-relaxed"
           >
-            {heroSection?.description || 'At Orlando Dental Care, we take pride in bringing added value to every patient by addressing all of your dental needs and concerns.'}
+            {heroSection?.description || 'At Dental Care Clinic, we take pride in bringing added value to every patient by addressing all of your dental needs and concerns.'}
           </motion.p>
         </div>
       </section>
@@ -88,43 +88,43 @@ export function About() {
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
             <div className="space-y-12">
-               <div className="space-y-4">
-                 <h2 className="text-4xl font-display font-bold">
-                   {renderTitle(missionSection?.title) || 'Our Mission'}
-                 </h2>
-                 <p className="text-gray-600 text-lg leading-relaxed">
-                   {missionSection?.description || 'Our mission is to provide the highest quality dental care in a comfortable and welcoming environment. We believe in educating our patients and providing them with all the necessary information to make informed decisions about their oral health.'}
-                 </p>
-               </div>
-               <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
-                 {displayFeatures.map((item, i) => {
-                   const IconComponent = (Icons as any)[item.icon] || Icons.HelpCircle;
-                   return (
-                     <div key={i} className="flex gap-4">
-                       <div className="w-12 h-12 bg-white text-brand-secondary rounded-xl flex items-center justify-center flex-shrink-0 shadow-md border border-gray-100">
-                         <IconComponent className="w-6 h-6" />
-                       </div>
-                       <div>
-                         <h4 className="font-bold text-gray-900">{item.title}</h4>
-                         <p className="text-sm text-gray-500">{item.description || (item as any).desc}</p>
-                       </div>
-                     </div>
-                   );
-                 })}
-               </div>
+              <div className="space-y-4">
+                <h2 className="text-4xl font-display font-bold">
+                  {renderTitle(missionSection?.title) || 'Our Mission'}
+                </h2>
+                <p className="text-gray-600 text-lg leading-relaxed">
+                  {missionSection?.description || 'Our mission is to provide the highest quality dental care in a comfortable and welcoming environment. We believe in educating our patients and providing them with all the necessary information to make informed decisions about their oral health.'}
+                </p>
+              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
+                {displayFeatures.map((item, i) => {
+                  const IconComponent = (Icons as any)[item.icon] || Icons.HelpCircle;
+                  return (
+                    <div key={i} className="flex gap-4">
+                      <div className="w-12 h-12 bg-white text-brand-secondary rounded-xl flex items-center justify-center flex-shrink-0 shadow-md border border-gray-100">
+                        <IconComponent className="w-6 h-6" />
+                      </div>
+                      <div>
+                        <h4 className="font-bold text-gray-900">{item.title}</h4>
+                        <p className="text-sm text-gray-500">{item.description || (item as any).desc}</p>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
             </div>
             <div className="relative">
               <div className="rounded-[48px] overflow-hidden shadow-2xl">
-                <img 
-                  src={(missionSection?.image && missionSection.image !== '') ? missionSection.image : (heroSection?.image && heroSection.image !== '') ? heroSection.image : "https://images.unsplash.com/photo-1629909613654-28e377c37b09?auto=format&fit=crop&q=80&w=800"} 
-                  alt="Our Office" 
+                <img
+                  src={(missionSection?.image && missionSection.image !== '') ? missionSection.image : (heroSection?.image && heroSection.image !== '') ? heroSection.image : "https://images.unsplash.com/photo-1629909613654-28e377c37b09?auto=format&fit=crop&q=80&w=800"}
+                  alt="Our Office"
                   className="w-full aspect-[4/3] object-cover"
                 />
 
               </div>
               <div className="absolute -bottom-10 -right-10 bg-brand-secondary p-8 rounded-3xl shadow-xl flex items-center gap-4">
-                 <div className="text-5xl font-display font-bold text-brand-dark">15</div>
-                 <div className="text-sm font-bold text-brand-dark/70 uppercase leading-tight tracking-widest">Years of <br /> Excellence</div>
+                <div className="text-5xl font-display font-bold text-brand-dark">15</div>
+                <div className="text-sm font-bold text-brand-dark/70 uppercase leading-tight tracking-widest">Years of <br /> Excellence</div>
               </div>
             </div>
           </div>
@@ -138,7 +138,6 @@ export function About() {
             <h2 className="text-3xl font-display font-bold uppercase tracking-widest text-gray-400">Trusted By Industry Leaders</h2>
           </div>
           <div className="flex flex-wrap justify-center items-center gap-12 md:gap-24 opacity-40 hover:opacity-100 transition-opacity">
-            {/* These would be actual certification logos */}
             <div className="font-bold text-2xl text-gray-900">ADA American Dental Association</div>
             <div className="font-bold text-2xl text-gray-900">Invisalign Platinum</div>
             <div className="font-bold text-2xl text-gray-900">AAO Orthodontics</div>
@@ -147,42 +146,72 @@ export function About() {
       </section>
 
       {/* Why Choose Us */}
-      <section className="py-24">
-        <div className="container mx-auto px-4">
-          <div className="text-center max-w-3xl mx-auto mb-16">
-            <h2 className="text-4xl md:text-5xl font-display font-bold mb-6">Why Choose Orlando Dental Care?</h2>
-            <p className="text-gray-600">We go beyond routine checkups to provide a comprehensive dental experience based on trust and transparency.</p>
-          </div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-12 text-center">
-            {[
-              {
-                title: 'Expert Specialists',
-                desc: 'Our team includes specialists in all fields of dentistry, from surgery to pediatric care.',
-                image: 'https://images.unsplash.com/photo-1559839734-2b71f1536780?auto=format&fit=crop&q=80&w=400'
-              },
-              {
-                title: 'High-Tech Facility',
-                desc: 'Equipped with digital X-rays, 3D imaging, and the latest in sterilization technology.',
-                image: 'https://images.unsplash.com/photo-1581595224492-38616483df21?auto=format&fit=crop&q=80&w=400'
-              },
-              {
-                title: 'Compassionate Team',
-                desc: 'We understand dental anxiety and strive to make every visit calm and stress-free.',
-                image: 'https://images.unsplash.com/photo-1622253692010-333f2da6031d?auto=format&fit=crop&q=80&w=400'
-              }
-            ].map((item, i) => (
-              <div key={i} className="space-y-6">
-                <div className="rounded-full overflow-hidden w-48 h-48 mx-auto border-4 border-brand-secondary shadow-lg">
-                  <img src={item.image} alt={item.title} className="w-full h-full object-cover" />
+      {(() => {
+        const customWhyChoose = pageData?.sections?.find((s: any) => s.type === 'features_circles');
+        if (customWhyChoose) {
+          return (
+            <section className="py-24">
+              <div className="container mx-auto px-4">
+                <div className="text-center max-w-3xl mx-auto mb-16">
+                  <h2 className="text-4xl md:text-5xl font-display font-bold mb-6">{renderTitle(customWhyChoose.title)}</h2>
+                  <p className="text-gray-600">{customWhyChoose.description}</p>
                 </div>
-                <h3 className="text-2xl font-display font-bold">{item.title}</h3>
-                <p className="text-gray-600">{item.desc}</p>
+                
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-12 text-center">
+                  {(customWhyChoose.items || []).map((item: any, i: number) => (
+                    <div key={i} className="space-y-6">
+                      <div className="rounded-full overflow-hidden w-48 h-48 mx-auto border-4 border-brand-secondary shadow-lg">
+                        <img src={item.image || "https://images.unsplash.com/photo-1559839734-2b71ea197ec2?auto=format&fit=crop&q=80&w=400"} alt={item.title} className="w-full h-full object-cover" />
+                      </div>
+                      <h3 className="text-2xl font-display font-bold">{item.title}</h3>
+                      <p className="text-gray-600">{item.description}</p>
+                    </div>
+                  ))}
+                </div>
               </div>
-            ))}
-          </div>
-        </div>
-      </section>
+            </section>
+          );
+        }
+
+        return (
+          <section className="py-24">
+            <div className="container mx-auto px-4">
+              <div className="text-center max-w-3xl mx-auto mb-16">
+                <h2 className="text-4xl md:text-5xl font-display font-bold mb-6">Why Choose Dental Care Clinic?</h2>
+                <p className="text-gray-600">We go beyond routine checkups to provide a comprehensive dental experience based on trust and transparency.</p>
+              </div>
+              
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-12 text-center">
+                {[
+                  {
+                    title: 'Expert Specialists',
+                    desc: 'Our team includes specialists in all fields of dentistry, from surgery to pediatric care.',
+                    image: 'https://images.unsplash.com/photo-1559839734-2b71ea197ec2?auto=format&fit=crop&q=80&w=400'
+                  },
+                  {
+                    title: 'High-Tech Facility',
+                    desc: 'Equipped with digital X-rays, 3D imaging, and the latest in sterilization technology.',
+                    image: 'https://images.unsplash.com/photo-1581595224492-38616483df21?auto=format&fit=crop&q=80&w=400'
+                  },
+                  {
+                    title: 'Compassionate Team',
+                    desc: 'We understand dental anxiety and strive to make every visit calm and stress-free.',
+                    image: 'https://images.unsplash.com/photo-1622253692010-333f2da6031d?auto=format&fit=crop&q=80&w=400'
+                  }
+                ].map((item, i) => (
+                  <div key={i} className="space-y-6">
+                    <div className="rounded-full overflow-hidden w-48 h-48 mx-auto border-4 border-brand-secondary shadow-lg">
+                      <img src={item.image} alt={item.title} className="w-full h-full object-cover" />
+                    </div>
+                    <h3 className="text-2xl font-display font-bold">{item.title}</h3>
+                    <p className="text-gray-600">{item.desc}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </section>
+        );
+      })()}
       
       {/* Our Team Section */}
       <section className="py-24 bg-brand-dark text-white overflow-hidden">

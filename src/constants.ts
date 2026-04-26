@@ -143,6 +143,13 @@ export const CONTACT_INFO = {
     { day: 'Saturday', time: '9:00 AM - 2:00 PM' },
     { day: 'Sunday', time: 'Closed' },
   ],
+  socialLinks: {
+    facebook: 'https://facebook.com',
+    instagram: 'https://instagram.com',
+    twitter: 'https://twitter.com',
+    linkedin: 'https://linkedin.com',
+    youtube: 'https://youtube.com',
+  },
 };
 
 export const BRANDING = {

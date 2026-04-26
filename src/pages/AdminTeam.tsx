@@ -6,6 +6,7 @@ import { Users, Plus, Trash2, Loader2, X, Check, Edit2, ShieldCheck, Heart } fro
 import { useNotification } from '../context/NotificationContext';
 
 import { ImageUpload } from '../components/ImageUpload';
+import { TEAM as STATIC_TEAM } from '../constants';
 
 export function AdminTeam() {
   const [members, setMembers] = useState<any[]>([]);
@@ -40,6 +41,26 @@ export function AdminTeam() {
       setLoading(false);
     }
   }
+
+  const importDefaults = async () => {
+    setLoading(true);
+    try {
+      for (const member of STATIC_TEAM) {
+        const { id, ...data } = member; // Remove static ID
+        await addDoc(collection(db, 'team'), {
+          ...data,
+          createdAt: new Date().toISOString()
+        });
+      }
+      showNotification('Default team members imported!');
+      fetchMembers();
+    } catch (error) {
+      console.error("Error importing:", error);
+      showNotification('Error importing defaults.', 'error');
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -228,9 +249,18 @@ export function AdminTeam() {
       )}
 
       {!loading && members.length === 0 && (
-         <div className="text-center py-20 bg-gray-50 rounded-[40px] border border-dashed border-gray-200">
-            <Users className="w-16 h-16 text-gray-200 mx-auto mb-4" />
-            <p className="text-gray-400 font-bold">No team members added yet.</p>
+         <div className="text-center py-20 bg-gray-50 rounded-[40px] border border-dashed border-gray-200 space-y-6">
+            <div className="flex flex-col items-center">
+              <Users className="w-16 h-16 text-gray-200 mb-4" />
+              <p className="text-gray-400 font-bold text-lg">No team members added yet.</p>
+              <p className="text-gray-400 text-sm max-w-xs mx-auto mt-2">Connect the existing specialists from the About page to the database to start managing them.</p>
+            </div>
+            <button 
+              onClick={importDefaults}
+              className="px-8 py-3 bg-white border border-brand-primary/20 text-brand-primary rounded-xl font-bold text-xs uppercase tracking-widest hover:bg-brand-primary hover:text-white transition-all shadow-sm"
+            >
+              Import Existing Specialists
+            </button>
          </div>
       )}
     </div>

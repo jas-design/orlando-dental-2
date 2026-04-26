@@ -78,7 +78,7 @@ export function AdminLayout({ children }: { children: ReactNode }) {
              <div className="w-10 h-10 bg-brand-primary rounded-xl flex items-center justify-center text-white font-bold">OC</div>
              <div>
                 <h2 className="font-bold text-brand-dark leading-none">CMS</h2>
-                <p className="text-[10px] uppercase font-black tracking-widest text-brand-primary opacity-70">Orlando Dental</p>
+                <p className="text-[10px] uppercase font-black tracking-widest text-brand-primary opacity-70">Dental Care Clinic</p>
              </div>
           </div>
         </div>
@@ -131,7 +131,7 @@ export function AdminLayout({ children }: { children: ReactNode }) {
               >
                 <Menu className="w-6 h-6" />
               </button>
-              <h2 className="font-bold text-brand-dark">Orlando CMS</h2>
+              <h2 className="font-bold text-brand-dark">Dental CMS</h2>
            </div>
 
            <div className="flex-1 hidden lg:block">

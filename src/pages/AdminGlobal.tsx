@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useContent } from '../context/ContentContext';
 import { motion } from 'motion/react';
-import { Save, Phone, Mail, MapPin, Clock, Loader2, CheckCircle, MessageCircle, Palette, Globe, Calendar, Link2, Key } from 'lucide-react';
+import { Save, Phone, Mail, MapPin, Clock, Loader2, CheckCircle, MessageCircle, Palette, Globe, Calendar, Link2, Key, Facebook, Instagram, Twitter, Linkedin, Youtube } from 'lucide-react';
 import { useNotification } from '../context/NotificationContext';
 import { ImageUpload } from '../components/ImageUpload';
 
@@ -305,6 +305,49 @@ export function AdminGlobal() {
                   />
                   <p className="text-[10px] text-gray-400">Required to display upcoming appointments in the admin panel.</p>
                </div>
+            </div>
+         </section>
+
+         {/* 4. Social Media Links Section */}
+         <section className="space-y-8">
+            <h2 className="text-xl font-display font-bold text-brand-dark flex items-center gap-3">
+               <div className="w-10 h-10 bg-brand-primary/10 text-brand-primary rounded-xl flex items-center justify-center">
+                  <Link2 className="w-5 h-5" />
+               </div>
+               Social Media Links
+            </h2>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+               {[
+                 { key: 'facebook', label: 'Facebook', icon: Facebook },
+                 { key: 'instagram', label: 'Instagram', icon: Instagram },
+                 { key: 'twitter', label: 'Twitter / X', icon: Twitter },
+                 { key: 'linkedin', label: 'LinkedIn', icon: Linkedin },
+                 { key: 'youtube', label: 'YouTube', icon: Youtube }
+               ].map((item) => (
+                 <div key={item.key} className="bg-white p-6 rounded-[32px] border border-gray-100 shadow-sm space-y-4">
+                    <div className="flex items-center gap-3 text-brand-primary">
+                       <item.icon className="w-4 h-4" />
+                       <span className="text-xs font-bold uppercase tracking-widest">{item.label}</span>
+                    </div>
+                    <input 
+                      type="url"
+                      placeholder={`https://${item.key}.com/...`}
+                      value={(formData.contactInfo.socialLinks as any)?.[item.key] || ''}
+                      onChange={(e) => setFormData({ 
+                        ...formData, 
+                        contactInfo: { 
+                          ...formData.contactInfo, 
+                          socialLinks: {
+                            ...(formData.contactInfo.socialLinks || {}),
+                            [item.key]: e.target.value
+                          }
+                        } 
+                      })}
+                      className="w-full px-4 py-3 bg-gray-50 border-gray-100 rounded-xl focus:ring-2 focus:ring-brand-primary outline-none text-sm transition-all"
+                    />
+                 </div>
+               ))}
             </div>
          </section>
 
